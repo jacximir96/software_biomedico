@@ -8,7 +8,9 @@ class CronogramasCalendarioModel extends Model
 {
     protected $table = 'cronogramacalendario';
 
-    public function Equipo(){
+    protected $primaryKey = "id_cronogramaCalendario";
+
+    public function equipo(){
         return $this->belongsTo('App\EquiposGarantiaModel','id_equipoGarantia','id_equipoGarantia');
     }
 

@@ -36,7 +36,62 @@ class CronogramasController extends Controller
                                             $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                             FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
                                             WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
+            $cronograma = CronogramasModel::all();
+            $events = array();
 
+            
+            foreach ($cronograma as $cronogramas) {
+                if($cronogramas->realizado == 1){
+                    $cronogramas->realizado = "REALIZADO";
+                }else{
+                    $cronogramas->realizado = "NO REALIZADO";
+                }
+                if ($cronogramas->id_mantenimiento == 1) {
+                    $events[] = [
+                        'id' => $cronogramas->id_cronograma,
+                        'title' => "(P-ODS) " . $cronogramas->equipo->nombre_equipo,
+                        'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                        'start' => $cronogramas->fecha,
+                        'end' => $cronogramas->fecha_final,
+                        'backgroundColor' => 'green',
+                        'borderColor' => 'black',
+                        'textColor' => 'white'
+                    ];
+                }elseif ($cronogramas->id_mantenimiento == 2) {
+                    $events[] = [
+                        'id' => $cronogramas->id_cronograma,
+                        'title' => "(C-ODS) " . $cronogramas->equipo->nombre_equipo,
+                        'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                        'start' => $cronogramas->fecha,
+                        'end' => $cronogramas->fecha_final,
+                        'backgroundColor' => 'red',
+                        'borderColor' => 'black',
+                        'textColor' => 'white'
+                    ];
+                }elseif ($cronogramas->id_mantenimiento == 3) {
+                    $events[] = [
+                        'id' => $cronogramas->id_cronograma,
+                        'title' => "(C-OTM) " . $cronogramas->equipo->nombre_equipo,
+                        'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                        'start' => $cronogramas->fecha,
+                        'end' => $cronogramas->fecha_final,
+                        'backgroundColor' => 'red',
+                        'borderColor' => 'black',
+                        'textColor' => 'white'
+                    ];
+                }elseif ($cronogramas->id_mantenimiento == 4) {
+                   $events[] = [
+                    'id' => $cronogramas->id_cronograma,
+                    'title' => "(P-OTM) " . $cronogramas->equipo->nombre_equipo,
+                    'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                    'start' => $cronogramas->fecha,
+                    'end' => $cronogramas->fecha_final,
+                    'backgroundColor' => 'green',
+                    'borderColor' => 'black',
+                    'textColor' => 'white'
+                   ];
+                }
+            }
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
                                             AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
@@ -45,7 +100,8 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                                                     "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"cronogramas_fecha"=>$cronogramas_fecha,
                                                     "ordenServicios"=>$ordenServicios,"departamentos"=>$departamentos,
                                                     "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
-                                                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                                                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
+                                                    "events" => $events));
         }
 
         public function listar(){
@@ -144,7 +200,67 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
             $equipos = EquiposModel::all();
             $administradores = AdministradoresModel::all();
             $tipoMantenimientos = TipoMantenimientosModel::all();
-            $cronogramas = CronogramasModel::all();
+            $cronogramas1 = CronogramasModel::all();
+            $events = array();
+
+            
+            foreach ($cronogramas1 as $cronogramas) {
+                if($cronogramas->realizado == 1){
+                    $cronogramas->realizado = "REALIZADO";
+                }else{
+                    $cronogramas->realizado = "NO REALIZADO";
+                }
+                switch ($cronogramas->id_mantenimiento) {
+                    case "1":
+                        $events[] = [
+                            'id' => $cronogramas->id_cronograma,
+                            'title' => "(P-ODS) " . $cronogramas->equipo->nombre_equipo,
+                            'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                            'start' => $cronogramas->fecha,
+                            'end' => $cronogramas->fecha_final,
+                            'backgroundColor' => 'green',
+                            'borderColor' => 'black',
+                            'textColor' => 'white'
+                        ];
+                        break;
+                    case" 2":
+                        $events[] = [
+                            'id' => $cronogramas->id_cronograma,
+                            'title' => "(C-ODS) " . $cronogramas->equipo->nombre_equipo,
+                            'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                            'start' => $cronogramas->fecha,
+                            'end' => $cronogramas->fecha_final,
+                            'backgroundColor' => 'red',
+                            'borderColor' => 'black',
+                            'textColor' => 'white'
+                        ];
+                        break;
+                    case "3":
+                        $events[] = [
+                            'id' => $cronogramas->id_cronograma,
+                            'title' => "(C-OTM) " . $cronogramas->equipo->nombre_equipo,
+                            'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                            'start' => $cronogramas->fecha,
+                            'end' => $cronogramas->fecha_final,
+                            'backgroundColor' => 'red',
+                            'borderColor' => 'black',
+                            'textColor' => 'white'
+                        ];
+                        break;
+                    case "4":
+                        $events[] = [
+                                'id' => $cronogramas->id_cronograma,
+                                'title' => "(P-OTM) " . $cronogramas->equipo->nombre_equipo,
+                                'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipo.', '.'Serie: '.$cronogramas->equipo->serie_equipo.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipo.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                                'start' => $cronogramas->fecha,
+                                'end' => $cronogramas->fecha_final,
+                                'backgroundColor' => 'green',
+                                'borderColor' => 'black',
+                                'textColor' => 'white'
+                               ];
+                        break;
+                }
+            }
             $cronogramas_fecha = DB::select("select M.nombre_mantenimiento,C.fecha_final,C.realizado,C.id_cronograma,C.id_equipo,C.fecha,E.nombre_equipo,E.cp_equipo from cronograma C
                                             INNER JOIN equipo E ON C.id_equipo = E.id_equipo
                                             INNER JOIN mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento
@@ -166,22 +282,42 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                 "equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,"cronogramas"=>$cronogramas,"cronogramas_fecha"=>$cronogramas_fecha,
                 "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"proveedores"=>$proveedores,"ordenServicios"=>$ordenServicios,
                 "departamentos"=>$departamentos,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"direccionesEjecutivas"=>$direccionesEjecutivas,
-                "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo, "events" => $events));
             }else{
                 return view("paginas.cronogramas",array("status"=>404,"cronograma"=>$cronograma,"administradores"=>$administradores,
                 "equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,"cronogramas"=>$cronogramas,"cronogramas_fecha"=>$cronogramas_fecha,
                 "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"proveedores"=>$proveedores,"ordenServicios"=>$ordenServicios,
                 "departamentos"=>$departamentos,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"direccionesEjecutivas"=>$direccionesEjecutivas,
-                "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo, "events" => $events));
             }
         }
 
-        public function destroy(Request $request){
-            $cronograma_unidad = CronogramasModel::where("id_cronograma",$request->id_cronograma)->delete();
+        public function destroy(Request $request, $id){
 
-            return "ok";
+            // $cronograma = CronogramasModel::all();
+
+            
+            $cronograma_unidad = CronogramasModel::where("id_cronograma", $id)
+            ->first();
+            
+            if (!$cronograma_unidad) {
+                
+                    return response()->json(['mensaje' => 'Evento no encontrado'], 404);
+                
+            }
+            $cronograma_unidad->delete();
+            
+                return response()->json(['mensaje' => 'Evento eliminado exitosamente']);
+            
+            //$find = CronogramasModel::find($id);
+            
+            // if (!$cronograma_unidad) {
+            //     return response()->json([
+            //         'error' => 'Error'
+            //     ]);
+            //     $cronograma_unidad->each->delete();
+            // }
         }
-
         public function update($id,Request $request){
 
             $extraer_cronograma_penultimo = DB::select('SELECT * FROM cronograma C WHERE C.id_equipo = ? AND C.realizado = 1 AND (C.id_mantenimiento IN (1,2) OR C.id_mantenimiento IS NULL) ORDER BY C.id_cronograma DESC LIMIT 1',[$request->input("cronograma_equipo")]);
@@ -203,7 +339,13 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
             $observacion = json_encode(explode(",",$datos["observacion"]));
 
-            $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
+            if ($request->hasFile('pdf_archivo_final')) {
+                $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
+            }else{
+                $pdf = null;
+            }
+
+           
 
             //validar los datos
             if(!empty($datos)){
@@ -217,8 +359,14 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                 if($validar->fails()){
                     return redirect("/cronogramas")->with("no-validacion","");
                 }else{
-
-                    $ruta = $pdf["pdf_cronograma"];
+                    if ($request->hasFile('pdf_archivo_final')) {
+                        $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
+                        $ruta = $pdf["pdf_cronograma"];
+                    }else{
+                        $ruta = null;
+                    }
+                   
+                   
 
                     $datos = array("id_equipo"=>$request->input("cronograma_equipo"),
                                     "fecha"=>$request->input("cronograma_fecha"),

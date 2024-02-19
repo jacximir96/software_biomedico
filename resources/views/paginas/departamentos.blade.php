@@ -5,7 +5,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -69,6 +69,89 @@
     <!-- /.content -->
   </div>
 
+  {{-- @foreach ($departamentos as $departamento) --}}
+  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Departamento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Nombre:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nombre_departamento" name="nombre_departamento"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin nombre de departamento --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Iniciales:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control"  id="iniciales_departamento" name="iniciales_departamento" 
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin iniciales de departamento --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Estado:</label>
+
+                        <div class="col-md-6">
+                            <select class="form-control" id="estado_departamento" name="estado_departamento" required>
+                            @foreach ($estado as $key => $value1)
+
+                                <option value="{{$value1->id_estado}}">
+                                    {{$value1->nombre_estado}}
+                                </option>
+
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin estado de departamento --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Dir. Ejecutiva:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" id ="id_direccionEjecutiva" name="id_direccionEjecutiva" required>
+                                    @foreach ($direccionesEjecutivas as $key => $value1)
+
+                                        <option value="{{$value1->id_direccionEjecutiva}}">
+                                            {{$value1->nombre_direccionEjecutiva}}
+                                        </option>
+
+                                    @endforeach
+                                </select>
+                        </div>
+                    </div>{{-- fin id de dirección Ejecutiva --}}
+                  
+                    
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
   <div class="modal" id="crearDepartamento">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -152,6 +235,9 @@
     </div>
   </div>
 
+  <!-- Modal -->
+
+
 {{-- Editar departamento en modal --}}
 
 @if (isset($status))
@@ -160,7 +246,7 @@
 
     @foreach ($departamento as $key => $value)
 
-    <div class="modal" id="editarDepartamento">
+    <div class="modal fade" id="editarDepartamento" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST" action="{{ url('/') }}/departamentos/{{ $value["id_departamento"] }}"
@@ -331,3 +417,4 @@
 @endif
 
 @endforeach
+

@@ -4,6 +4,41 @@
 @extends('plantilla')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    .spinner-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    display: none; /* Empieza oculto */
+    }
+
+    .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #fff;
+    border-top: 4px solid transparent; /* El mismo color que el fondo del contenedor */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+    }
+
+    .spinner-text {
+    margin-top: 10px;
+    text-align: center;
+    }
+
+    @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+    }
+</style>
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -26,6 +61,10 @@
     <!-- Main content -->
     <section class="content">
     <div class="container-fluid">
+        <div id="spinner" class="spinner-container">
+            <div class="spinner"></div>
+            <div class="spinner-text">Generando PDF...</div>
+          </div>
         <div class="row">
             <div class="col-12">
             <!-- Default box -->
@@ -34,9 +73,11 @@
 
                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#crearCronogramaGeneral">
                         Programas Mantenimientos de Equipos</button>
-                    <a href="{{ url('/') }}/reportesCronogramaGeneral/cronogramaGeneralPdf" target="_blank" class="btn btn-success btn-sm" style="float:right;">
+                    <button id="downloadButton" class="btn btn-success btn-sm" style="float:right;">
                         Exportar a PDF
-                    </a>
+                    </button>
+                    
+                    
 
                     </div>
 
@@ -46,7 +87,6 @@
                 id="tablaCronogramasGenerales">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Ambiente</th>
                             <th>Equipo</th>
                             <th>Marca</th>
@@ -59,8 +99,10 @@
                         </tr>
 
                     </thead>
-
                     <tbody>
+
+                    </tbody>
+                    {{-- <tbody>
                         @foreach($cronogramasGeneral as $key => $valor_cronogramasGeneral)
                         <tr>
                             <td style="text-align: center;">{{($key+1)}}</td>
@@ -140,7 +182,7 @@
 
                         </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
 
             </div>
@@ -310,304 +352,192 @@
     </div>
 </div>
 
-{{-- Editar cronograma general en modal --}}
-
-@if (isset($status))
-
-@if ($status == 200)
-
-    @foreach ($cronogramaGeneralUnidad as $key => $value)
-
-    <div class="modal" id="editarCronogramaGeneral">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" action="{{ url('/') }}/cronogramasGeneral/{{$value->id_cronogramaGeneral}}"
-                enctype="multipart/form-data">
-                @method('PUT')
-                @csrf
-
-                <div class="modal-header bg-info">
-                    <h4 class="modal-tittle">Editar Programación de Equipo</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-
-                    {{-- Id de Equipo --}}
+{{-- inicio de modal cronograma general en modal --}}
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Programación de Equipo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
                     <div class="input-group mb-3" style="display:none;">
                         <label for="email" class="col-md-3 control-label">ID:</label>
 
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="id_equipo"
-                            value="{{$value->id_equipo}}" required autofocus
+                            <input type="text" class="form-control" id="id_equipo" name="id_equipo" 
+                            required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
                     </div>{{-- fin Id de Equipo --}}
-
-                    {{-- Nombre de Equipo --}}
-                    <div class="input-group mb-3">
+                     {{-- Nombre de Equipo --}}
+                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Equipo:</label>
 
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="nombre_equipo"
-                            value="{{$value->nombre_equipo}}" required autofocus
+                            <input type="text" class="form-control" id="nombre_equipo"name="nombre_equipo"
+                            required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
                     </div>{{-- fin Nombre de Equipo --}}
-
-                    {{-- Marca de Equipo --}}
-                    <div class="input-group mb-3">
+                     {{-- Marca de Equipo --}}
+                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Marca:</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="marca_equipo"
-                            value="{{$value->marca_equipo}}" required autofocus
+                            <input type="text" class="form-control" id="marca_equipo"name="marca_equipo"
+                           required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
                     </div>{{-- fin Marca de Equipo --}}
-
-                    {{-- Modelo de Equipo --}}
-                    <div class="input-group mb-3">
+                      {{-- Modelo de Equipo --}}
+                      <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Modelo:</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="modelo_equipo"
-                            value="{{$value->modelo_equipo}}" required autofocus
+                            <input type="text" class="form-control" id="modelo_equipo" name="modelo_equipo"
+                             required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
                     </div>{{-- fin Modelo de Equipo --}}
-
-                    {{-- Serie de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label"># Serie:</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="serie_equipo"
-                            value="{{$value->serie_equipo}}" required autofocus
+                            <input type="text" class="form-control" id="serie_equipo" name="serie_equipo"
+                            required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
                     </div>{{-- fin Serie de Equipo --}}
-
-                    {{-- CP de Equipo --}}
-                    <div class="input-group mb-3">
+                     {{-- CP de Equipo --}}
+                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label"># C. Patrim:</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="cp_equipo"
-                            value="{{$value->cp_equipo}}" required autofocus
+                            <input type="text" class="form-control" id="cp_equipo" name="cp_equipo"
+                            required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
                     </div>{{-- fin CP de Equipo --}}
-
-                    {{-- Mes de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Mes:</label>
 
                         <div class="col-md-6">
-                            <select class="form-control" name="mes_cronogramaGeneral" required>
-                                        @switch($value->mes_cronogramaGeneral)
-                                            @case(1)
-                                                <option value="1">
-                                                    ENERO
-                                                </option>
-                                            @break
+                            <select class="form-control" id="mes_cronogramaGeneral" name="mes_cronogramaGeneral" required>
+                                @for($i=1; $i<=12; $i++)
 
-                                            @case(2)
-                                                <option value="2">
-                                                    FEBRERO
-                                                </option>
-                                            @break
+                                @switch($i)
+                                    @case(1)
+                                        <option value="1">
+                                            ENERO
+                                        </option>
+                                    @break
 
-                                            @case(3)
-                                                <option value="3">
-                                                    MARZO
-                                                </option>
-                                            @break
+                                    @case(2)
+                                        <option value="2">
+                                            FEBRERO
+                                        </option>
+                                    @break
 
-                                            @case(4)
-                                                <option value="4">
-                                                    ABRIL
-                                                </option>
-                                            @break
+                                    @case(3)
+                                        <option value="3">
+                                            MARZO
+                                        </option>
+                                    @break
 
-                                            @case(5)
-                                                <option value="5">
-                                                    MAYO
-                                                </option>
-                                            @break
+                                    @case(4)
+                                        <option value="4">
+                                            ABRIL
+                                        </option>
+                                    @break
 
-                                            @case(6)
-                                                <option value="6">
-                                                    JUNIO
-                                                </option>
-                                            @break
+                                    @case(5)
+                                        <option value="5">
+                                            MAYO
+                                        </option>
+                                    @break
 
-                                            @case(7)
-                                                <option value="7">
-                                                    JULIO
-                                                </option>
-                                            @break
+                                    @case(6)
+                                        <option value="6">
+                                            JUNIO
+                                        </option>
+                                    @break
 
-                                            @case(8)
-                                                <option value="8">
-                                                    AGOSTO
-                                                </option>
-                                            @break
+                                    @case(7)
+                                        <option value="7">
+                                            JULIO
+                                        </option>
+                                    @break
 
-                                            @case(9)
-                                                <option value="9">
-                                                    SETIEMBRE
-                                                </option>
-                                            @break
+                                    @case(8)
+                                        <option value="8">
+                                            AGOSTO
+                                        </option>
+                                    @break
 
-                                            @case(10)
-                                                <option value="10">
-                                                    OCTUBRE
-                                                </option>
-                                            @break
+                                    @case(9)
+                                        <option value="9">
+                                            SETIEMBRE
+                                        </option>
+                                    @break
 
-                                            @case(11)
-                                                <option value="11">
-                                                    NOVIEMBRE
-                                                </option>
-                                            @break
+                                    @case(10)
+                                        <option value="10">
+                                            OCTUBRE
+                                        </option>
+                                    @break
 
-                                            @case(12)
-                                                <option value="12">
-                                                    DICIEMBRE
-                                                </option>
-                                            @break
-                                        @endswitch
+                                    @case(11)
+                                        <option value="11">
+                                            NOVIEMBRE
+                                        </option>
+                                    @break
 
-                                        @for($i=1; $i<=12; $i++)
+                                    @case(12)
+                                        <option value="12">
+                                            DICIEMBRE
+                                        </option>
+                                    @break
+                                @endswitch
 
-                                        @if($value->mes_cronogramaGeneral == $i)
-
-                                        @else
-
-                                        @switch($i)
-                                            @case(1)
-                                                <option value="1">
-                                                    ENERO
-                                                </option>
-                                            @break
-
-                                            @case(2)
-                                                <option value="2">
-                                                    FEBRERO
-                                                </option>
-                                            @break
-
-                                            @case(3)
-                                                <option value="3">
-                                                    MARZO
-                                                </option>
-                                            @break
-
-                                            @case(4)
-                                                <option value="4">
-                                                    ABRIL
-                                                </option>
-                                            @break
-
-                                            @case(5)
-                                                <option value="5">
-                                                    MAYO
-                                                </option>
-                                            @break
-
-                                            @case(6)
-                                                <option value="6">
-                                                    JUNIO
-                                                </option>
-                                            @break
-
-                                            @case(7)
-                                                <option value="7">
-                                                    JULIO
-                                                </option>
-                                            @break
-
-                                            @case(8)
-                                                <option value="8">
-                                                    AGOSTO
-                                                </option>
-                                            @break
-
-                                            @case(9)
-                                                <option value="9">
-                                                    SETIEMBRE
-                                                </option>
-                                            @break
-
-                                            @case(10)
-                                                <option value="10">
-                                                    OCTUBRE
-                                                </option>
-                                            @break
-
-                                            @case(11)
-                                                <option value="11">
-                                                    NOVIEMBRE
-                                                </option>
-                                            @break
-
-                                            @case(12)
-                                                <option value="12">
-                                                    DICIEMBRE
-                                                </option>
-                                            @break
-                                        @endswitch
-
-                                        @endif
-
-                                    @endfor
+                            @endfor
 
                             </select>
                         </div>
                     </div>{{-- fin Mes de Equipo --}}
-
-                    {{-- Año de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Año:</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="año_cronogramaGeneral"
-                            value="{{$value->año_cronogramaGeneral}}" required autofocus
+                            <input type="text" class="form-control" 
+                             id="año_cronogramaGeneral" name="año_cronogramaGeneral"
+                            required autofocus
                             style="text-transform: uppercase;">
                         </div>
                     </div>{{-- fin Año de Equipo --}}
-
-                </div>
-
-                <div class="modal-footer d-flex justify-content-between">
-                    <div>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
                     </div>
-
-                    <div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </div>
-
-            </form>
-          </div>
+                </form>
+            </div>
         </div>
-
     </div>
+</div>
 
-    @endforeach
+{{-- Editar cronograma general en modal --}}
 
-    <script>
-        $("#editarCronogramaGeneral").modal();
-    </script>
 
-  @else
-
-  {{$status}}
-
-@endif
-
-@endif
 
 
 @if (Session::has("ok-crear"))
@@ -655,9 +585,47 @@
 </script>
 
 @endif
+<script>
+    document.getElementById('downloadButton').addEventListener('click', async function() {
+      
+       document.getElementById('spinner').style.display = 'block';
+       $("body").css({opacity:.65,'pointer-events':'none'});
+       try {
+            const respuesta = await fetch('reportesCronogramaGeneral/cronogramaGeneralPdf');
+            if (!respuesta.ok) {
+                throw new Error('Error al obtener el archivo PDF desde el servidor');
+            }
+            const headerLine = respuesta.headers.get('Content-Disposition');
+            const nombre = headerLine.match(/(?<=filename\s*=["']).*(?=["'])/)[0];
+            const blob = await respuesta.blob();
+            let url = URL.createObjectURL(blob);
+
+            // Crear un enlace temporal para descargar el archivo PDF
+            let enlaceDescarga = document.createElement('a');
+            enlaceDescarga.href = url;
+            enlaceDescarga.download = nombre||'archivo.pdf';
+
+            // Agregar el enlace al DOM y hacer clic en él para iniciar la descarga
+            document.body.appendChild(enlaceDescarga);
+            enlaceDescarga.click();
+
+            // Limpiar el objeto URL y eliminar el enlace del DOM después de la descarga
+            document.body.removeChild(enlaceDescarga);
+            URL.revokeObjectURL(url);
+       } catch (error) {
+            console.error('Error:', error);
+       }
+
+       document.getElementById('spinner').style.display = 'none';
+        $("body").css({opacity:'','pointer-events':''});
+   });
+</script>
+
 
 @endsection
 
 @endif
 
 @endforeach
+
+

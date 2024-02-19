@@ -4,7 +4,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -50,41 +50,44 @@
                         </tr>
 
                     </thead>
-
                     <tbody>
 
-                    @foreach ($ordenServicios as $key => $data)
-                        <tr>
-                            <td style="text-align: center;">{{($key+1)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->codigo_ordenServicio}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->expediente_ordenServicio}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{ \Carbon\Carbon::parse($data->fecha_ordenServicio)->format('d-m-Y')}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">S/. {{number_format($data->monto_ordenServicio, 2)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                <a href="../storage/app/{{$data->pdf_ordenServicio}}" download="Orden de Servicio" class="btn btn-default btn-sm" >
-                                    <i class="fas fa-download text-black"></i> Descargar Archivo
-                                </a>
-                            </td>
-                            </td>
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    <a href="{{url('/')}}/ordenServicios/{{$data->id_ordenServicio}}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-pencil-alt text-white"></i>
-                                    </a>
-
-                                    <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/ordenServicios/{{$data->id_ordenServicio}}"
-                                        method="DELETE" pagina="ordenServicios" token="{{ csrf_token() }}">
-                                        <!-- @csrf -->
-                                        <i class="fas fa-trash-alt text-white"></i>
-                                    </button>
-
-                                </div>
-                            </td>
-
-                        </tr>
-                    @endforeach
-
                     </tbody>
+
+                    {{-- <tbody>
+
+                        @foreach ($ordenServicios as $key => $data)
+                            <tr>
+                                <td style="text-align: center;">{{($key+1)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->codigo_ordenServicio}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->expediente_ordenServicio}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{ \Carbon\Carbon::parse($data->fecha_ordenServicio)->format('d-m-Y')}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">S/. {{number_format($data->monto_ordenServicio, 2)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    <a href="../storage/app/{{$data->pdf_ordenServicio}}" download="Orden de Servicio" class="btn btn-default btn-sm" >
+                                        <i class="fas fa-download text-black"></i> Descargar Archivo
+                                    </a>
+                                </td>
+                                </td>
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <a href="{{url('/')}}/ordenServicios/{{$data->id_ordenServicio}}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-pencil-alt text-white"></i>
+                                        </a>
+
+                                        <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/ordenServicios/{{$data->id_ordenServicio}}"
+                                            method="DELETE" pagina="ordenServicios" token="{{ csrf_token() }}">
+                                            <!-- @csrf -->
+                                            <i class="fas fa-trash-alt text-white"></i>
+                                        </button>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        @endforeach
+
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -98,8 +101,8 @@
       </div>
     </section>
     <!-- /.content -->
-  </div>
-
+</div>
+{{-- crear nuevo orden de servicio --}}
 <div class="modal" id="crearOrdenServicio">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -182,6 +185,101 @@
         </div>
     </div>
 </div>
+{{-- fin de crear nueva orden de servicio --}}
+
+
+{{-- inicio del modal editar orden de servicio --}}
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Departamento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST" enctype="multipart/form-data">
+                    @method('PUT')
+                    @csrf
+                    <div class="input-group mb-3">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+
+                        <input type="text" class="form-control" id="codigo_ordenServicio" name="codigo_ordenServicio"
+                        required autofocus
+                        style="text-transform: uppercase;">
+                    </div>{{-- fin codigo de orden de servicio --}}
+                    <div class="input-group mb-3">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+
+                        <input type="date" class="form-control" id="fecha_ordenServicio"name="fecha_ordenServicio"
+                         required autofocus
+                        style="text-transform: uppercase;">
+                    </div>{{-- fin fecha de orden de servicio --}}
+                    <div class="input-group mb-3">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+
+                        <input type="text" class="form-control"  id="expediente_ordenServicio" name="expediente_ordenServicio"
+                        required autofocus
+                        style="text-transform: uppercase;">
+                    </div>{{-- fin expediente de orden de servicio --}}
+                    <div class="input-group mb-3">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+
+                        <input type="text" class="form-control" id="monto_ordenServicio" name="monto_ordenServicio"
+                         required autofocus
+                        style="text-transform: uppercase;">
+                    </div>{{-- fin monto de orden de servicio --}}
+                    {{-- pdf --}}
+                    <hr class="pb-2">
+                    <div class="form-group my-2 text-center">
+                        <div class="btn btn-default btn-file">
+                            <i class="fas fa-paperclip"></i> Adjuntar Archivo
+                            <p><label for="pdf_archivo_editar">
+                                <input type="file" name="pdf_archivo_editar" id="pdf_ordenServicio_editar">
+                            </label></p>
+
+                        </div><br>
+
+                        <p class="help-block small">Tamaño máximo de archivos: 20MB</p>
+                    </div>
+                    <div class="input-group mb-3" style="display:none;">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+
+                        <input type="hidden" class="form-control" name="pdf_archivo_editar_actual" id="pdf_archivo_editar_actual"
+                         required autofocus
+                        style="text-transform: uppercase;">
+                    </div>{{-- fin pdf actual --}}
+                </div>
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{-- fin del modal editar orden del servicio  --}}
+
+
 
 {{-- Editar departamento en modal --}}
 

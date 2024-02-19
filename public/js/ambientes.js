@@ -2,7 +2,47 @@
 DataTable de Jornadas Laborales
 =============================================*/
 $("#tablaAmbientes").DataTable({
-    "language": {
+    
+	processing: true,
+    serverSide: true,
+	lengthChange: false,
+	ajax :{
+		url: 'http://127.0.0.1:8000/obtenerambiente'
+	}
+	,
+	columns:[	
+		{
+			data: null, // Utilizamos null ya que no hay una propiedad específica asociada
+			name: 'correlativo', // Nombre de la columna
+			render: function (data, type, row, meta) {
+				// Devolvemos el número de fila más uno para hacerlo correlativo
+				var correlativo = meta.row + meta.settings._iDisplayStart + 1;
+                return correlativo;	
+			}
+		},
+		{data:'nombre_ambiente' ,name:'nombre_ambiente'}, 
+		{data:'nombre_estado' ,name:'nombre_estado'}, 
+		{data:'nombre_departamento' ,name:'nombre_departamento'}, 
+		{data:function (row) {
+			if (row.id_departamento == '') {
+				return row.nombre_direccionAmbiente
+			}else{
+				return row.nombre_direccionDepartamento
+			}
+		}
+			,name:'id_departamento'}, 
+		{ 
+			data: "id_ambiente",
+			name: 'acciones',
+			render: function(data, type, full, meta) {
+				return'<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>'+ 
+				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="/ambientes/'+ data +'" method=DELETE pagina="ambientes">'+
+					'<i class="fas fa-trash-alt text-white"></i>'+
+				 '</button>'
+			}
+		}
+	],
+	"language": {
 
 	    "sProcessing": "Procesando...",
 	    "sLengthMenu": "Mostrar _MENU_ registros",
@@ -26,5 +66,45 @@ $("#tablaAmbientes").DataTable({
 	      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 	      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
         }
-      }
+      }  
+});
+$('#tablaAmbientes').on('click', '.editar-btn', function() {
+    var id = $(this).data('id');
+
+    // Realiza una petición AJAX para obtener los datos del registro
+    $.get('/ambientes/json/' + id, function(data) {
+        // console.log("Datos recibidos:",data);
+        // Completa el formulario del modal con los datos recibidos
+        //$('#id').val(data.id_departamento);
+        $('#nombre_ambiente').val(data.nombre_ambiente);
+        $('#estado_ambiente').val(data.estado_ambiente);
+        $('#id_departamento').val(data.id_departamento);
+        $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
+        // Continúa con los demás campos
+        $('#editForm').submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+    
+            // Realiza una petición AJAX para actualizar el registro
+            $.ajax({
+                url: 'http://127.0.0.1:8000/ambientes/' + id,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    //console.log(response);
+                    // Cierra el modal de edición
+                    //$('#editModal').modal('hide');
+                    // Recarga los datos en la tabla
+                    // location.reload();
+                    // return false;
+                },
+                error: function(xhr, status, error) {
+					console.error(textStatus + " " + errorThrown);
+                }
+            });
+            location.reload();
+        });
+		
+    });
+    
 });

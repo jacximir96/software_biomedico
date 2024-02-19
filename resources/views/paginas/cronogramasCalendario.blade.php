@@ -4,7 +4,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -48,7 +48,7 @@
 
                 <div id="tabla_ocultar">
                     <table class="table table-bordered table-striped dt-responsive" width="100%"
-                    id="tablaRoles">
+                    id="historial">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -340,6 +340,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
           var calendarEl = document.getElementById('calendar');
+          var events = @json($events);
 
           $.ajaxSetup({
             headers: {
@@ -360,6 +361,7 @@
             navLinks: false,
             selectable: true,
             dayMaxEventRows: true,
+            events: events,
 
             views: {
                 timeGrid: {
@@ -377,6 +379,7 @@
 
             /* Inicio evento eliminar */
             eventClick: function(arg) {
+                var id = arg.event.id;
               var deleteMsg = swal({
                                 title: "Estas seguro?",
                                 text: "No podrás recuperar este archivo!",
@@ -390,8 +393,8 @@
                     if(result.value){
                     if(deleteMsg){
                 $.ajax({
-                    url: '/software_biomedico/public/cronogramasCalendario/13/eliminar',
-                    type: 'POST',
+                    url: "{{route('cronogramasCalendario.destroy','')}}" +'/'+id,
+                    type: 'DELETE',
                     data: {
                               "_token":"{{ csrf_token() }}",
                               "id_cronogramaCalendario":arg.event.id
@@ -399,6 +402,7 @@
                     success: function () {
                     arg.event.remove();
                     swal("Hecho!", "Fue eliminado con éxito!", "success");
+                    location.reload(); 
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                     swal("Error al eliminar!", "Inténtalo de nuevo", "error");
@@ -425,8 +429,16 @@
             },
 
             editable: true, //para poder editar los datos del registro
-            events: '/software_biomedico/public/cronogramasCalendario/calendario/listar' //se listan todos los registros del cronograma
-
+            //events: '/software_biomedico/public/cronogramasCalendario/calendario/listar' //se listan todos los registros del cronograma
+            eventDidMount: function(info) {
+                // console.log(info.event.title);
+                $(info.el).tooltip({ 
+                title: info.event.extendedProps.description,
+                placement: "top",
+                trigger: "hover",
+                container: "body"
+            });
+        },
           });
 
           calendar.render();

@@ -15,6 +15,7 @@
         "laravel/framework": "^6.20",
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
+        "maatwebsite/excel": "^3.1",
         "spatie/laravel-permission": "^4.0",
         "yajra/laravel-datatables-oracle": "^9.15"
     },

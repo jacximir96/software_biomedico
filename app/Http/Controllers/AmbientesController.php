@@ -13,9 +13,27 @@ use App\AmbientesModel;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Yajra\DataTables\Facades\DataTables;
 
 class AmbientesController extends Controller
 {
+    
+    public function getAmbiente() {
+        if (request()->ajax()) {
+            $ambientes_general = DB::select('SELECT A.id_ambiente,A.nombre_ambiente,A.estado_ambiente,A.id_departamento,A.id_direccionEjecutiva,
+                                    D.id_departamento,D.nombre_departamento,D.iniciales_departamento,D.estado_departamento,D.id_direccionEjecutiva,
+                                    DE.id_direccionEjecutiva,DE.nombre_direccionEjecutiva as nombre_direccionAmbiente,DE.iniciales_direccionEjecutiva as
+                                    iniciales_direccionAmbiente,DEE.id_direccionEjecutiva,DEE.nombre_direccionEjecutiva as nombre_direccionDepartamento,
+                                    DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,E.id_estado,E.nombre_estado
+                                    FROM ambiente A LEFT JOIN departamento D ON A.id_departamento = D.id_departamento
+                                    LEFT JOIN direccionejecutiva DE ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva
+                                    LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva
+                                    INNER JOIN estado E ON A.estado_ambiente = E.id_estado ORDER BY A.id_ambiente DESC');
+            return DataTables::of($ambientes_general)->make(true);
+        }
+    }
+
+    
     public function index(){
 
     $ambientes_general = DB::select('SELECT A.id_ambiente,A.nombre_ambiente,A.estado_ambiente,A.id_departamento,A.id_direccionEjecutiva,
@@ -34,6 +52,7 @@ class AmbientesController extends Controller
     $administradores = AdministradoresModel::all();
     $departamentos = DepartamentosModel::all();
     $equipos = EquiposModel::all();
+    $estado = DB::select('select * from estado');
     $ambientes = AmbientesModel::all();
     $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
@@ -42,7 +61,7 @@ class AmbientesController extends Controller
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
     AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-    return view("paginas.ambientes",array("ambientes"=>$ambientes,"equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,
+    return view("paginas.ambientes",array("ambientes"=>$ambientes,"equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,'estado' => $estado,
                                             "direccionesEjecutivas"=>$direccionesEjecutivas,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                             "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,"ambientes_general"=>$ambientes_general));
 }
@@ -104,6 +123,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
         $ambientes = AmbientesModel::all();
+        $estado = DB::select('select * from estado');
 
         $ambiente_departamento = DB::select('select * from ambiente A INNER JOIN
         departamento D ON D.id_departamento = A.id_departamento
@@ -136,13 +156,13 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
         if(count($ambiente) != 0){
-            return view("paginas.ambientes",array("status"=>200,"ambiente"=>$ambiente,"ambiente_departamento"=>$ambiente_departamento,
+            return view("paginas.ambientes",array("status"=>200,"ambiente"=>$ambiente,"ambiente_departamento"=>$ambiente_departamento,'estado' => $estado,
         "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
         "ambiente_estado"=>$ambiente_estado,"estado"=>$estado,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
         "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,"ambientes_general"=>$ambientes_general,
         "ambiente_direccionEjecutiva"=>$ambiente_direccionEjecutiva));
         }else{
-            return view("paginas.ambientes",array("status"=>404,"ambiente"=>$ambiente,"ambiente_departamento"=>$ambiente_departamento,
+            return view("paginas.ambientes",array("status"=>404,"ambiente"=>$ambiente,"ambiente_departamento"=>$ambiente_departamento,'estado' => $estado,
             "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
             "ambiente_estado"=>$ambiente_estado,"estado"=>$estado,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
             "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,"ambientes_general"=>$ambientes_general,
@@ -183,5 +203,9 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
         }else{
             return redirect("/ambientes")->with("error","");
         }
+    }
+    public function showJson($id) {
+        $ambiente = AmbientesModel::find($id);
+        return $ambiente;
     }
 }

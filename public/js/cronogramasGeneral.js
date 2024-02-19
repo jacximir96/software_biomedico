@@ -2,74 +2,74 @@
 DataTable de Jornadas Laborales
 =============================================*/
 var tablaCronogramasGeneral = $("#tablaCronogramasGeneral").DataTable({
-    "language": {
+  "language": {
 
-	    "sProcessing": "Procesando...",
-	    "sLengthMenu": "Mostrar _MENU_ registros",
-	    "sZeroRecords": "No se encontraron resultados",
-	    "sEmptyTable": "Ningún dato disponible en esta tabla",
-	    "sInfo": "Mostrando registros del _START_ al _END_",
-	    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0",
-	    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-	    "sInfoPostFix": "",
-	    "sSearch": "Buscar:",
-	    "sUrl": "",
-	    "sInfoThousands": ",",
-	    "sLoadingRecords": "Cargando...",
-	    "oPaginate": {
-	      "sFirst": "Primero",
-	      "sLast": "Último",
-	      "sNext": "Siguiente",
-	      "sPrevious": "Anterior"
-	    },
-	    "oAria": {
-	      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-	      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-        }
+    "sProcessing": "Procesando...",
+    "sLengthMenu": "Mostrar _MENU_ registros",
+    "sZeroRecords": "No se encontraron resultados",
+    "sEmptyTable": "Ningún dato disponible en esta tabla",
+    "sInfo": "Mostrando registros del _START_ al _END_",
+    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0",
+    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "sInfoPostFix": "",
+    "sSearch": "Buscar:",
+    "sUrl": "",
+    "sInfoThousands": ",",
+    "sLoadingRecords": "Cargando...",
+    "oPaginate": {
+      "sFirst": "Primero",
+      "sLast": "Último",
+      "sNext": "Siguiente",
+      "sPrevious": "Anterior"
     },
-    columnDefs: [ {
-        orderable: false,
-        className: 'select-checkbox',
-        targets:   3
-        } ],
+    "oAria": {
+      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+      }
+  },
+  columnDefs: [ {
+      orderable: false,
+      className: 'select-checkbox',
+      targets:   3
+      } ],
 
-    select: {
-        style:    'multi',
-        selector: 'td:nth-child(4)'
-    }
+  select: {
+      style:    'multi',
+      selector: 'td:nth-child(4)'
+  }
 });
 
 $('#guardarCronogramaGeneral').on('click', function (event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    $('#form1').find('input[type="hidden"]').remove();
-    var token_cronograma = $('#token').val();
-    var mes_cronograma = $('#mes_cronograma').val();
-    var año_cronograma = $('#año_cronograma').val();
-    var seleccionados = tablaCronogramasGeneral.rows({ selected: true });
+  $('#form1').find('input[type="hidden"]').remove();
+  var token_cronograma = $('#token').val();
+  var mes_cronograma = $('#mes_cronograma').val();
+  var año_cronograma = $('#año_cronograma').val();
+  var seleccionados = tablaCronogramasGeneral.rows({ selected: true });
 
-    if(!seleccionados.data().length)
-      alert("No ha seleccionado ningún producto");
-    else{
-        $('<input>', {
-            type: 'hidden',
-            value: token_cronograma,
-            name: 'token'
-        }).appendTo('#form1');
+  if(!seleccionados.data().length)
+    alert("No ha seleccionado ningún producto");
+  else{
+      $('<input>', {
+          type: 'hidden',
+          value: token_cronograma,
+          name: 'token'
+      }).appendTo('#form1');
 
-      seleccionados.every(function(key,data){
-        /* console.log(this.data()[0]); */
+    seleccionados.every(function(key,data){
+      /* console.log(this.data()[0]); */
 
-        $('<input>', {
-            type: 'hidden',
-            value: this.data()[0],
-            name: 'equipos_cronograma[]'
-        }).appendTo('#form1');
+      $('<input>', {
+          type: 'hidden',
+          value: this.data()[0],
+          name: 'equipos_cronograma[]'
+      }).appendTo('#form1');
 
-        $("#form1").submit(); //submiteas el form
-      });
-    }
-  });
+      $("#form1").submit(); //submiteas el form
+    });
+  }
+});
 
 
 

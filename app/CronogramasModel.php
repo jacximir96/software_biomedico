@@ -8,11 +8,14 @@ class CronogramasModel extends Model
 {
     protected $table = 'cronograma';
 
-    public function Mantenimiento(){
+    protected $primaryKey = "id_cronograma";
+
+
+    public function mantenimiento(){
         return $this->belongsTo('App\TipoMantenimientosModel','id_mantenimiento','id_mantenimiento');
     }
 
-    public function Equipo(){
+    public function equipo(){
         return $this->belongsTo('App\EquiposModel','id_equipo','id_equipo');
     }
 
@@ -25,7 +28,7 @@ class CronogramasModel extends Model
     }
 
     protected $fillable = [
-        "id_cronograma",
+        'id_cronograma',
         "id_equipo",
         "fecha",
         "fecha_final",

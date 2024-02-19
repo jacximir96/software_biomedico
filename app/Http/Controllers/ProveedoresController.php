@@ -9,9 +9,16 @@ use App\AdministradoresModel;
 use App\reniec\reniec;
 use App\reniec\curl;
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Yajra\DataTables\Facades\DataTables;
 
 class ProveedoresController extends Controller
 {
+    public function getProveedor() {
+        if (request()->ajax()) {
+            $proveedores = ProveedoresModel::all();
+            return DataTables::of($proveedores)->make(true);
+        }
+    }
     /* Mostrar todos los registros */
     public function index(){
 
@@ -197,4 +204,9 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                         return redirect("/proveedores")->with("error","");
                     }
                 }
+                public function showJson($id) {
+                    $proveedores = ProveedoresModel::find($id);
+                    return $proveedores;
+                }
 }
+

@@ -15,17 +15,24 @@ use App\DepartamentosModel;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Yajra\DataTables\DataTables;
 
 class CronogramasListaController extends Controller
 {
+   
+    public function getindex(Request $request) {
+        if($request->ajax()){
+            $data  = CronogramasModel::all();
+            return DataTables::of($data)->make(true);
+
+        }
+        return view('paginas.cronogramasLista');
+    }
+
     public function index(){
 
-/*         if(request()->ajax()){
-            return datatables()->of(DB::SELECT("SELECT C.observacion,C.pdf_cronograma,C.otm_cronograma,OS.codigo_ordenServicio,D.iniciales_departamento,DE.iniciales_direccionEjecutiva,
-            CASE WHEN P.ruc_proveedor IS NULL AND C.realizado = 1 THEN 'ESGTMEB' ELSE P.ruc_proveedor END AS ruc_proveedor,C.monto_cronograma,M.nombre_mantenimiento,C.garantia,C.fecha_final,C.realizado,C.id_cronograma,C.id_equipo,C.fecha,E.nombre_equipo,E.cp_equipo from cronograma C
-            INNER JOIN equipo E ON C.id_equipo = E.id_equipo INNER JOIN mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento LEFT JOIN proveedor P ON C.id_proveedor = P.id_proveedor LEFT JOIN departamento D ON C.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE ON C.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN ordenservicio OS ON C.id_ordenServicio = OS.id_ordenServicio
-            WHERE C.fecha_final IS NOT NULL ORDER BY C.id_cronograma DESC"));
-        } */
+     
+
         $administradores = AdministradoresModel::all();
         $proveedores = ProveedoresModel::all();
         $equipos = EquiposModel::all();
@@ -160,7 +167,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
     public function show1(Request $request){
 
-        return $request->all() /* response(json_encode($datosReferencia)) */;  
+        return $request->all(); /* response(json_encode($datosReferencia)) */;  
         /* return "probando"; */
 
         /* $cronograma = DB::select('SELECT * FROM cronograma C INNER JOIN equipo E ON C.id_equipo = E.id_equipo WHERE id_cronograma = ?',[$id]); */

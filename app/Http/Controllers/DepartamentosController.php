@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base 
 
 class DepartamentosController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+    
     public function index(){
 
         /* DB::select('select * from departamento D INNER JOIN
@@ -30,9 +34,7 @@ class DepartamentosController extends Controller
                                                 direccionejecutiva Dir ON D.id_direccionEjecutiva = Dir.id_direccionEjecutiva'))
             ->addColumn('acciones', function($data){
                 $acciones = '<div class="btn-group">
-                                <a href="'.url()->current().'/'.$data->id_departamento.'" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-pencil-alt text-white"></i>
-                                </a>
+                <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' .$data->id_departamento.'"><i class="fas fa-pencil-alt text-white"></i></button>
 
                                 <button class="btn btn-danger btn-sm eliminarRegistro" action="'.url()->current().'/'.$data->id_departamento.'"
                                 method="DELETE" pagina="departamentos" token="'.csrf_token().'">
@@ -48,6 +50,7 @@ class DepartamentosController extends Controller
         $departamentos = DepartamentosModel::all();
         $administradores = AdministradoresModel::all();
         $direccionesEjecutivas = DireccionesEjecutivasModel::all();
+        // $departamento_estado = DB::select("select * from estado_departamento");
         $departamento_estado_direccionEjecutiva =DB::select('select * from departamento D INNER JOIN
         estado E ON D.estado_departamento = E.id_estado INNER JOIN
         direccionejecutiva Dir ON D.id_direccionEjecutiva = Dir.id_direccionEjecutiva');
@@ -193,4 +196,9 @@ class DepartamentosController extends Controller
                 return redirect("/departamentos")->with("error","");
             }
         }
+
+    function showJson($id){
+        $departamento = DepartamentosModel::find($id);
+        return $departamento;
+    }
 }

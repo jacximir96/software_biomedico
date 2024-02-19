@@ -54,8 +54,7 @@
             <div class="card">
               <div class="card-body">
 
-                <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="tablaRoles">
+                <table class="table table-bordered table-striped dt-responsive" width="100%" id="tablaRoles">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -75,101 +74,101 @@
                         </tr>
 
                     </thead>
+                    <tbody></tbody>
+                    {{-- <tbody>
 
-                    <tbody>
+                        @foreach($equipos_criterios as $key => $data)
+                                @php
+                                    if($data->antiguedad_equipo >= $data->tiempo_vida_util_equipo){
+                                        $valor_antiguedad = 1;
+                                    }else{
+                                        $valor_antiguedad = 0;
+                                    }
+                                @endphp
 
-                    @foreach($equipos_criterios as $key => $data)
-                            @php
-                                if($data->antiguedad_equipo >= $data->tiempo_vida_util_equipo){
-                                    $valor_antiguedad = 1;
-                                }else{
-                                    $valor_antiguedad = 0;
-                                }
-                            @endphp
+                                @php
+                                    if(100*$data->acumulado_cronograma/$data->monto_adquisicion_equipo >= 40){
+                                        $valor_porcentaje = 1;
+                                    }else{
+                                        $valor_porcentaje = 0;
+                                    }
+                                @endphp
 
-                            @php
-                                if(100*$data->acumulado_cronograma/$data->monto_adquisicion_equipo >= 40){
-                                    $valor_porcentaje = 1;
-                                }else{
-                                    $valor_porcentaje = 0;
-                                }
-                            @endphp
+                            @if($data->baja_equipo != 1 && $data->criterio_7 == 1 || $data->baja_equipo != 1 && $data->criterio_1 + $valor_porcentaje + $data->criterio_3 + $data->criterio_4 + $valor_antiguedad + $data->criterio_6 >= 2)
+                            <tr>
+                                <td style="text-align: center;">{{($key+1)}}</td>
+                                <td style="text-transform: uppercase;">{{$data->nombre_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipo}} VALOR OBTENIDO{{100*$data->acumulado_cronograma/$data->monto_adquisicion_equipo}} {{$valor_porcentaje}} {{$valor_antiguedad}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->criterio_1 == 0)
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if(100*$data->acumulado_cronograma/$data->monto_adquisicion_equipo >= 40)
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->criterio_3 == 0)
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->criterio_4 == 0)
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->antiguedad_equipo >= $data->tiempo_vida_util_equipo)
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->criterio_6 == 0)
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->criterio_7 == 0)
+                                        <i class="fas fa-times text-red" style="text-align:center;"></i>
+                                    @else
+                                        <i class="fas fa-check text-green" style="text-align:center;"></i>
+                                    @endif
+                                </td>
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <a href="{{url('/')}}/equiposReposicion/{{$data->id_equipo}}" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-pencil-alt text-white"></i> Dar de Baja
+                                        </a>
+                                    </div>
 
-                        @if($data->baja_equipo != 1 && $data->criterio_7 == 1 || $data->baja_equipo != 1 && $data->criterio_1 + $valor_porcentaje + $data->criterio_3 + $data->criterio_4 + $valor_antiguedad + $data->criterio_6 >= 2)
-                        <tr>
-                            <td style="text-align: center;">{{($key+1)}}</td>
-                            <td style="text-transform: uppercase;">{{$data->nombre_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipo}} {{100*$data->acumulado_cronograma/$data->monto_adquisicion_equipo}} {{$valor_porcentaje}} {{$valor_antiguedad}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->criterio_1 == 0)
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if(100*$data->acumulado_cronograma/$data->monto_adquisicion_equipo >= 40)
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->criterio_3 == 0)
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->criterio_4 == 0)
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->antiguedad_equipo >= $data->tiempo_vida_util_equipo)
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->criterio_6 == 0)
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->criterio_7 == 0)
-                                    <i class="fas fa-times text-red" style="text-align:center;"></i>
-                                @else
-                                    <i class="fas fa-check text-green" style="text-align:center;"></i>
-                                @endif
-                            </td>
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    <a href="{{url('/')}}/equiposReposicion/{{$data->id_equipo}}" class="btn btn-danger btn-sm">
-                                        <i class="fas fa-pencil-alt text-white"></i> Dar de Baja
-                                    </a>
-                                </div>
+                                    <div class="btn-group">
+                                        <a href="http://192.168.6.113/software_biomedico/public/reportesEquipos/EquiposPdf/{{$data->id_equipo}}" class="btn btn-default btn-sm" target="_blank">
+                                            <i class="fas fa-download text-black"></i> Tarjeta de Control
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+                        @endforeach
 
-                                <div class="btn-group">
-                                    <a href="http://192.168.6.113/software_biomedico/public/reportesEquipos/EquiposPdf/{{$data->id_equipo}}" class="btn btn-default btn-sm" target="_blank">
-                                        <i class="fas fa-download text-black"></i> Tarjeta de Control
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endif
-                    @endforeach
-
-                    </tbody>
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -186,6 +185,63 @@
 </div>
 
 {{-- Editar departamento en modal --}}
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Dar de Baja</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                   
+                        {{-- fecha Inicial --}}
+                        <div class="input-group mb-3">
+    
+                            <label for="email" class="col-md-4 control-label">Fecha:</label>
+    
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" id="fecha_baja" name="fecha_baja"
+                                value="" required autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>{{-- fin fecha inicial--}}
+    
+                        {{-- Equipo para baja--}}
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-4 control-label">Reemplazado por:</label>
+    
+                            <div class="col-md-8">
+                            <select class="form-control select2" id="equipo_baja" name="equipo_baja" required>
+                                <option value="">
+                                    -- Seleccionar el Equipo --
+                                </option>
+                                @foreach($equiposGarantia = App\EquiposGarantiaModel::all() as $key => $value_equipos)
+                                    <option value="{{$value_equipos->nombre_equipoGarantia}},Cod. Patrimonial: {{$value_equipos->cp_equipoGarantia}}">{{$value_equipos->nombre_equipoGarantia}},Cod. Patrimonial: {{$value_equipos->cp_equipoGarantia}}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>{{-- fin equipo para baja --}}
+                     
+                  
+                    
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if (isset($status))
 

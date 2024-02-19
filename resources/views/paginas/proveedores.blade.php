@@ -55,10 +55,12 @@
                         </tr>
 
                     </thead>
-
                     <tbody>
 
-                    @foreach ($proveedores as $key => $data)
+                    </tbody>
+                    {{-- <tbody>
+
+                        @foreach ($proveedores as $key => $data)
                         <tr>
                             <td>{{($key+1)}}</td>
                             <td>{{$data->ruc_proveedor}}</td>
@@ -89,9 +91,9 @@
                             </td>
 
                         </tr>
-                    @endforeach
+                        @endforeach
 
-                    </tbody>
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -106,6 +108,104 @@
     </section>
     <!-- /.content -->
   </div>
+  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Proveedor</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">RUC:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="txtdni" name="txtdni"
+                             required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+                    </div>{{-- fin ruc --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Razón Social:</label>
+
+                        <div class="col-md-8">
+                            <textarea class="form-control"  id="txtrazon" name="txtrazon" required autofocus style="text-transform: uppercase;" readonly=""></textarea>
+                        </div>
+                    </div>{{-- fin razon social --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Estado:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="txtgrupo" name="txtgrupo"
+                            required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+                    </div>{{-- fin estado --}}
+
+                    {{-- Direccion --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Direccion: <i class="fa fa-map-marker"></i> </label>
+
+                        <div class="col-md-8">
+                            <textarea class="form-control" id="txtdireccion" name="txtdireccion" required autofocus style="text-transform: uppercase;"></textarea>
+                        </div>
+                    </div>{{-- fin DIRECCION --}}
+
+                    {{-- Distrito --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Distrito:</label>
+
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" id="txtdistrito" name="txtdistrito"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin distrito --}}
+
+                    {{-- provincia --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Provincia:</label>
+
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" id="txtprovincia" name="txtprovincia"
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin provincia --}}
+
+                    {{-- departamento --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Departamento:</label>
+
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" id="txtdepartamento" name="txtdepartamento"
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin departamento --}}
+
+
+                   
+                        <div class="modal-footer d-flex justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+            
+                            <div>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
 
 <div class="modal" id="consultaSunat">
     <div class="modal-dialog">
@@ -217,7 +317,10 @@
 
   {{-- Editar departamento en modal --}}
 
-@if (isset($status))
+
+
+
+  @if (isset($status))
 
 @if ($status == 200)
 

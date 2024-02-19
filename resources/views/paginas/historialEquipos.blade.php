@@ -45,24 +45,26 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                    @foreach ($equipos as $key => $data)
-                        <tr>
-                            <td style="text-align: center;">{{($key+1)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipo}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
-                            <td>
-                                <a href="{{url('/')}}/historialEquipos/{{$data->id_equipo}}" class="btn btn-warning btn-sm">
-                                    Historial
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
+
                     </tbody>
+                    {{-- <tbody>
+                        @foreach ($equipos as $key => $data)
+                            <tr>
+                                <td style="text-align: center;">{{($key+1)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipo}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
+                                <td>
+                                    <a href="{{url('/')}}/historialEquipos/{{$data->id_equipo}}" class="btn btn-warning btn-sm">
+                                        Historial
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -77,6 +79,59 @@
     </section>
     <!-- /.content -->
   </div>
+  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Historial</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                    <table class="table table-bordered" id="miTabla">
+                        <thead>
+                             <tr>
+                                <th colspan="2" style="text-align:center;">Información del Equipo</th>
+                            </tr>
+                        </thead>
+    
+                        <tbody>
+                            <input type="text" style="display:none" id="id_equipoHistorial" id="id_equipoHistorial">
+                           
+                            
+                        </tbody>
+                    </table>
+                    <table  class="table table-bordered table-striped dt-responsive" id="historialCompra">
+                        <thead>
+                            <tr>
+                                
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Archivo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
 
 {{-- Modal de Historial del equipo --}}
 
@@ -92,7 +147,10 @@
         <form action="{{ url('/') }}/reportesHistorial/historialPdf" method="get" target="_blank">
             <div class="modal-header bg-info">
                 <h4 class="modal-tittle">Historial</h4>
-                <a href="{{url("/")}}/historialEquipos" type="button" class="close">&times;</a>
+                {{-- <a href="{{url("/")}}/historialEquipos" type="button" class="close">&times;</a> --}}
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
 
             <div class="modal-body">
@@ -134,7 +192,7 @@
                     </tbody>
                 </table>
 
-                <table class="table table-bordered table-striped dt-responsive" id="tablaRoles">
+                <table class="table table-bordered table-striped dt-responsive">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -167,16 +225,21 @@
                             @endif
 
                             @if($valor_cronograma->realizado == 1)
-                                <td>REALIZADO</td>
+                                <td style="color:green;">REALIZADO</td>
                             @else
                                 <td style="color:red;">NO REALIZADO</td>
                             @endif
 
 
                             <td>
-                                <a href="../../storage/app/{{$valor_cronograma->pdf_cronograma}}" download="Archivo de finalización" class="btn btn-default btn-sm">
+                                @if (Storage::exists($valor_cronograma->pdf_cronograma))
+                                    <a href="{{Storage::url($valor_cronograma->pdf_cronograma)}}" download="Archivo de finalización" class="btn btn-default btn-sm">
+                                        <i class="fas fa-download text-black"></i>
+                                    </a>
+                                @endif
+                                {{-- <a href="{{route('download')}}" download="Archivo de finalización" class="btn btn-default btn-sm">
                                     <i class="fas fa-download text-black"></i>
-                                </a>
+                                </a> --}}
                             </td>
 
                         </tr>
@@ -190,7 +253,9 @@
 
                 <div class="modal-footer d-flex justify-content-between">
                     <div>
-                        <a href="{{url("/")}}/historialEquipos" type="button" class="btn btn-danger">Cerrar</a>
+                        {{-- <a href="{{url("/")}}/historialEquipos" type="button" class="btn btn-danger">Cerrar</a>
+                         --}}
+                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
 
                     <div>

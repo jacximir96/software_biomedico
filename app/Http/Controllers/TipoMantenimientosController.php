@@ -32,10 +32,9 @@ class TipoMantenimientosController extends Controller
                                                 estado E ON M.estado_mantenimiento = E.id_estado'))
             ->addColumn('acciones', function($data){
                 $acciones = '<div class="btn-group">
-                                <a href="'.url()->current().'/'.$data->id_mantenimiento.'" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-pencil-alt text-white"></i>
-                                </a>
-
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModalLong'.$data->id_mantenimiento.'">
+                                <i class="fas fa-pencil-alt text-white"></i>
+                                 </button>
                                 <button class="btn btn-danger btn-sm eliminarRegistro" action="'.url()->current().'/'.$data->id_mantenimiento.'"
                                 method="DELETE" pagina="tipoMantenimientos" token="'.csrf_token().'">
                                     <i class="fas fa-trash-alt text-white"></i>
@@ -54,6 +53,7 @@ class TipoMantenimientosController extends Controller
         $ambientes = AmbientesModel::all();
         $tipoMantenimientos = TipoMantenimientosModel::all();
         $estados = DB::select('select * from estado');
+        $estado_mantenimiento = DB::select('select * from estado');
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                                     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
                                                     WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
@@ -61,7 +61,7 @@ class TipoMantenimientosController extends Controller
         $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
                                                     AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-        return view("paginas.tipoMantenimientos",array("tipoMantenimientos"=>$tipoMantenimientos,"ambientes"=>$ambientes,"equipos"=>$equipos,
+        return view("paginas.tipoMantenimientos",array("tipoMantenimientos"=>$tipoMantenimientos,"ambientes"=>$ambientes,"equipos"=>$equipos,"estado_mantenimiento" => $estado_mantenimiento,
                                                         "departamentos"=>$departamentos,"administradores"=>$administradores,
                                                         "direccionesEjecutivas"=>$direccionesEjecutivas,"estados"=>$estados,
                                                         "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
@@ -133,11 +133,11 @@ class TipoMantenimientosController extends Controller
                                                 AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
             if(count($mantenimiento) != 0){
-                return view("paginas.tipoMantenimientos",array("status"=>200,"mantenimiento"=>$mantenimiento,"estado_mantenimiento"=>$estado_mantenimiento,"estados"=>$estados,
+                return view("paginas.tipoMantenimientos",array("status"=>200,"mantenimiento"=>$mantenimiento,"estado_mantenimiento"=>$estado_mantenimiento,"estados"=>$estados,'tipoMantenimientos' => $tipoMantenimientos,
             "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
             "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
             }else{
-                return view("paginas.tipoMantenimientos",array("status"=>404,"mantenimiento"=>$mantenimiento,"estado_mantenimiento"=>$estado_mantenimiento,"estados"=>$estados,
+                return view("paginas.tipoMantenimientos",array("status"=>404,"mantenimiento"=>$mantenimiento,"estado_mantenimiento"=>$estado_mantenimiento,"estados"=>$estados,'tipoMantenimientos' => $tipoMantenimientos,
                 "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
                 "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
             }

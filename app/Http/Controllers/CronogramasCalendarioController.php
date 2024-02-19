@@ -27,7 +27,7 @@ class CronogramasCalendarioController extends Controller
                 $administradores = AdministradoresModel::all();
                 $proveedores = ProveedoresModel::all();
                 $equipos = EquiposGarantiaModel::all();
-                $cronogramasCalendario = CronogramasCalendarioModel::all();
+               
                 $tipoMantenimientos = TipoMantenimientosModel::all();
                 $ordenServicios = OrdenServiciosModel::all();
                 $departamentos = DepartamentosModel::all();
@@ -38,7 +38,31 @@ class CronogramasCalendarioController extends Controller
                                                             $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                                             FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
                                                             WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
-        
+                 $cronogramasCalendario = CronogramasCalendarioModel::all();
+                 $events = array();
+
+            
+                 foreach ($cronogramasCalendario as $cronogramas) {
+                    if($cronogramas->realizado == 1){
+                        $cronogramas->realizado = "REALIZADO";
+                    }else{
+                        $cronogramas->realizado = "NO REALIZADO";
+                    }
+                     $events[] = [
+                         'id' => $cronogramas->id_cronogramaCalendario,
+                         'title' =>$cronogramas->equipo->nombre_equipoGarantia,
+                         'description' => 'Equipo: '.$cronogramas->equipo->nombre_equipoGarantia.', '.'Serie: '.$cronogramas->equipo->serie_equipoGarantia.', '.'Cod. Patrimonial: '.$cronogramas->equipo->cp_equipoGarantia.','.'Solicitado por:'.$cronogramas->id_departamento.','.'Realizado: '.$cronogramas->realizado,
+                         'start' => $cronogramas->fecha,
+                         'end' => $cronogramas->fecha_final,
+                         'backgroundColor' => '#1F618D ',
+                        'borderColor' => 'black',
+                        'textColor' => 'white'
+                     ];
+                 }
+
+
+
+
                 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
                                                             AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
@@ -46,7 +70,7 @@ class CronogramasCalendarioController extends Controller
                                                         "proveedores"=>$proveedores,"equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,
                                                         "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"cronogramasCalendario_fecha"=>$cronogramasCalendario_fecha,
                                                         "ordenServicios"=>$ordenServicios,"departamentos"=>$departamentos,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
-                                                        "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                                                        "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,'events' => $events));
             }
 
             public function listar(){
@@ -109,7 +133,20 @@ class CronogramasCalendarioController extends Controller
                 $administradores = AdministradoresModel::all();
                 $equipos = EquiposGarantiaModel::all();
                 $tipoMantenimientos = TipoMantenimientosModel::all();
-                $cronogramas = CronogramasCalendarioModel::all();
+
+                $cronogramasCalendario = CronogramasCalendarioModel::all();
+                 $events = array();
+
+            
+                 foreach ($cronogramasCalendario as $cronogramas) {
+                     $events[] = [
+                         'id' => $cronogramas->id_cronogramaCalendario,
+                         'title' => "(OTM) " . $cronogramas->equipo->nombre_equipoGarantia,
+                         'start' => $cronogramas->fecha,
+                         'end' => $cronogramas->fecha_final,
+                     ];
+                 }
+                // $cronogramas = CronogramasCalendarioModel::all();
                 $cronogramasCalendario_fecha = DB::select("select E.cp_equipoGarantia,C.fecha_final,C.realizado,C.id_cronogramaCalendario,C.id_equipoGarantia,C.fecha,E.nombre_equipoGarantia from cronogramacalendario C
                                                 INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
                                                 WHERE C.realizado = 0 AND C.fecha_final <> ''");
@@ -127,23 +164,34 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
                 if(count($cronograma) != 0){
                     return view("paginas.cronogramasCalendario",array("status"=>200,"cronograma"=>$cronograma,"administradores"=>$administradores,
-                    "equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,"cronogramas"=>$cronogramas,"cronogramasCalendario_fecha"=>$cronogramasCalendario_fecha,
+                    "equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,"cronogramasCalendario"=>$cronogramasCalendario,"cronogramasCalendario_fecha"=>$cronogramasCalendario_fecha,
                     "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"proveedores"=>$proveedores,"ordenServicios"=>$ordenServicios,
                     "departamentos"=>$departamentos,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
-                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,'events'=>$events));
                 }else{
                     return view("paginas.cronogramasCalendario",array("status"=>404,"cronograma"=>$cronograma,"administradores"=>$administradores,
-                    "equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,"cronogramas"=>$cronogramas,"cronogramasCalendario_fecha"=>$cronogramasCalendario_fecha,
+                    "equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,"cronogramasCalendario"=>$cronogramasCalendario,"cronogramasCalendario_fecha"=>$cronogramasCalendario_fecha,
                     "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"proveedores"=>$proveedores,"ordenServicios"=>$ordenServicios,
                     "departamentos"=>$departamentos,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
-                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,'events'=>$events));
                 }
             }
 
-            public function destroy(Request $request){
-                $cronograma_unidad = CronogramasCalendarioModel::where("id_cronogramaCalendario",$request->id_cronogramaCalendario)->delete();
+            public function destroy($id){
+                $cronograma_unidad = CronogramasCalendarioModel::where("id_cronogramaCalendario", $id)
+            ->first();
+            
+            if (!$cronograma_unidad) {
+                
+                    return response()->json(['mensaje' => 'Evento no encontrado'], 404);
+                
+            }
+            $cronograma_unidad->delete();
+            
+                return response()->json(['mensaje' => 'Evento eliminado exitosamente']);
+                // $cronograma_unidad = CronogramasCalendarioModel::where("id_cronogramaCalendario",$request->id_cronogramaCalendario)->delete();
 
-                return "ok";
+                // return "ok";
             }
 
             public function update($id,Request $request){
@@ -160,7 +208,13 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
                 $observacion = json_encode(explode(",",$datos["observacion"]));
 
-                $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronogramaCalendario'));
+                if ($request->hasFile('pdf_archivo_final')) {
+                    $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronogramaCalendario'));
+                }else{
+                    $pdf = null;
+                }
+
+                // $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronogramaCalendario'));
 
                 //validar los datos
                 if(!empty($datos)){
@@ -175,7 +229,12 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                         return redirect("/cronogramasCalendario")->with("no-validacion","");
                     }else{
 
-                        $ruta = $pdf["pdf_cronograma"];
+                        if ($request->hasFile('pdf_archivo_final')) {
+                            $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronogramaCalendario'));
+                            $ruta = $pdf["pdf_cronograma"];
+                        }else{
+                            $ruta = null;
+                        }
 
                         $datos = array("id_equipoGarantia"=>$request->input("cronograma_equipo"),
                                         "fecha"=>$request->input("cronograma_fecha"),
