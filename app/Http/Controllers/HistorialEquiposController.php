@@ -14,22 +14,31 @@ use App\CronogramasModel;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Illuminate\Support\Facades\Storage;
 use PDF;/* Apuntamos al modelo que existe por defecto para obtener información en PDF */
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 
 class HistorialEquiposController extends Controller
 {
+    public function gethistorialEquipos() {
+        if (request()->ajax()) {
+            $equipos = EquiposModel::all();
+            return DataTablesDataTables::of($equipos)->make(true);
+        }
+    }
+    
     public function index(){
         $administradores = AdministradoresModel::all();
-        $equipos = EquiposModel::all();
+        
         $cronogramas= CronogramasModel::all();
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                                     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
                                                     WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
-
+       
         $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
                                                     AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-        return view("paginas.historialEquipos",array("administradores"=>$administradores,"equipos"=>$equipos,"cronogramas"=>$cronogramas,
+        return view("paginas.historialEquipos",array("administradores"=>$administradores,"cronogramas"=>$cronogramas,
                                                     "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                     "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
     }
@@ -37,11 +46,14 @@ class HistorialEquiposController extends Controller
     public function show($id){
 
         $equipo = EquiposModel::where("id_equipo",$id)->get();
+        
         $administradores = AdministradoresModel::all();
         $equipos = EquiposModel::all();
+        
         $cronograma_equipo = DB::select('select C.pdf_cronograma,C.fecha_final,C.realizado,M.nombre_mantenimiento,C.fecha,C.id_mantenimiento,C.otm_cronograma,OS.codigo_ordenServicio from cronograma C INNER JOIN
                                         equipo E ON C.id_equipo = E.id_equipo INNER JOIN
                                         mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento LEFT JOIN ordenservicio OS ON C.id_ordenServicio = OS.id_ordenServicio WHERE C.id_equipo = ? ORDER BY C.fecha ASC',[$id]);
+                                    
         $cronogramas= CronogramasModel::all();
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                                     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
@@ -98,4 +110,9 @@ class HistorialEquiposController extends Controller
         // descargar archivo PDF con método de descarga
         return $pdf->setPaper('a4','landscape')->stream('cronogramasGeneral.pdf');
       }
+      public function showJson($id) {
+        $historial = EquiposModel::with('cronogramas')->find($id);
+        $historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
+        return $historial;
+    }
 }

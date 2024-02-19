@@ -33,7 +33,7 @@
               <div class="card-body">
 
                 <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="tablaHistorialEquipos">
+                 id="tablaHistorialCompras">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -45,24 +45,24 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-
-                    <tbody>
-                    @foreach ($equiposGarantia as $key => $data)
-                        <tr>
-                            <td style="text-align: center;">{{($key+1)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipoGarantia}}</td>
-                            <td>
-                                <a href="{{url('/')}}/historialEquiposCompra/{{$data->id_equipoGarantia}}" class="btn btn-warning btn-sm">
-                                    Historial
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
+                    
+                    {{-- <tbody>
+                        @foreach ($equiposGarantia as $key => $data)
+                            <tr>
+                                <td style="text-align: center;">{{($key+1)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipoGarantia}}</td>
+                                <td>
+                                    <a href="{{url('/')}}/historialEquiposCompra/{{$data->id_equipoGarantia}}" class="btn btn-warning btn-sm">
+                                        Historial
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -76,7 +76,60 @@
       </div>
     </section>
     <!-- /.content -->
-  </div>
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h4 class="modal-tittle">Historial</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                   
+                    <form id="editForm" method="POST">
+                        <table class="table table-bordered" id="miTabla">
+                            <thead>
+                                 <tr>
+                                    <th colspan="2" style="text-align:center;">Información del Equipo</th>
+                                </tr>
+                            </thead>
+        
+                            <tbody>
+                                <input type="text" style="display:none" id="id_equipoHistorial" id="id_equipoHistorial">
+                               
+                                
+                            </tbody>
+                        </table>
+                        <table  class="table table-bordered table-striped dt-responsive" id="historialCompra">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        
+                        <div class="modal-footer d-flex justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+        
+                            <div>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 {{-- Modal de Historial del equipo --}}
 
@@ -86,7 +139,7 @@
 
     @foreach ($equipo as $key => $value)
 
-<div class="modal" id="historial_visualizar">
+<div  class="modal" id="historial_visualizar" >
     <div class="modal-dialog">
         <div class="modal-content">
         <form action="{{ url('/') }}/reportesHistorialCompra/historialPdf" method="get" target="_blank">
@@ -134,7 +187,7 @@
                     </tbody>
                 </table>
 
-                <table class="table table-bordered table-striped dt-responsive" id="tablaRoles">
+                <table class="table table-bordered table-striped dt-responsive">
                     <thead>
                         <tr>
                             <th>#</th>

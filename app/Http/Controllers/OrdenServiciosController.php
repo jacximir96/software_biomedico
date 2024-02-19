@@ -13,22 +13,36 @@ use App\OrdenServiciosModel;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrdenServiciosController extends Controller
 {
-        /* Mostrar todos los registros */
+        
+        public function getordenServicios() {
+            if (request()->ajax()) {    
+                $ordenServicios = OrdenServiciosModel::all();
+                foreach ($ordenServicios as $dato) {
+                    $dato->pdf_ordenServicio = Storage::url($dato->pdf_ordenServicio);
+                }
+                return DataTables::of($ordenServicios)->make(true);
+            }
+        }
+    
+    /* Mostrar todos los registros */
         public function index(){
 
             $administradores = AdministradoresModel::all();
-            $ordenServicios = OrdenServiciosModel::all();
+            $ordenServicio = OrdenServiciosModel::all();
+          
             $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
             FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
             WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-$cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
+            $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
             AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-            return view("paginas.ordenServicios",array("administradores"=>$administradores,"ordenServicios"=>$ordenServicios,
+            return view("paginas.ordenServicios",array("administradores"=>$administradores,'ordenServicio' => $ordenServicio,
                                                         "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                         "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
         }
@@ -163,4 +177,8 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                         return redirect("/ordenServicios")->with("error","");
                     }
                 }
+    public function showJson($id) {
+        $ordenServicio = OrdenServiciosModel::find($id);
+        return $ordenServicio;
+    }
 }

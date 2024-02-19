@@ -16,17 +16,24 @@ use App\EquiposGarantiaModel;
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
 use PDF;/* Apuntamos al modelo que existe por defecto para obtener información en PDF */
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 
 
 class EquiposGarantiaController extends Controller
 {
-    public function index(){
-
-        $equiposGarantiaGeneral = DB::select("SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
+    public function getequipoGarantia() {
+        if (request()->ajax()) {
+            $equiposGarantiaGeneral = DB::select("SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
                                             ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipoGarantia,CURDATE())/12) AS antiguedad_equipoGarantia from equipogarantia E INNER JOIN ambiente A
                                             ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE ON
                                             A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva
                                             ORDER BY E.id_equipoGarantia DESC");
+           return DataTablesDataTables::of($equiposGarantiaGeneral)->make(true);
+        }
+    }
+    public function index(){
+
+    
         $direccionesEjecutivas = DireccionesEjecutivasModel::all();
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
@@ -44,7 +51,7 @@ class EquiposGarantiaController extends Controller
                                                     "direccionesEjecutivas"=>$direccionesEjecutivas,"ambientes"=>$ambientes,
                                                     "equiposGarantia"=>$equiposGarantia,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                     "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
-                                                    "equiposGarantiaGeneral"=>$equiposGarantiaGeneral));
+                                                    ));
     }
 
     public function show($id){
@@ -53,7 +60,7 @@ class EquiposGarantiaController extends Controller
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
         $ambientes = AmbientesModel::all();
-
+        $equiposGarantia = EquiposGarantiaModel::all();
         $equipoGarantia_ambiente=DB::select('select * from equipogarantia A INNER JOIN
                                     ambiente AM ON A.id_ambiente = AM.id_ambiente WHERE A.id_equipoGarantia = ?',[$id]);
 
@@ -71,12 +78,12 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
         if(count($equipoGarantia) != 0){
-            return view("paginas.equiposGarantia",array("status"=>200,"equipoGarantia"=>$equipoGarantia,"equipoGarantia_ambiente"=>$equipoGarantia_ambiente,
+            return view("paginas.equiposGarantia",array("status"=>200,"equipoGarantia"=>$equipoGarantia,"equipoGarantia_ambiente"=>$equipoGarantia_ambiente,'equiposGarantia' => $equiposGarantia,
         "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
         "ambientes"=>$ambientes,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
         "equiposGarantiaGeneral"=>$equiposGarantiaGeneral));
         }else{
-            return view("paginas.equiposGarantia",array("status"=>404,"equipoGarantia"=>$equipoGarantia,"equipoGarantia_ambiente"=>$equipoGarantia_ambiente,
+            return view("paginas.equiposGarantia",array("status"=>404,"equipoGarantia"=>$equipoGarantia,"equipoGarantia_ambiente"=>$equipoGarantia_ambiente, 'equiposGarantia' => $equiposGarantia,
             "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
             "ambientes"=>$ambientes,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
             "equiposGarantiaGeneral"=>$equiposGarantiaGeneral));
@@ -267,5 +274,9 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
         // descargar archivo PDF con método de descarga
         return $pdf->setPaper('a4','portrait')->stream('equipos.pdf');
+      }
+      public function showJson($id) {
+        $equipogarantia = EquiposGarantiaModel::with('ambiente')->find($id);
+        return $equipogarantia;
       }
 }

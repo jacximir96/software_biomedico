@@ -4,7 +4,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -43,7 +43,7 @@
                 <div class="card-body">
 
                 <table class="table table-bordered table-striped dt-responsive" width="100%"
-                id="tablaCronogramasGenerales">
+                id="tablaCronogramasGeneralNuevo">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -60,8 +60,8 @@
                         </tr>
 
                     </thead>
-
-                    <tbody>
+                    <tbody></tbody>
+                    {{-- <tbody>
                         @foreach($cronogramasGeneralNuevo as $key => $valor_cronogramasGeneral)
                         <tr>
                             <td style="text-align: center;">{{($key+1)}}</td>
@@ -148,7 +148,7 @@
 
                         </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
 
             </div>
@@ -278,7 +278,7 @@
                     <div class="input-group mb-3">
                     <div class="col-md-12">
                         <table class="table table-bordered table-striped dt-responsive" width="100%"
-                        id="tablaCronogramasGeneralNuevo">
+                        id="tablaCronogramasGeneralesNuevo">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -310,13 +310,200 @@
                     </div>
 
                     <div>
-                        <button type="button" class="btn btn-primary" id="vender">Guardar</button>
+                        <button type="submit" class="btn btn-primary" id="guardarCronogramaGeneral">Guardar</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Programación de Equipo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                   @csrf
+                   @method('PUT')
+                   <div class="input-group mb-3" style="display:none;">
+                    <label for="email" class="col-md-3 control-label">ID:</label>
+
+                    <div class="col-md-8">
+                        <input type="text" class="form-control"  id="id_equipo" name="id_equipo"
+                         required autofocus
+                        style="text-transform: uppercase;" readonly="">
+                    </div>
+                </div>{{-- fin Id de Equipo --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Equipo:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nombre_equipoGarantia"name="nombre_equipoGarantia"
+                            required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+
+                    </div>{{-- fin Id de Equipo --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Marca:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="marca_equipo"name="marca_equipo"
+                             required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+                    </div>{{-- fin Marca de Equipo --}}
+
+                    {{-- Modelo de Equipo --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Modelo:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="modelo_equipo"name="modelo_equipo"
+                            required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+                    </div>{{-- fin Modelo de Equipo --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label"># Serie:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="serie_equipo"name="serie_equipo"
+                            required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+                    </div>{{-- fin Serie de Equipo --}}
+
+                    {{-- CP de Equipo --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label"># C. Patrim:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="cp_equipo" name="cp_equipo"
+                             required autofocus
+                            style="text-transform: uppercase;" readonly="">
+                        </div>
+                    </div>{{-- fin CP de Equipo --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Mes:</label>
+
+                        <div class="col-md-6">
+                            <select class="form-control" id="mes_cronogramaGeneral" name="mes_cronogramaGeneral" required>
+                                @for($i=1; $i<=12; $i++)
+
+                                @switch($i)
+                                    @case(1)
+                                        <option value="1">
+                                            ENERO
+                                        </option>
+                                    @break
+
+                                    @case(2)
+                                        <option value="2">
+                                            FEBRERO
+                                        </option>
+                                    @break
+
+                                    @case(3)
+                                        <option value="3">
+                                            MARZO
+                                        </option>
+                                    @break
+
+                                    @case(4)
+                                        <option value="4">
+                                            ABRIL
+                                        </option>
+                                    @break
+
+                                    @case(5)
+                                        <option value="5">
+                                            MAYO
+                                        </option>
+                                    @break
+
+                                    @case(6)
+                                        <option value="6">
+                                            JUNIO
+                                        </option>
+                                    @break
+
+                                    @case(7)
+                                        <option value="7">
+                                            JULIO
+                                        </option>
+                                    @break
+
+                                    @case(8)
+                                        <option value="8">
+                                            AGOSTO
+                                        </option>
+                                    @break
+
+                                    @case(9)
+                                        <option value="9">
+                                            SETIEMBRE
+                                        </option>
+                                    @break
+
+                                    @case(10)
+                                        <option value="10">
+                                            OCTUBRE
+                                        </option>
+                                    @break
+
+                                    @case(11)
+                                        <option value="11">
+                                            NOVIEMBRE
+                                        </option>
+                                    @break
+
+                                    @case(12)
+                                        <option value="12">
+                                            DICIEMBRE
+                                        </option>
+                                    @break
+                                @endswitch
+
+                            @endfor
+
+                            </select>
+                        </div>
+                    </div>{{-- fin Mes de Equipo --}}
+
+                    {{-- Año de Equipo --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Año:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" 
+                             id="año_cronogramaGeneral" name="año_cronogramaGeneral"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin Año de Equipo --}}
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {{-- Editar cronograma general en modal --}}
 

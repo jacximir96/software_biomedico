@@ -569,8 +569,10 @@ $(document).on("click", ".eliminarRegistro", function(){
       console.log(method);
   	var pagina = $(this).attr("pagina");
       console.log(pagina);
-    var token = $(this).attr("token");
-    console.log(token);
+
+	var token = $('meta[name="csrf-token"]').attr('content');
+	console.log(token);
+	
 
   	swal({
   		 title: '¿Está seguro de eliminar este registro?',
@@ -588,11 +590,14 @@ $(document).on("click", ".eliminarRegistro", function(){
   			var datos = new FormData();
   			datos.append("_method", method);
   			datos.append("_token", token);
-
+			
   			$.ajax({
 
   				url: action,
-  				method: "POST",
+  				method: "DELETE",
+				  headers: {
+					'X-CSRF-TOKEN': token
+				},
   				data: datos,
   				cache: false,
   				contentType: false,

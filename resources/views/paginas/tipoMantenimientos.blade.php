@@ -121,6 +121,65 @@
         </div>
     </div>
 </div>
+ {{-- editar modal  --}}
+@foreach ($tipoMantenimientos as $value)
+   
+    <div class="modal fade" id="exampleModalLong{{$value->id_mantenimiento}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar tipo de Mantenimiento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form action="{{ url('/') }}/tipoMantenimientos/{{ $value->id_mantenimiento}}" method="post">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                
+                    {{-- Nombre --}}
+                    <div class="input-group mb-3">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+    
+                        <input type="text" class="form-control" name="nombre_mantenimiento"
+                        value="{{$value["nombre_mantenimiento"]}}" required autofocus
+                        style="text-transform: uppercase;">
+                    </div>{{-- fin nombre de mantenimiento --}}
+    
+                    <div class="input-group mb-3">
+                        <div class="input-group-append input-group-text">
+                            <i class="fas fa-angle-double-right"></i>
+                        </div>
+    
+                        <select class="form-control" name="estado_mantenimiento" required>
+                                @foreach ($estado_mantenimiento as $key => $value1)
+                                    <option value="{{$value1->id_estado}}"
+                                        @if ($value1->id_estado == $value->estado_mantenimiento)
+                                            selected
+                                        @endif 
+                                        >{{$value1->nombre_estado}}</option>
+    
+                                @endforeach
+                            </select>
+                    </div>{{-- fin estado del tipo de Mantenimiento --}}
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+            
+          </div>
+        </div>
+    </div>
+@endforeach
+    {{-- fin editar modal  --}}
 
 {{-- Editar ambiente en modal --}}
 

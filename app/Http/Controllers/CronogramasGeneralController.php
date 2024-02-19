@@ -12,6 +12,8 @@ use App\AmbientesModel;
 use App\RolesModel;
 use App\EquiposModel;
 use App\CronogramasGeneralModel;
+use DataTables;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
@@ -20,6 +22,15 @@ use PDF;/* Apuntamos al modelo que existe por defecto para obtener información 
 
 class CronogramasGeneralController extends Controller
 {
+    public function obtenercronogramageneral() {
+        if (request()->ajax()) {
+            $cronogramasGeneral = DB::select('SELECT C.id_cronogramaGeneral,C.mes_cronogramaGeneral,C.año_cronogramaGeneral,E.nombre_equipo,A.nombre_ambiente,
+            E.marca_equipo,E.modelo_equipo,E.serie_equipo,E.cp_equipo FROM cronogramageneral C
+            INNER JOIN equipo E ON C.id_equipo = E.id_equipo INNER JOIN ambiente A ON
+            E.id_ambiente = A.id_ambiente ORDER BY C.mes_cronogramaGeneral ASC');
+            return DataTablesDataTables::of($cronogramasGeneral)->make(true);
+        }
+    }
     public function index(){
 
         $administradores = AdministradoresModel::all();
@@ -27,10 +38,7 @@ class CronogramasGeneralController extends Controller
         $departamentos = DepartamentosModel::all();
         $ambientes = AmbientesModel::all();
         $equipos = EquiposModel::all();
-        $cronogramasGeneral = DB::select('SELECT C.id_cronogramaGeneral,C.mes_cronogramaGeneral,C.año_cronogramaGeneral,E.nombre_equipo,A.nombre_ambiente,
-                                        E.marca_equipo,E.modelo_equipo,E.serie_equipo,E.cp_equipo FROM cronogramageneral C
-                                        INNER JOIN equipo E ON C.id_equipo = E.id_equipo INNER JOIN ambiente A ON
-                                        E.id_ambiente = A.id_ambiente ORDER BY C.mes_cronogramaGeneral ASC');
+        $cronogramaGeneral = CronogramasGeneralModel::all();
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
         FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
         WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
@@ -39,9 +47,9 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
         AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
 
-        return view("paginas.cronogramasGeneral",array("administradores"=>$administradores,"direccionesEjecutivas"=>$direccionesEjecutivas,
+        return view("paginas.cronogramasGeneral",array("administradores"=>$administradores,"direccionesEjecutivas"=>$direccionesEjecutivas,'cronogramaGeneral' => $cronogramaGeneral,
                                                         "departamentos"=>$departamentos,"ambientes"=>$ambientes,"equipos"=>$equipos,
-                                                        "cronogramasGeneral"=>$cronogramasGeneral,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
+                                                        "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                         "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
     }
 
@@ -161,7 +169,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
     }
 
-    public function createPDF(Request $request){
+    public function createPDF(){
         $cronogramasGeneral = DB::select('SELECT GROUP_CONCAT(C.mes_cronogramaGeneral)
                                         AS juntar_meses, C.id_cronogramaGeneral,C.mes_cronogramaGeneral,C.año_cronogramaGeneral,E.nombre_equipo,A.nombre_ambiente,
                                         E.marca_equipo,E.modelo_equipo,E.serie_equipo,E.cp_equipo FROM cronogramageneral C
@@ -173,7 +181,11 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
         $pdf = PDF::loadView('paginas.reportesCronogramasGeneral',$cronogramasGeneral);
 
-        // descargar archivo PDF con método de descarga
-        return $pdf->setPaper('a4','landscape')->stream('registroHistorio_Mantenimiento.pdf');
+        // descargar archivo PDF con método de descarga 
+        return $pdf->setPaper('a4','landscape')->download('registroHistorio_Mantenimiento.pdf');
+    }
+    public function showJson($id) {
+        $cronogramaGeneral = CronogramasGeneralModel::with('equipo')->find($id);
+        return $cronogramaGeneral;
     }
 }

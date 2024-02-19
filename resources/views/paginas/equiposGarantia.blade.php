@@ -1,10 +1,10 @@
 @foreach ($administradores as $element)
-            @if ($_COOKIE["email_login"] == $element->email)
+            @if ("administrador@inr.gob.pe" == $element->email)
 
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -45,7 +45,7 @@
                  id="tablaEquiposGarantia">
                     <thead>
                         <tr>
-                            <th>#</th>
+                           
                             <th>Equipo</th>
                             <th>Marca</th>
                             <th>Modelo</th>
@@ -60,60 +60,62 @@
                             <th>Vida Util</th>
                             <th>Imagen</th>
                             <th>Tarjeta de Control</th>
-                            <th>Acciones</th>
+                            <th>Acciones</th> 
                         </tr>
 
                     </thead>
-
                     <tbody>
-                    @foreach ($equiposGarantiaGeneral as $key => $data)
-                        <tr>
-                            <td style="text-align: center;">{{($key+1)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->id_departamento == '')
-                                    {{$data->iniciales_direccionAmbiente}}
-                                @else
-                                    {{$data->iniciales_direccionDepartamento}}
-                                @endif
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->iniciales_departamento}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_ambiente}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{ \Carbon\Carbon::parse($data->fecha_adquisicion_equipoGarantia)->format('d-m-Y')}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">S/. {{number_format($data->monto_adquisicion_equipoGarantia, 2)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->antiguedad_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->tiempo_vida_util_equipoGarantia}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                <a href="{{$data->imagen_equipoGarantia}}" target="_blank">
-                                    <img src="{{$data->imagen_equipoGarantia}}" style="width:200px; height:200px;" class="img-fluid"></img>
-                                </a>
-                            </td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                <a href="http://192.168.6.113/software_biomedico/public/reportesEquiposGarantia/EquiposGarantiaPdf/{{$data->id_equipoGarantia}}" class="btn btn-default btn-sm" target="_blank">
-                                    <i class="fas fa-download text-black"></i> Descargar Archivo
-                                </a>
-                            </td>
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    <a href="{{url('/')}}/equiposGarantia/{{$data->id_equipoGarantia}}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-pencil-alt text-white"></i>
-                                    </a>
 
-                                    <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/equiposGarantia/{{$data->id_equipoGarantia}}"
-                                        method="DELETE" pagina="equiposGarantia" token="{{ csrf_token() }}">
-                                        <!-- @csrf -->
-                                        <i class="fas fa-trash-alt text-white"></i>
-                                    </button>
-
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
                     </tbody>
+                    {{-- <tbody>
+                        @foreach ($equiposGarantiaGeneral as $key => $data)
+                            <tr>
+                                <td style="text-align: center;">{{($key+1)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->id_departamento == '')
+                                        {{$data->iniciales_direccionAmbiente}}
+                                    @else
+                                        {{$data->iniciales_direccionDepartamento}}
+                                    @endif
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->iniciales_departamento}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_ambiente}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{ \Carbon\Carbon::parse($data->fecha_adquisicion_equipoGarantia)->format('d-m-Y')}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">S/. {{number_format($data->monto_adquisicion_equipoGarantia, 2)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->antiguedad_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->tiempo_vida_util_equipoGarantia}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    <a href="{{$data->imagen_equipoGarantia}}" target="_blank">
+                                        <img src="{{$data->imagen_equipoGarantia}}" style="width:200px; height:200px;" class="img-fluid"></img>
+                                    </a>
+                                </td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    <a href="/reportesEquiposGarantia/EquiposGarantiaPdf/{{$data->id_equipoGarantia}}" class="btn btn-default btn-sm" target="_blank">
+                                        <i class="fas fa-download text-black"></i> Descargar Archivo
+                                    </a>
+                                </td>
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <a href="{{url('/')}}/equiposGarantia/{{$data->id_equipoGarantia}}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-pencil-alt text-white"></i>
+                                        </a>
+
+                                        <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/equiposGarantia/{{$data->id_equipoGarantia}}"
+                                            method="DELETE" pagina="equiposGarantia" token="{{ csrf_token() }}">
+                                            <!-- @csrf -->
+                                            <i class="fas fa-trash-alt text-white"></i>
+                                        </button>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -272,6 +274,136 @@
   </div>
 
   {{-- Editar departamento en modal --}}
+  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Equipo Médico</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST"   enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Nombre:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nombre_equipo" name="nombre_equipo"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin nombre de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Marca:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="marca_equipo" name="marca_equipo"
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin marca de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Modelo:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="modelo_equipo"name="modelo_equipo"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin modelo de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Serie:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="serie_equipo"name="serie_equipo"
+                            required autofocus
+                            placeholder="Ingrese el número de serie" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin serie de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Cod. Patrim:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRuta"  id="cp_equipo"name="cp_equipo"
+                             required autofocus
+                            placeholder="Ingrese el código Patrimonial" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin cp de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Ambiente:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" id="id_ambiente" name="id_ambiente" required style="text-transform: uppercase;">
+                                @foreach ($ambientes as $key => $value1)
+
+                                    <option value="{{$value1->id_ambiente}}">
+                                        {{$value1->nombre_ambiente}}
+                                    </option>
+
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin id de ambiente --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Fecha Adquis:</label>
+
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="fecha_adquisicion_equipo" name="fecha_adquisicion_equipo"
+                            required autofocus
+                            placeholder="Ingrese la fecha de adquisición" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin fecha adquisicion de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Monto Adquis:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRutaMonto" id="monto_adquisicion_equipo" name="monto_adquisicion_equipo"
+                            required autofocus
+                            placeholder="Ingrese el monto de adquisición" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin monto adquisicion de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Vida Util:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRuta" id="tiempo_vida_util_equipo"name="tiempo_vida_util_equipo"
+                           required autofocus
+                            placeholder="Ingrese el tiempo de vida util (años)" style="text-transform: uppercase;" maxlength="2">
+                        </div>
+                    </div>{{-- fin vida util de equipo medico --}}
+
+                    <hr class="pb-2">
+                            <div class="form-group my-2 text-center">
+                                <div class="btn btn-default btn-file">
+                                        <i class="fas fa-paperclip"></i> Adjuntar Foto
+                                        <input type="file" name="foto" id="imagen_equipoGarantia_editar">
+                                </div><br>
+                                {{-- <img id="imagenEquipo" src="/images/default.jpg" alt="Imagen predeterminada"> --}}
+                                <img  id="imagenEquipo"class="previsualizarImg_foto
+                                    img-fluid py-2 w-25">
+                                <input type="hidden" id="imagen_actual" name="imagen_actual">
+                                <p class="help-block small">Dimensiones: 200px * 200px | Peso Max. 10MB |
+                                Formato: JPG o PNG</p>
+                            </div>
+                        
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @if (isset($status))
 
@@ -421,6 +553,7 @@
                                 <p class="help-block small">Dimensiones: 200px * 200px | Peso Max. 10MB |
                                 Formato: JPG o PNG</p>
                             </div>
+                        
 
                 </div>
 

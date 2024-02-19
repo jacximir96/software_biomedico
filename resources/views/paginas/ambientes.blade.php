@@ -5,7 +5,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -53,44 +53,46 @@
                         </tr>
 
                     </thead>
-
                     <tbody>
-                    @foreach ($ambientes_general as $key => $data)
-                        <tr>
-                            <td style="text-align: center;">{{($key+1)}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_ambiente}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_estado}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_departamento}}</td>
-                            <td style="text-align: center; text-transform: uppercase;">
-                                @if($data->id_departamento == '')
-                                    {{$data->nombre_direccionAmbiente}}
-                                @else
-                                    {{$data->nombre_direccionDepartamento}}
-                                @endif
-                            </td>
 
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    @can("editar_ambientes")
-                                    <a href="{{url('/')}}/ambientes/{{$data->id_ambiente}}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-pencil-alt text-white"></i>
-                                    </a>
-                                    @endcan
-
-                                    @can("eliminar_ambientes")
-                                    <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/ambientes/{{$data->id_ambiente}}"
-                                        method="DELETE" pagina="ambientes" token="{{ csrf_token() }}">
-                                        @csrf
-                                        <i class="fas fa-trash-alt text-white"></i>
-                                    </button>
-                                    @endcan
-
-                                </div>
-                            </td>
-
-                        </tr>
-                    @endforeach
                     </tbody>
+                    {{-- <tbody>
+                        @foreach ($ambientes_general as $key => $data)
+                            <tr>
+                                <td style="text-align: center;">{{($key+1)}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_ambiente}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_estado}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_departamento}}</td>
+                                <td style="text-align: center; text-transform: uppercase;">
+                                    @if($data->id_departamento == '')
+                                        {{$data->nombre_direccionAmbiente}}
+                                    @else
+                                        {{$data->nombre_direccionDepartamento}}
+                                    @endif
+                                </td>
+
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        @can("editar_ambientes")
+                                        <a href="{{url('/')}}/ambientes/{{$data->id_ambiente}}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-pencil-alt text-white"></i>
+                                        </a>
+                                        @endcan
+
+                                        @can("eliminar_ambientes")
+                                        <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/ambientes/{{$data->id_ambiente}}"
+                                            method="DELETE" pagina="ambientes" token="{{ csrf_token() }}">
+                                            @csrf
+                                            <i class="fas fa-trash-alt text-white"></i>
+                                        </button>
+                                        @endcan
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -199,6 +201,95 @@
     </div>
   </div>
 
+
+  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Ambiente</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Nombre:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nombre_ambiente" name="nombre_ambiente"
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin nombre de ambiente --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Estado:</label>
+
+                        <div class="col-md-6">
+                            <select class="form-control" id="estado_ambiente"name="estado_ambiente" required>
+                            @foreach ($estado as $key => $value1)
+
+                                <option value="{{$value1->id_estado}}">
+                                    {{$value1->nombre_estado}}
+                                </option>
+
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin estado de ambiente --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Departamento:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" name="id_departamento" id="id_departamento">
+                                @foreach ($departamentos as $key => $value1)
+
+                                    <option value="{{$value1->id_departamento}}">
+                                        {{$value1->nombre_departamento}}
+                                    </option>
+
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin id de departamento --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Dir. Ejecutiva:</label>
+    
+                        <div class="col-md-8">
+                            <select class="form-control" id="id_direccionEjecutiva" name="id_direccionEjecutiva">
+                                @foreach ($direccionesEjecutivas as $key => $value1)
+    
+                                    <option value="{{$value1->id_direccionEjecutiva}}">
+                                        {{$value1->nombre_direccionEjecutiva}}
+                                    </option>
+    
+    
+                                @endforeach
+                            </select>
+                        </div>
+                        </div>{{-- fin id de direccion Ejecutiva --}}
+                        <div class="modal-footer d-flex justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+            
+                            <div>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
   {{-- Editar ambiente en modal --}}
 
 @if (isset($status))
@@ -295,7 +386,7 @@
 
                     <div class="col-md-8">
                         <select class="form-control" name="id_direccionEjecutiva">
-                            @foreach ($ambiente_direccionEjecutiva as $key => $value1)
+                            @foreach ($direccionesEjecutivas as $key => $value1)
 
                                 <option value="{{$value1->id_direccionEjecutiva}}">
                                     {{$value1->nombre_direccionEjecutiva}}

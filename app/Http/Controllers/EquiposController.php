@@ -11,27 +11,47 @@ use App\DireccionesEjecutivasModel;
 use App\EquiposModel;
 use App\AmbientesModel;
 use App\CronogramasModel;
+use App\Exports\EquipoExport;
+use DataTables;
+
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;/* Apuntamos al modelo que existe por defecto para obtener información en PDF */
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 
 class EquiposController extends Controller
 {
+    
+    public function obtenerDatos() {
+        if (request()->ajax()) {
+            $equiposGeneral = DB::select('SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
+            ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo E INNER JOIN cronograma C ON E.id_equipo = C.id_equipo
+            INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
+            ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
+            tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
+            ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo)');
+            return DataTablesDataTables::of($equiposGeneral)->make(true);
+        }
+    }
     public function index(){
-
         $direccionesEjecutivas = DireccionesEjecutivasModel::all();
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
         $equipos = EquiposModel::all();
         $ambientes = AmbientesModel::all();
+        $cronogramas = CronogramasModel::all();
         $tipoEquipamientos = DB::select('SELECT * FROM tipoequipamiento');
-        $equiposGeneral =DB::select('SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
-                                     ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo E INNER JOIN cronograma C ON E.id_equipo = C.id_equipo
-                                     INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
-                                     ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
-                                     tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
-                                     ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo)');
+        $equiposGeneral = DB::select('SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
+            ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo E INNER JOIN cronograma C ON E.id_equipo = C.id_equipo
+            INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
+            ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
+            tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
+            ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo)');
+        
+       
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
         FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
         WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
@@ -39,10 +59,11 @@ class EquiposController extends Controller
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
         AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-                return view("paginas.equipos",array("equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,
+                return view("paginas.equipos",array("equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,'equiposGeneral' => $equiposGeneral,'cronogramas' => $cronogramas,
                                                         "direccionesEjecutivas"=>$direccionesEjecutivas,"ambientes"=>$ambientes,
                                                         "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"tipoEquipamientos"=>$tipoEquipamientos,
-                                                        "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,"equiposGeneral"=>$equiposGeneral));
+                                                        "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+            // return $equiposGeneral ;
             }
 
     public function show($id){
@@ -82,7 +103,7 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
         "ambientes"=>$ambientes,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
         "cronogramas"=>$cronogramas,"tipoEquipamientos"=>$tipoEquipamientos,"equipo_tipoEquipamiento"=>$equipo_tipoEquipamiento,"equiposGeneral"=>$equiposGeneral));
         }else{
-            return view("paginas.equipos",array("status"=>404,"direccionEjecutiva"=>$direccionEjecutiva,
+            return view("paginas.equipos",array("status"=>404,"direccionesEjecutivas"=>$direccionesEjecutivas,
             "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
             "ambientes"=>$ambientes,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
             "cronogramas"=>$cronogramas,"tipoEquipamientos"=>$tipoEquipamientos,"equipo_tipoEquipamiento"=>$equipo_tipoEquipamiento,"equiposGeneral"=>$equiposGeneral));
@@ -322,5 +343,12 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
         // descargar archivo PDF con método de descarga
         return $pdf->setPaper('a4','portrait')->stream('equipos.pdf');
       }
-
+      public function ExcelExport() {
+        return Excel::download(new EquipoExport, 'EQUIPOS_MANTENIMIENTO.xlsx');
+      }
+    public function showJson($id) {
+        $equipo = EquiposModel::with('cronogramas')->find($id);
+        
+        return $equipo;
+    }
 }

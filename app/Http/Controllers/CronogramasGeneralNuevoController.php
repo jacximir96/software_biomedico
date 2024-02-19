@@ -17,9 +17,20 @@ use App\CronogramasGeneralNuevoModel;
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
 use PDF;/* Apuntamos al modelo que existe por defecto para obtener información en PDF */
+use Yajra\DataTables\Facades\DataTables;
 
 class CronogramasGeneralNuevoController extends Controller
 {
+    public function getCronogramaNuevo(){
+        if (request()->ajax()) {
+            $cronogramasGeneralNuevo = DB::select('SELECT C.id_cronogramaGeneralNuevo,C.mes_cronogramaGeneralNuevo,C.año_cronogramaGeneralNuevo,E.nombre_equipoGarantia,A.nombre_ambiente,
+            E.marca_equipoGarantia,E.modelo_equipoGarantia,E.serie_equipoGarantia,E.cp_equipoGarantia,C.realizado FROM cronogramageneralnuevo C
+            INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia INNER JOIN ambiente A ON
+            E.id_ambiente = A.id_ambiente ORDER BY C.mes_cronogramaGeneralNuevo ASC');
+            return DataTables::of($cronogramasGeneralNuevo)->make(true);
+        }
+    }
+   
     public function index(){
 
         $administradores = AdministradoresModel::all();
@@ -27,10 +38,11 @@ class CronogramasGeneralNuevoController extends Controller
         $departamentos = DepartamentosModel::all();
         $ambientes = AmbientesModel::all();
         $equiposGarantia = EquiposGarantiaModel::all();
-        $cronogramasGeneralNuevo = DB::select('SELECT C.id_cronogramaGeneralNuevo,C.mes_cronogramaGeneralNuevo,C.año_cronogramaGeneralNuevo,E.nombre_equipoGarantia,A.nombre_ambiente,
-                                                E.marca_equipoGarantia,E.modelo_equipoGarantia,E.serie_equipoGarantia,E.cp_equipoGarantia,C.realizado FROM cronogramageneralnuevo C
-                                                INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia INNER JOIN ambiente A ON
-                                                E.id_ambiente = A.id_ambiente ORDER BY C.mes_cronogramaGeneralNuevo ASC');
+        $cronogramaGeneralNuevo =  CronogramasGeneralNuevoModel::all();
+        // $cronogramasGeneralNuevo = DB::select('SELECT C.id_cronogramaGeneralNuevo,C.mes_cronogramaGeneralNuevo,C.año_cronogramaGeneralNuevo,E.nombre_equipoGarantia,A.nombre_ambiente,
+        //                                         E.marca_equipoGarantia,E.modelo_equipoGarantia,E.serie_equipoGarantia,E.cp_equipoGarantia,C.realizado FROM cronogramageneralnuevo C
+        //                                         INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia INNER JOIN ambiente A ON
+        //                                         E.id_ambiente = A.id_ambiente ORDER BY C.mes_cronogramaGeneralNuevo ASC');
 
 $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
 FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
@@ -39,9 +51,9 @@ WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
 AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-        return view("paginas.cronogramasGeneralNuevo",array("administradores"=>$administradores,"direccionesEjecutivas"=>$direccionesEjecutivas,
+        return view("paginas.cronogramasGeneralNuevo",array("administradores"=>$administradores,"direccionesEjecutivas"=>$direccionesEjecutivas, 'cronogramaGeneralNuevo'=> $cronogramaGeneralNuevo,
                                                         "departamentos"=>$departamentos,"ambientes"=>$ambientes,"equiposGarantia"=>$equiposGarantia,
-                                                        "cronogramasGeneralNuevo"=>$cronogramasGeneralNuevo,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
+                                                        "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                         "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
     }
 
@@ -104,6 +116,7 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
         $cronogramaGeneral = CronogramasGeneralModel::where("id_cronogramaGeneral",$id)->get();
         $administradores = AdministradoresModel::all();
         $equiposGarantia = EquiposGarantiaModel::all();
+        $cronogramaGeneralNuevo =  CronogramasGeneralNuevoModel::all();
         $cronogramasGeneralNuevo = DB::select('SELECT C.id_cronogramaGeneralNuevo,C.mes_cronogramaGeneralNuevo,C.año_cronogramaGeneralNuevo,E.nombre_equipoGarantia,A.nombre_ambiente,
                                                 E.marca_equipoGarantia,E.modelo_equipoGarantia,E.serie_equipoGarantia,E.cp_equipoGarantia,C.realizado FROM cronogramageneralnuevo C
                                                 INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia INNER JOIN ambiente A ON
@@ -123,12 +136,12 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
 
         if(count($cronogramaGeneralNuevoUnidad) != 0){
-            return view("paginas.cronogramasGeneralNuevo",array("status"=>200,"cronogramaGeneral"=>$cronogramaGeneral,"equiposGarantia"=>$equiposGarantia,
+            return view("paginas.cronogramasGeneralNuevo",array("status"=>200,"cronogramaGeneral"=>$cronogramaGeneral,"equiposGarantia"=>$equiposGarantia,'cronogramaGeneralNuevo' => $cronogramaGeneralNuevo,
                                                             "cronogramasGeneralNuevo"=>$cronogramasGeneralNuevo,"administradores"=>$administradores,
                                                             "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                             "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo),["cronogramaGeneralNuevoUnidad"=>$cronogramaGeneralNuevoUnidad]);
         }else{
-            return view("paginas.cronogramasGeneralNuevo",array("status"=>404,"cronogramaGeneral"=>$cronogramaGeneral,"equiposGarantia"=>$equiposGarantia,
+            return view("paginas.cronogramasGeneralNuevo",array("status"=>404,"cronogramaGeneral"=>$cronogramaGeneral,"equiposGarantia"=>$equiposGarantia,'cronogramaGeneralNuevo' => $cronogramaGeneralNuevo,
                                                             "cronogramasGeneralNuevo"=>$cronogramasGeneralNuevo,"administradores"=>$administradores,
                                                             "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                             "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo),["cronogramaGeneralNuevoUnidad"=>$cronogramaGeneralNuevoUnidad]);
@@ -178,5 +191,10 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
         // descargar archivo PDF con método de descarga
         return $pdf->setPaper('a4','landscape')->stream('registroHistorio_Mantenimiento.pdf');
+    }
+
+    public function showJson($id) {
+        $cronogramaGeneralNuevo = CronogramasGeneralNuevoModel::with('equipogarantia')->find($id);
+        return $cronogramaGeneralNuevo;
     }
 }

@@ -4,104 +4,107 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Cronograma de Mantenimientos</h1>
-            </br>
-          </div>
-
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ url("/") }}">Inicio</a></li>
-              <li class="breadcrumb-item active">Cronograma</li>
-            </ol>
-          </div>
-
-          <div class="col-sm-12">
-            <div class="callout callout-info col-md-5" style="float:left;">
-                <h5>
-                    <span class="spinner-grow text-danger"></span>
-                    <i> Leyenda:</i>
-                </h5>
-
-                <ul>
-                    <li>Correctivo (ODS): Color Rojo <span style="color:red;">(C-ODS)</span></li>
-                    <li>Preventivo (ODS): Color Verde <span style="color:green;">(P-ODS)</span></li>
-                    <li>Correctivo (OTM): Color Rojo <span style="color:red;">(P-OTM)</span></li>
-                    <li>Preventivo (OTM): Color Verde <span style="color:green;">(P-OTM)</span></li>
-                </ul>
-            </div>
-
-            <div class="callout callout-info col-md-6" style="float:right;">
-                <h5>
-                    <span class="spinner-grow text-danger"></span>
-                    <i> Información del Equipo:</i>
-                </h5>
-
-                <ul>
-                    <li id="texto_cronograma"></li>
-                </ul>
-            </div>
-          </div>
-
-          <div class="col-sm-12">
-            <div class="callout callout-info col-md-12" style="float:left;">
-                    <h5>
-                        <span class="spinner-grow text-danger"></span>
-                        <i> Registrar si se realizó el Mantenimiento:</i>
-                        <button id="ocultar_listado" class="btn btn-danger btn-sm">Ver Listado</button>
-                    </h5>
-
-                    </br>
-
-                <div id="tabla_ocultar">
-                    <table class="table table-bordered table-striped dt-responsive" width="100%"
-                    id="tablaRoles">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Equipo</th>
-                            <th>Cod. Patrimonial</th>
-                            <th>Tipo de Mantenimiento</th>
-                            <th>Fecha Inicial</th>
-                            <th>Fecha Final</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    @foreach ($cronogramas_fecha as $key => $data)
-                        <tr>
-                            <th>{{($key+1)}}</th>
-                            <td>{{$data->nombre_equipo}}</td>
-                            <td>{{$data->cp_equipo}}</td>
-                            <td>{{$data->nombre_mantenimiento}}</td>
-                            <td>{{ \Carbon\Carbon::parse($data->fecha)->format('d-m-Y')}}</td>
-                            <td>{{ \Carbon\Carbon::parse($data->fecha_final)->format('d-m-Y')}}</td>
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    <a href="{{url('/')}}/cronogramas/{{$data->id_cronograma}}" class="btn btn-warning btn-sm">
-                                        Registrar
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div><!-- /.container-fluid -->
-    </section>
+    <div class="scrollspy-example">
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1>Cronograma de Mantenimientos</h1>
+                  </br>
+                </div>
+      
+                <div class="col-sm-6">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url("/") }}">Inicio</a></li>
+                    <li class="breadcrumb-item active">Cronograma</li>
+                  </ol>
+                </div>
+      
+                <div class="col-sm-12">
+                  <div class="callout callout-info col-md-5" style="float:left;">
+                      <h5>
+                          <span class="spinner-grow text-danger"></span>
+                          <i> Leyenda:</i>
+                      </h5>
+      
+                      <ul>
+                          <li>Correctivo (ODS): Color Rojo <span style="color:red;">(C-ODS)</span></li>
+                          <li>Preventivo (ODS): Color Verde <span style="color:green;">(P-ODS)</span></li>
+                          <li>Correctivo (OTM): Color Rojo <span style="color:red;">(P-OTM)</span></li>
+                          <li>Preventivo (OTM): Color Verde <span style="color:green;">(P-OTM)</span></li>
+                      </ul>
+                  </div>
+      
+                  <div class="callout callout-info col-md-6" style="float:right;">
+                      <h5>
+                          <span class="spinner-grow text-danger"></span>
+                          <i> Información del Equipo:</i>
+                      </h5>
+      
+                      <ul>
+                          <li id="texto_cronograma"></li>
+                      </ul>
+                  </div>
+                </div>
+      
+                <div class="col-sm-12">
+                  <div class="callout callout-info col-md-12" style="float:left;">
+                          <h5>
+                              <span class="spinner-grow text-danger"></span>
+                              <i> Registrar si se realizó el Mantenimiento:</i>
+                              <button id="ocultar_listado" class="btn btn-danger btn-sm">Ver Listado</button>
+                          </h5>
+      
+                          </br>
+      
+                      <div id="tabla_ocultar">
+                          <table class="table table-bordered table-striped dt-responsive" width="100%"
+                          id="historial">
+                          <thead>
+                              <tr>
+                                  <th>#</th>
+                                  <th>Equipo</th>
+                                  <th>Cod. Patrimonial</th>
+                                  <th>Tipo de Mantenimiento</th>
+                                  <th>Fecha Inicial</th>
+                                  <th>Fecha Final</th>
+                                  <th>Acciones</th>
+                              </tr>
+                          </thead>
+      
+                          <tbody>
+                          @foreach ($cronogramas_fecha as $key => $data)
+                              <tr>
+                                  <th>{{($key+1)}}</th>
+                                  <td>{{$data->nombre_equipo}}</td>
+                                  <td>{{$data->cp_equipo}}</td>
+                                  <td>{{$data->nombre_mantenimiento}}</td>
+                                  <td>{{ \Carbon\Carbon::parse($data->fecha)->format('d-m-Y')}}</td>
+                                  <td>{{ \Carbon\Carbon::parse($data->fecha_final)->format('d-m-Y')}}</td>
+                                  <td style="text-align: center;">
+                                      <div class="btn-group">
+                                          <a href="{{url('/')}}/cronogramas/{{$data->id_cronograma}}" class="btn btn-warning btn-sm">
+                                              Registrar
+                                          </a>
+                                      </div>
+                                  </td>
+                              </tr>
+                          @endforeach
+                          </tbody>
+                      </table>
+                  </div>
+                  </div>
+                </div>
+      
+              </div>
+      
+            </div><!-- /.container-fluid -->
+          </section>
+    </div>
+   
 
     <!-- Main content -->
     <section class="content">
@@ -484,174 +487,192 @@
 
 <script>
 
-        $("#fecha_actual_calendario").prop('disabled',true); //indicamos que la fecha no se pueda cambiar
+    $("#fecha_actual_calendario").prop('disabled',true); //indicamos que la fecha no se pueda cambiar
 
-        document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var events = @json($events);
 
-          $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                     }
-            });
-
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-            locale: 'es',   //timeZone: 'America/Bogota',
-
-            headerToolbar: {
-                left: 'prev,next today', //Con esta opción se verifica los botones anterior,siguiente y hoy
-                center: 'title', //el titulo centrado donde muestra el mes del calendario
-                right: 'dayGridMonth' //los botones del mes, semana y dia
-            },
-
-            /* initialDate: '2020-09-12', */
-            navLinks: false,
-            selectable: true,
-            dayMaxEventRows: true,
-
-            views: {
-                timeGrid: {
-                    dayMaxEventRows: 4 // adjust to 6 only for timeGridWeek/timeGridDay
-                }
-            },
-
-            selectMirror: true,
-            select: function(arg) {
-                let m = moment(arg.start).format("YYYY-MM-DD");
-                $("#fecha_actual_calendario").val(m);
-                $("#agregarCalendario").modal();
-                calendar.unselect(); // funcion para que no se quede seleccionado la fecha
-            },
-
-            /* Inicio evento eliminar */
-            eventClick: function(arg) {
-              var deleteMsg = swal({
-                                title: "Estas seguro?",
-                                text: "No podrás recuperar este archivo!",
-                                type: "warning",
-                                showCancelButton: true,
-  		                        confirmButtonColor: '#3085d6',
-  		                        cancelButtonColor: '#d33',
-  		                        cancelButtonText: 'Cancelar',
-  		                        confirmButtonText: 'Si, eliminar registro!'
-                }).then(function(result){
-                    if(result.value){
-                    if(deleteMsg){
-                $.ajax({
-                    url: '/software_biomedico/public/cronogramas/13/eliminar',
-                    type: 'POST',
-                    data: {
-                              "_token":"{{ csrf_token() }}",
-                              "id_cronograma":arg.event.id
-                          },
-                    success: function () {
-                    arg.event.remove();
-                    swal("Hecho!", "Fue eliminado con éxito!", "success");
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                    swal("Error al eliminar!", "Inténtalo de nuevo", "error");
-                    }
-                    });
-                  }
-                }
-                })
-            },/* Fin evento eliminar */
-
-            eventDidMount: function(info) {
-                /* console.log(info.event.extendedProps); */
-            },
-
-            eventMouseEnter: function(info) {
-                /* console.log(info.event.extendedProps.description); */
-                $('#texto_cronograma').append(info.event.extendedProps.description);
-                $('#texto_cronograma').empty();
-                $('#texto_cronograma').append(info.event.extendedProps.description);
-
-                $('#texto_cronograma_id').append(info.event.extendedProps.description);
-                $('#texto_cronograma_id').empty();
-                $('#texto_cronograma_id').append(info.event.extendedProps.description);
-            },
-
-            editable: true, //para poder editar los datos del registro
-            events: '/software_biomedico/public/cronogramas/calendario/listar' //se listan todos los registros del cronograma
-
-          });
-
-          calendar.render();
-
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                 }
         });
 
-        function guardar(){
-            var fd = new FormData(document.getElementById("formulario_calendario"));
-            let fecha = $("#fecha_actual_calendario").val();
-            let equipo = $("#nombres_equipo").val();
-            let realizado = $('#realizado').val();
-            let mantenimiento = $("#nombres_mantenimiento").val();
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        
+        locale: 'es',   //timeZone: 'America/Bogota',
 
-            $("#fecha_actual_calendario").prop('disabled',false);
+        headerToolbar: {
+            left: 'prev,next today', //Con esta opción se verifica los botones anterior,siguiente y hoy
+            center: 'title', //el titulo centrado donde muestra el mes del calendario
+            right: 'dayGridMonth' //los botones del mes, semana y dia
+        },
 
-            if ($('#nombres_equipo').val() == '') {
-                $("#fecha_actual_calendario").prop('disabled', true);
-                alert("Seleccionar un Equipo Médico");
+        /* initialDate: '2020-09-12', */
+        navLinks: false,
+        selectable: true,
+        dayMaxEventRows: true,
+        events:events,
+
+        views: {
+            timeGrid: {
+                dayMaxEventRows: 4 // adjust to 6 only for timeGridWeek/timeGridDay
             }
+        },
 
-            if ($('#nombres_mantenimiento').val() == '') {
-                $("#fecha_actual_calendario").prop('disabled', true);
-                alert("Seleccionar un tipo de Mantenimiento");
-            }
+        selectMirror: true,
+        select: function(arg) {
+            let m = moment(arg.start).format("YYYY-MM-DD");
+            $("#fecha_actual_calendario").val(m);
+            $("#agregarCalendario").modal();
+            calendar.unselect(); // funcion para que no se quede seleccionado la fecha
+        },
+        
 
+        /* Inicio evento eliminar */
+        eventClick: function(arg) {
+            var id = arg.event.id;
+          var deleteMsg = swal({
+                            title: "Estas seguro?",
+                            text: "No podrás recuperar este archivo!",
+                            type: "warning",
+                            showCancelButton: true,
+                              confirmButtonColor: '#3085d6',
+                              cancelButtonColor: '#d33',
+                              cancelButtonText: 'Cancelar',
+                              confirmButtonText: 'Si, eliminar registro!'
+            }).then(function(result){
+                if(result.value){
+                if(deleteMsg){
+
+            var token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: $('#formulario_calendario').attr('action'),
-                type: $('#formulario_calendario').attr('method'),
-                data: $('#formulario_calendario').serialize()
-            }).done(function(respuesta){
-                if(respuesta && respuesta.ok){
-                    swal({
-		                    type:"success",
-                            title: "¡El registro ha sido guardado correctamente!",
-                            showConfirmButton: true,
-		                    confirmButtonText: "Cerrar"
-                         }).then(function(result){
-                            if(result.value){
-                                window.location = "";
-                            }
-                         })
-
-                    calendar.refetchEvents();
-                 }
+                //url: '/software_biomedico/cronogramas/13/eliminar',
+                url: "{{route('cronogramas.destroy','')}}" +'/'+id,
+                type: 'DELETE',
+                dataType:'json',
+                headers: {
+                    'X-CSRF-TOKEN': token
+    },
+                success: function (response) {
+                var id = response.id
+                // console.log(id)
+                arg.event.remove();
+                swal("Hecho!", "Fue eliminado con éxito!", "success");
+                location.reload(); 
+                },
+                error: function (error) {
+                    // console.log(error)
+                swal("Error al eliminar!", "Inténtalo de nuevo", "error");
+                }
+                });
+              }
+            }
             })
+        },/* Fin evento eliminar */
+
+       
+
+        eventMouseEnter: function(info) {
+            //console.log('Mouse entered event:', info.event.extendedProps.description);   
+            $('#texto_cronograma').append(info.event.extendedProps.description);
+            $('#texto_cronograma').empty();
+            $('#texto_cronograma').append(info.event.extendedProps.description);
+
+            // $('#texto_cronograma_id').append(info.event.extendedProps.description);
+            // $('#texto_cronograma_id').empty();
+            // $('#texto_cronograma_id').append(info.event.extendedProps.description);
+        },
+
+        editable: true, //para poder editar los datos del registro
+        
+        eventDidMount: function(info) {
+                // console.log(info.event.title);
+                $(info.el).tooltip({ 
+                title: info.event.extendedProps.description,
+                placement: "top",
+                trigger: "hover",
+                container: "body"
+            });
+        },
+      });
+
+      calendar.render();
+
+    });
+
+    function guardar(){
+        var fd = new FormData(document.getElementById("formulario_calendario"));
+        let fecha = $("#fecha_actual_calendario").val();
+        let equipo = $("#nombres_equipo").val();
+        let realizado = $('#realizado').val();
+        let mantenimiento = $("#nombres_mantenimiento").val();
+
+        $("#fecha_actual_calendario").prop('disabled',false);
+
+        if ($('#nombres_equipo').val() == '') {
+            $("#fecha_actual_calendario").prop('disabled', true);
+            alert("Seleccionar un Equipo Médico");
         }
+
+        if ($('#nombres_mantenimiento').val() == '') {
+            $("#fecha_actual_calendario").prop('disabled', true);
+            alert("Seleccionar un tipo de Mantenimiento");
+        }
+
+        $.ajax({
+            url: $('#formulario_calendario').attr('action'),
+            type: $('#formulario_calendario').attr('method'),
+            data: $('#formulario_calendario').serialize()
+        }).done(function(respuesta){
+            if(respuesta && respuesta.ok){
+                swal({
+                        type:"success",
+                        title: "¡El registro ha sido guardado correctamente!",
+                        showConfirmButton: true,
+                        confirmButtonText: "Cerrar"
+                     }).then(function(result){
+                        if(result.value){
+                            window.location = "";
+                        }
+                     })
+
+                calendar.refetchEvents();
+             }
+        })
+    }
 
 </script>
 
 @if (Session::has("ok-crear"))
-  <script>
-      notie.alert({type:1,text:'!El mantenimiento ha sido creado correctamente', time:10})
-  </script>
+<script>
+  notie.alert({type:1,text:'!El mantenimiento ha sido creado correctamente', time:10})
+</script>
 @endif
 
 @if (Session::has("no-validacion"))
-  <script>
-      notie.alert({type:2,text:'!Hay campos no válidos en el formulario', time:10})
-  </script>
+<script>
+  notie.alert({type:2,text:'!Hay campos no válidos en el formulario', time:10})
+</script>
 @endif
 
 @if (Session::has("error"))
-  <script>
-      notie.alert({type:3,text:'!Error en el gestor de Cronogramas', time:10})
-  </script>
+<script>
+  notie.alert({type:3,text:'!Error en el gestor de Cronogramas', time:10})
+</script>
 @endif
 
 @if (Session::has("ok-editar"))
-  <script>
-      notie.alert({type:1,text:'!El mantenimiento ha sido registrado correctamente', time:10})
-  </script>
+<script>
+  notie.alert({type:1,text:'!El mantenimiento ha sido registrado correctamente', time:10})
+</script>
 @endif
 
 @if (Session::has("ok-eliminar"))
 
 <script>
-    notie.alert({ type: 1, text: '¡El cronograma ha sido eliminado correctamente!', time: 10 })
+notie.alert({ type: 1, text: '¡El cronograma ha sido eliminado correctamente!', time: 10 })
 </script>
 
 @endif
@@ -659,7 +680,7 @@
 @if (Session::has("no-borrar"))
 
 <script>
-    notie.alert({ type: 2, text: '¡Este administrador no se puede borrar!', time: 10 })
+notie.alert({ type: 2, text: '¡Este administrador no se puede borrar!', time: 10 })
 </script>
 
 @endif

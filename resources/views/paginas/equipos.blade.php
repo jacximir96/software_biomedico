@@ -36,8 +36,9 @@
 
                 <!-- <button class="btn btn-danger btn-sm" style="float:right;">
                     Imprimir</button> -->
-                <!-- <button class="btn btn-success btn-sm" style="float:right;  margin-right:5px;">
-                    Exportar a excel</button> -->
+                {{-- <button  class="btn btn-success btn-sm" style="float:right;  margin-right:5px;">
+                   l</button> --}}
+                    <a href="{{route('equipo.excel')}}" class="btn btn-success btn-sm" style="float:right;  margin-right:5px;"> Exportar a excel</a>
               </div>
               <div class="card-body">
 
@@ -61,13 +62,13 @@
                             <th>Vida Util</th>
                             <th>Prioridad</th>
                             <th>Imagen</th>
-                            <th>Tarjeta de Control</th>
+                            {{-- <th>Tarjeta de Control</th> --}}
                             <th>Acciones</th>
                         </tr>
 
                     </thead>
-
-                    <tbody>
+                    <tbody></tbody>
+                    {{-- <tbody>
                     @foreach ($equiposGeneral as $key => $data)
 
                             @php
@@ -137,7 +138,7 @@
                             @endif
                         @endif
                     @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
 
               </div>
@@ -325,6 +326,225 @@
 
 {{-- Editar departamento en modal --}}
 
+
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Departamento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Nombre:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nombre_equipo" name="nombre_equipo" 
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin nombre de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Marca:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="marca_equipo"name="marca_equipo"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin marca de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Modelo:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="modelo_equipo"name="modelo_equipo"
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin modelo de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Serie:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control"  id="serie_equipo"name="serie_equipo"
+                            required autofocus
+                            placeholder="Ingrese el número de serie" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin serie de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Cod. Patrim:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRuta" id="cp_equipo"name="cp_equipo"
+                            required autofocus
+                            placeholder="Ingrese el código Patrimonial" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin cp de equipo medico --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">T. Equipam:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control"  id="id_tipoEquipamiento" name="id_tipoEquipamiento" required style="text-transform: uppercase;">
+                                @foreach ($tipoEquipamientos as $key => $value1)
+
+                                    <option value="{{$value1->id_tipoEquipamiento}}">
+                                        {{$value1->nombre_tipoEquipamiento}}
+                                    </option>
+
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin id de tipoEquipamiento --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Ambiente:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" id="id_ambiente" name="id_ambiente" required style="text-transform: uppercase;">
+                                @foreach ($ambientes as $key => $value1)
+
+                                    <option value="{{$value1->id_ambiente}}">
+                                        {{$value1->nombre_ambiente}}
+                                    </option>
+
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin id de ambiente --}}
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Fecha Adquis:</label>
+
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="fecha_adquisicion_equipo" name="fecha_adquisicion_equipo"
+                            required autofocus
+                            placeholder="Ingrese la fecha de adquisición" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin fecha adquisicion de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Monto Adquis:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRutaMonto" id="monto_adquisicion_equipo" name="monto_adquisicion_equipo"
+                            required autofocus
+                            placeholder="Ingrese el monto de adquisición" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin monto adquisicion de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Vida Util:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRuta"  id="tiempo_vida_util_equipo"  name="tiempo_vida_util_equipo"
+                             required autofocus
+                            placeholder="Ingrese el tiempo de vida util (años)" style="text-transform: uppercase;" maxlength="2">
+                        </div>
+                    </div>{{-- fin vida util de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Prioridad:</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control inputRuta" id="prioridad_equipo" name="prioridad_equipo"
+                            required autofocus
+                            placeholder="Ingrese la prioridad" style="text-transform: uppercase;" maxlength="2">
+                        </div>
+                    </div>{{-- fin prioridad de equipo medico --}}
+                    
+                    {{-- inicio de switch --}}
+                    <hr class="pb-2">
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">
+                                <input type="checkbox" value="1" class="custom-control-input" id="customSwitch1_1" name="criterio1_equipo">
+                                <label class="custom-control-label" for="customSwitch1_1">Se encuentra en estado de conservación malo</label>
+                            </div>
+                        </div>
+
+
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">        
+                                <input checked type="checkbox" class="custom-control-input" id="customSwitch2" disabled name="criterio2_equipo">
+                                <label class="custom-control-label" for="customSwitch2">El costo supera el 40% del valor Inicial</label>
+                            </div>
+                        </div>
+                        
+
+
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">
+                                <input type="checkbox" value="1" class="custom-control-input" id="customSwitch3_1" name="criterio3_equipo">
+                                
+                                <label class="custom-control-label" for="customSwitch3_1">No existe soporte técnico en el Mercado Nacional</label>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">
+                                <input type="checkbox" value="1" class="custom-control-input" id="customSwitch4_1" name="criterio4_equipo">
+                                <label class="custom-control-label" for="customSwitch4_1">Tenga mayores costos de operación comparado con otros similares</label>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">
+                                <input checked type="checkbox" class="custom-control-input" id="customSwitch5" disabled name="criterio5_equipo">
+                                <label class="custom-control-label" for="customSwitch5">Antiguedad mayor al tiempo de vida util</label>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">
+                                <input type="checkbox" value="1" class="custom-control-input" id="customSwitch6_1" name="criterio6_equipo">
+                                <label class="custom-control-label" for="customSwitch6_1">No se encuentre vigente Tecnologicamente</label>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <div class="col-12">
+                                <input type="checkbox" value="1" class="custom-control-input" id="customSwitch7_1" name="criterio7_equipo">
+                                <label class="custom-control-label" for="customSwitch7_1">Condición de seguridad</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- fin de switch --}}
+
+
+                    {{-- Imagen --}}
+                    <hr class="pb-2">
+                    <div class="form-group my-2 text-center">
+                        <div class="btn btn-default btn-file">
+                                <i class="fas fa-paperclip"></i> Adjuntar Foto
+                                <input type="file" name="foto" id="imagen_equipo_editar">
+                        </div><br>
+
+                        <img  id="imagenEquipo"class="previsualizarImg_foto
+                                    img-fluid py-2 w-25">
+
+                        <input type="hidden" name="imagen_actual" id="imagen_actual">
+                        <p class="help-block small">Dimensiones: 200px * 200px | Peso Max. 10MB |
+                        Formato: JPG o PNG</p>
+                    </div>
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @if (isset($status))
 
 @if ($status == 200)
@@ -506,13 +726,13 @@
                             <div class="col-12">
 
                             @php
-                                $suma_acumulado_s = 0;
+                                //$suma_acumulado_s = 0;
                                 $porcentaje_acumulado_s = 0;
                             @endphp
 
                             @foreach($cronogramas as $key => $valor_cronograma)
                                 @php
-                                    $suma_acumulado_s += $valor_cronograma->monto_cronograma;
+                                    //$suma_acumulado_s += $valor_cronograma->monto_cronograma;
                                     $porcentaje_acumulado_s += ($valor_cronograma->monto_cronograma*100)/$value->monto_adquisicion_equipo;
                                 @endphp
                             @endforeach

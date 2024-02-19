@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Software Biomédico</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -157,12 +158,16 @@
     <script src="{{ url('/') }}/js/ambientes.js"></script>
     <script src="{{ url('/') }}/js/proveedores.js"></script>
     <script src="{{ url('/') }}/js/roles.js"></script>
+    <script src="{{ url('/') }}/js/historial.js"></script>
     <script src="{{ url('/') }}/js/tipoMantenimientos.js"></script>
     <script src="{{ url('/') }}/js/historialEquipos.js"></script>
+    <script src="{{ url('/') }}/js/historialCompras.js"></script>
     <script src="{{ url('/') }}/js/ordenServicios.js"></script>
     <script src="{{ url('/') }}/js/cronogramasGeneral.js"></script>
     <script src="{{ url('/') }}/js/cronogramasGenerales.js"></script>
     <script src="{{ url('/') }}/js/cronogramasGeneralNuevo.js"></script>
+    <script src="{{ url('/') }}/js/cronogramasGeneralesNuevo.js"></script>
+
 
 </body>
 

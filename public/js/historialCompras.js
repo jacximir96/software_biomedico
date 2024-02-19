@@ -1,11 +1,13 @@
+
+
 /*=============================================
 DataTable de Jornadas Laborales
 =============================================*/
-$("#tablaHistorialEquipos").DataTable({
+$("#tablaHistorialCompras").DataTable({
 
 	processing: true,
     serverSide: true,
-	ajax :"/obtenerhistorialequipos",
+	ajax :"/obtenerhistorialcompras",
 	columns:[
 		{
 			data: null, // Utilizamos null ya que no hay una propiedad específica asociada
@@ -17,16 +19,16 @@ $("#tablaHistorialEquipos").DataTable({
 			}
 		},
 	
-		{data:'nombre_equipo' ,name:'nombre_equipo'}, //nombre de equipo
-		{data:'marca_equipo' ,name:'marca_equipo'}, // marca de equipo
-		{data:'modelo_equipo' ,name:'modelo_equipo'}, // modelo de equipo
-		{data:'serie_equipo' ,name:'serie_equipo'}, // serie de equipo
-		{data:'cp_equipo' ,name:'cp_equipo'}, // codigo patronal de equip
+		{data:'nombre_equipoGarantia' ,name:'nombre_equipoGarantia'}, //nombre de equipo
+		{data:'marca_equipoGarantia' ,name:'marca_equipoGarantia'}, // marca de equipo
+		{data:'modelo_equipoGarantia' ,name:'modelo_equipoGarantia'}, // modelo de equipo
+		{data:'serie_equipoGarantia' ,name:'serie_equipoGarantia'}, // serie de equipo
+		{data:'cp_equipoGarantia' ,name:'cp_equipoGarantia'}, // codigo patronal de equip
 		{ 
-			data: "id_equipo",
+			data: "id_equipoGarantia",
 			name: 'Acciones',
 			render: function(data, type, full, meta) {
-				return '<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'">Historial</button>';
+				return  '<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'">Historial</button>'
 			}
 		}
 	],
@@ -57,47 +59,46 @@ $("#tablaHistorialEquipos").DataTable({
       }
 });
 
-$('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
+$('#tablaHistorialCompras').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/historialequipo/json/' + id, function(data) {
+    $.get('/historialgarantia/json/' + id, function(data) {
         // console.log("Datos recibidos:",data);
-		$('#id_equipoHistorial').val(data.id_equipo);
+		$('#id_equipoHistorial').val(data.id_equipoGarantia);
 		var tabla = $('#miTabla tbody').empty();
 		
-		console.log(data.cronogramas.fecha);
+		// console.log(data.cronogramas.fecha);
         // Itera sobre los datos recibidos y agrega filas a la tabla
        
             var fila = '<tr>' +
                 '<th>' + 'Equipo:' + '</th>' +
-                '<td>' + data.nombre_equipo + '</td>' +
+                '<td>' + data.nombre_equipoGarantia + '</td>' +
                 '</tr>'+
 				'<tr>' +
                 '<th>' + 'Marca:' + '</th>' +
-                '<td>' + data.marca_equipo + '</td>' +
+                '<td>' + data.marca_equipoGarantia + '</td>' +
                 '</tr>'+
 				'<tr>' +
                 '<th>' + 'Modelo:' + '</th>' +
-                '<td>' + data.modelo_equipo + '</td>' +
+                '<td>' + data.modelo_equipoGarantia + '</td>' +
                 '</tr>'+
 				'<tr>' +
                 '<th>' + 'Serie:' + '</th>' +
-                '<td>' + data.serie_equipo + '</td>' +
+                '<td>' + data.serie_equipoGarantia + '</td>' +
                 '</tr>'+
 				'<tr>' +
                 '<th>' + 'Cod.Patr:' + '</th>' +
-                '<td>' + data.cp_equipo + '</td>' +
+                '<td>' + data.cp_equipoGarantia + '</td>' +
                 '</tr>';
             
            tabla.append(fila);
-			//console.log(Date());
+			console.log(Date());
 		   var table = $('#historialCompra tbody').empty();
 			let team;
         // Itera sobre los datos recibidos y agrega filas a la tabla
 		for (let i = 0; i < data.cronogramas.length; i++) {
-			//console.log(data.cronogramas[i].pdf_cronograma);
-			//console.log(data.cronogramas[i].fecha);
+			console.log(data.cronogramas[i].pdf_cronograma);
 			 team += '<tr>' +
                 
 			 '<td style="' + (data.cronogramas[i].fecha< Date() && data.cronogramas[i].realizado == 0 ? 'color:red;' : '') + '">' + data.cronogramas[i].fecha + '<br>' + data.cronogramas[i].fecha_final + '</td>' +
@@ -117,4 +118,6 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
     });
     
 });
+
+
 

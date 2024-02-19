@@ -4,7 +4,7 @@ DataTable Servidor de departamentos
 
 /* Petición AJAX */
 $.ajax({
-    url: 'http://192.168.6.113/software_biomedico/public/departamentos',
+    url: 'http://127.0.0.1:8000/departamentos',
     success: function(respuesta){
         console.log("respuesta",respuesta);
     },
@@ -22,7 +22,7 @@ var tablaDepartamentos = $("#tablaDepartamentos").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://192.168.6.113/software_biomedico/public/departamentos'
+        url: 'http://127.0.0.1:8000/departamentos'
     },
 
     "columnDefs":[{
@@ -101,3 +101,43 @@ var tablaDepartamentos = $("#tablaDepartamentos").DataTable({
 tablaDepartamentos.on('order.dt search.dt', function(){
     tablaDepartamentos.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell,i){cell.innerHTML = i+1})
 }).draw();
+
+$('#tablaDepartamentos').on('click', '.editar-btn', function() {
+    var id = $(this).data('id');
+
+    // Realiza una petición AJAX para obtener los datos del registro
+    $.get('/departamentos/json/' + id, function(data) {
+        // console.log("Datos recibidos:",data);
+        // Completa el formulario del modal con los datos recibidos
+        $('#id').val(data.id_departamento);
+        $('#nombre_departamento').val(data.nombre_departamento);
+        $('#iniciales_departamento').val(data.iniciales_departamento);
+        $('#estado_departamento').val(data.estado_departamento);
+        $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
+        // Continúa con los demás campos
+        $('#editForm').submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+    
+            // Realiza una petición AJAX para actualizar el registro
+            $.ajax({
+                url: '/departamentos/' + id,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    //console.log(response.data);
+                    // Cierra el modal de edición
+                    //$('#editModal').modal('hide');
+                    // Recarga los datos en la tabla
+                    // location.reload();
+                    // return false;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+            location.reload();
+        });
+    });
+    
+});
