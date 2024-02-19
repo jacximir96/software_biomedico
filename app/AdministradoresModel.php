@@ -12,4 +12,6 @@ class AdministradoresModel extends Model
 
     protected $table = 'users';
 
+    protected $primaryKey = 'id_users';
+
 }
