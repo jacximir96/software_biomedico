@@ -11,6 +11,7 @@ use App\DireccionesEjecutivasModel;
 use App\RolesModel;
 use App\EquiposModel;
 use App\CronogramasModel;
+use Carbon\Carbon;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
@@ -112,7 +113,21 @@ class HistorialEquiposController extends Controller
       }
       public function showJson($id) {
         $historial = EquiposModel::with('cronogramas')->find($id);
-        $historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
+        //$historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
+        $historial->cronogramas = collect($historial->cronogramas)->map(function ($cronograma) {
+            if(empty($cronograma['fecha'])){
+                $cronograma['bool_fecha'] = false && $cronograma['realizado'] == 0;
+            } else {
+                $fecha = new Carbon($cronograma['fecha']);
+                $hoy = Carbon::today();
+                $cronograma['bool_fecha'] =  $fecha->lessThan($hoy) && $cronograma['realizado'] == 0;
+            }
+            $cronograma['bool_archivo'] = Storage::exists($cronograma['pdf_cronograma']);
+            if($cronograma['bool_archivo']){
+                $cronograma['pdf_cronograma'] = Storage::url($cronograma['pdf_cronograma']);
+            }
+            return $cronograma;
+        })->toArray();
         return $historial;
     }
 }
