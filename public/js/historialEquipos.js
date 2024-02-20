@@ -58,18 +58,18 @@ $("#tablaHistorialEquipos").DataTable({
 });
 
 $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
-    var id = $(this).data('id');
+    let id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
     $.get('/historialequipo/json/' + id, function(data) {
         // console.log("Datos recibidos:",data);
 		$('#id_equipoHistorial').val(data.id_equipo);
-		var tabla = $('#miTabla tbody').empty();
+		let tabla = $('#miTabla tbody').empty();
 		
-		console.log(data.cronogramas.fecha);
+		//console.log(data.cronogramas.fecha);
         // Itera sobre los datos recibidos y agrega filas a la tabla
        
-            var fila = '<tr>' +
+            let fila = '<tr>' +
                 '<th>' + 'Equipo:' + '</th>' +
                 '<td>' + data.nombre_equipo + '</td>' +
                 '</tr>'+
@@ -92,27 +92,37 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
             
            tabla.append(fila);
 			//console.log(Date());
-		   var table = $('#historialCompra tbody').empty();
 			let team;
         // Itera sobre los datos recibidos y agrega filas a la tabla
-		for (let i = 0; i < data.cronogramas.length; i++) {
-			//console.log(data.cronogramas[i].pdf_cronograma);
-			//console.log(data.cronogramas[i].fecha);
-			 team += '<tr>' +
-                
-			 '<td style="' + (data.cronogramas[i].fecha< Date() && data.cronogramas[i].realizado == 0 ? 'color:red;' : '') + '">' + data.cronogramas[i].fecha + '<br>' + data.cronogramas[i].fecha_final + '</td>' +
-			 '<td style="' + (data.cronogramas[i].realizado == 1 ? '' : 'color:red;') + '">' + (data.cronogramas[i].realizado == 1 ? 'REALIZADO' : 'NO REALIZADO') + '</td>'+
-			 '<td>' + (data.cronogramas[i].pdf_cronograma ? '<a href="' + data.cronogramas[i].pdf_cronograma + '" download="Archivo de finalización" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>' : '') + '</td>'
-
-   
-			 '</tr>';
-				
-			
-		}
+		 for (const cronograma of data.cronogramas) {
+			//console.log(cronograma.pdf_cronograma);
+			//console.log(cronograma.fecha);
+			 team += `<tr>
+			 <td ${(cronograma.bool_fecha)?'style="color:red"':''}>
+				 ${cronograma.fecha}<br>${cronograma.fecha_final}
+			 </td>
+			 <td ${(cronograma.realizado == 1)?'':'style="color:red"'}>
+				 ${(cronograma.realizado == 1) ? 'REALIZADO' : 'NO REALIZADO'}
+			 </td>
+			 <td>
+				 ${(cronograma.bool_archivo ? `<a href="${cronograma.pdf_cronograma}" download="Archivo de finalización${cronograma.pdf_cronograma.match(/\.\w+$/).pop()}" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>` : '')}
+			 </td>
+		 </tr>`;
+		 }
+		//  team = data.cronogramas.map(e=>{
+		// 	return $('<tr>').append($('<td>', {
+		// 		...(e.bool_fecha && { style: 'color:red' })
+		// 	}).html(`${e.fecha}<br>${e.fecha_final}`),
+		// 	$('<td>', {
+		// 		...(e.realizado != 1 && { style: 'color:red' })
+		// 	}).text(e.realizado == 1 ? 'REALIZADO' : 'NO REALIZADO'),
+		// 	$('<td>').html(
+		// 		e.bool_archivo ? `<a href="${e.pdf_cronograma}" download="Archivo de finalización${e.pdf_cronograma.match(/\.\w+$/).pop()}" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>` : ''
+		// 	)).prop('outerHTML');
+		//  }).join('');
             
             
-           table.append(team);
-       
+		 $('#historialCompra tbody').empty().html(team);
         // Continúa con los demás campos
     });
     

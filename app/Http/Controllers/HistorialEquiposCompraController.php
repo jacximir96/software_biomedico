@@ -10,6 +10,7 @@ use App\DepartamentosModel;
 use App\DireccionesEjecutivasModel;
 use App\RolesModel;
 use App\EquiposGarantiaModel;
+use Carbon\Carbon;
 use App\CronogramasModel;
 /* Fin de Modelos de nuestro proyecto */
 
@@ -100,9 +101,28 @@ class HistorialEquiposCompraController extends Controller
         // descargar archivo PDF con método de descarga
         return $pdf->setPaper('a4','landscape')->stream('cronogramasGeneral.pdf');
       }
+    // public function showJson($id) {
+    //     $historial = EquiposGarantiaModel::with('cronogramas')->find($id);
+    //     $historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
+    //     return $historial;
+    // }
     public function showJson($id) {
         $historial = EquiposGarantiaModel::with('cronogramas')->find($id);
-        $historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
+        //$historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
+        $historial->cronogramas = collect($historial->cronogramas)->map(function ($cronograma) {
+            if(empty($cronograma['fecha'])){
+                $cronograma['bool_fecha'] = false && $cronograma['realizado'] == 0;
+            } else {
+                $fecha = new Carbon($cronograma['fecha']);
+                $hoy = Carbon::today();
+                $cronograma['bool_fecha'] =  $fecha->lessThan($hoy) && $cronograma['realizado'] == 0;
+            }
+            $cronograma['bool_archivo'] = Storage::exists($cronograma['pdf_cronograma']);
+            if($cronograma['bool_archivo']){
+                $cronograma['pdf_cronograma'] = Storage::url($cronograma['pdf_cronograma']);
+            }
+            return $cronograma;
+        })->toArray();
         return $historial;
     }
 }

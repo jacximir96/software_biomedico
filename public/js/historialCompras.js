@@ -64,6 +64,9 @@ $('#tablaHistorialCompras').on('click', '.editar-btn', function() {
 
     // Realiza una petición AJAX para obtener los datos del registro
     $.get('/historialgarantia/json/' + id, function(data) {
+
+
+		
         // console.log("Datos recibidos:",data);
 		$('#id_equipoHistorial').val(data.id_equipoGarantia);
 		var tabla = $('#miTabla tbody').empty();
@@ -93,26 +96,29 @@ $('#tablaHistorialCompras').on('click', '.editar-btn', function() {
                 '</tr>';
             
            tabla.append(fila);
-			console.log(Date());
-		   var table = $('#historialCompra tbody').empty();
-			let team;
+			//console.log(Date());
+		//    var table = $('#historialCompra tbody').empty();
+		let team;
         // Itera sobre los datos recibidos y agrega filas a la tabla
-		for (let i = 0; i < data.cronogramas.length; i++) {
-			console.log(data.cronogramas[i].pdf_cronograma);
-			 team += '<tr>' +
-                
-			 '<td style="' + (data.cronogramas[i].fecha< Date() && data.cronogramas[i].realizado == 0 ? 'color:red;' : '') + '">' + data.cronogramas[i].fecha + '<br>' + data.cronogramas[i].fecha_final + '</td>' +
-			 '<td style="' + (data.cronogramas[i].realizado == 1 ? '' : 'color:red;') + '">' + (data.cronogramas[i].realizado == 1 ? 'REALIZADO' : 'NO REALIZADO') + '</td>'+
-			 '<td>' + (data.cronogramas[i].pdf_cronograma ? '<a href="' + data.cronogramas[i].pdf_cronograma + '" download="Archivo de finalización" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>' : '') + '</td>'
-
-   
-			 '</tr>';
-				
-			
-		}
+		// Itera sobre los datos recibidos y agrega filas a la tabla
+		 for (const cronograma of data.cronogramas) {
+			//console.log(cronograma.pdf_cronograma);
+			//console.log(cronograma.fecha);
+			 team += `<tr>
+			 <td ${(cronograma.bool_fecha)?'style="color:red"':''}>
+				 ${cronograma.fecha}<br>${cronograma.fecha_final}
+			 </td>
+			 <td ${(cronograma.realizado == 1)?'':'style="color:red"'}>
+				 ${(cronograma.realizado == 1) ? 'REALIZADO' : 'NO REALIZADO'}
+			 </td>
+			 <td>
+				 ${(cronograma.bool_archivo ? `<a href="${cronograma.pdf_cronograma}" download="Archivo de finalización${cronograma.pdf_cronograma.match(/\.\w+$/).pop()}" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>` : '')}
+			 </td>
+		 </tr>`;
+		 }
             
             
-           table.append(team);
+		 $('#historialCompra tbody').empty().append(team);
        
         // Continúa con los demás campos
     });
