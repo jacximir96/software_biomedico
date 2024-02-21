@@ -4,7 +4,7 @@ DataTable Servidor de departamentos
 
 /* Petición AJAX */
 $.ajax({
-    url: 'http://127.0.0.1:8000/tipoMantenimientos',
+    url: ruta +'/tipoMantenimientos',
     success: function(respuesta){
         console.log("respuesta",respuesta);
     },
@@ -22,7 +22,7 @@ var tablaTipoMantenimientos = $("#tablaTipoMantenimientos").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://127.0.0.1:8000/tipoMantenimientos'
+        url: ruta +'/tipoMantenimientos'
     },
 
     "columnDefs":[{

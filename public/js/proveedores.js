@@ -6,7 +6,7 @@ $("#tablaProveedores").DataTable({
 	processing: true,
     serverSide: true,
 	lengthChange: false,
-	ajax :"/obtenerproveedor",
+	ajax :ruta +"/obtenerproveedor",
 
 	columns:[	
 		{
@@ -68,7 +68,7 @@ $('#tablaProveedores').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/proveedores/json/' + id, function(data) {
+    $.get(ruta +'/proveedores/json/' + id, function(data) {
         // Completa el formulario del modal con los datos recibidos
         //$('#id').val(data.id_departamento);
         $('#txtdni').val(data.ruc_proveedor);
@@ -89,7 +89,7 @@ $('#tablaProveedores').on('click', '.editar-btn', function() {
     
             // Realiza una petición AJAX para actualizar el registro
             $.ajax({
-                url: '/proveedores/' + id,
+                url: ruta +'/proveedores/' + id,
                 type: 'POST',
                 data: formData,
                 success: function(response) {

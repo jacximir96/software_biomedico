@@ -7,7 +7,7 @@ $("#tablaEquipos").DataTable({
 	processing: true,
    serverSide: true,
    lengthChange: false,
-   ajax :"/obtener",
+   ajax :ruta +"/obtener",
    columns:[	
 	   {
 		   data: null, // Utilizamos null ya que no hay una propiedad específica asociada
@@ -148,7 +148,7 @@ $('#tablaEquipos').on('click', '.editar-btn', function() {
    
 
    // Realiza una petición AJAX para obtener los datos del registro
-   $.get('/equipos/json/' + id, function(data) {
+   $.get( ruta + '/equipos/json/' + id, function(data) {
 	   var fechaAdquisicionEquipo = new Date(data.fecha_adquisicion_equipo);
 
    // Calcula la diferencia en meses entre la fecha_adquisicion_equipo y la fecha actual
@@ -211,7 +211,7 @@ $('#tablaEquipos').on('click', '.editar-btn', function() {
    
 		   // Realiza una petición AJAX para actualizar el registro
 		   $.ajax({
-			   url: '/equipos/' + id,
+			   url: ruta +'/equipos/' + id,
 			   type: 'POST',
 			   data: formData,
 			   contentType: false,

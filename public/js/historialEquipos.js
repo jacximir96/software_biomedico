@@ -5,7 +5,7 @@ $("#tablaHistorialEquipos").DataTable({
 
 	processing: true,
     serverSide: true,
-	ajax :"/obtenerhistorialequipos",
+	ajax :ruta +"/obtenerhistorialequipos",
 	columns:[
 		{
 			data: null, // Utilizamos null ya que no hay una propiedad específica asociada
@@ -61,7 +61,7 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
     let id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/historialequipo/json/' + id, function(data) {
+    $.get(ruta+'/historialequipo/json/' + id, function(data) {
         // console.log("Datos recibidos:",data);
 		$('#id_equipoHistorial').val(data.id_equipo);
 		let tabla = $('#miTabla tbody').empty();

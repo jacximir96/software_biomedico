@@ -1,6 +1,6 @@
 
 /*  Capturar ruta de mi servidor */
-var ruta = $("#ruta").val();
+let ruta = $("#ruta").val();
 
 /* Agregar red */
 $(document).on("click",".agregarRed", function(){

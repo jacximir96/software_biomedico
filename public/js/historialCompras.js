@@ -7,7 +7,7 @@ $("#tablaHistorialCompras").DataTable({
 
 	processing: true,
     serverSide: true,
-	ajax :"/obtenerhistorialcompras",
+	ajax :ruta +"/obtenerhistorialcompras",
 	columns:[
 		{
 			data: null, // Utilizamos null ya que no hay una propiedad específica asociada
@@ -63,7 +63,7 @@ $('#tablaHistorialCompras').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/historialgarantia/json/' + id, function(data) {
+    $.get(ruta +'/historialgarantia/json/' + id, function(data) {
 
 
 		
