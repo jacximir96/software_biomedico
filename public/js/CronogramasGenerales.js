@@ -6,7 +6,7 @@ DataTable de Jornadas Laborales
 $("#tablaCronogramasGenerales").DataTable({
 	processing: true,
     serverSide: true,
-	ajax :"/obtenercronograma",
+	ajax : ruta + "/obtenercronograma",
 
 	columns :[
 		// {data:'id_cronogramaGeneral',name:'id_cronogramaGeneral'},
@@ -92,7 +92,7 @@ $('#tablaCronogramasGenerales').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/cronogramasgeneral/json/' + id, function(data) {
+    $.get(ruta + '/cronogramasgeneral/json/' + id, function(data) {
         // console.log("Datos recibidos:",data);
         // Completa el formulario del modal con los datos recibidos
         $('#id_equipo').val(data.id_equipo);

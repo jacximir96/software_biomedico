@@ -4,7 +4,7 @@ DataTable de Jornadas Laborales
 $("#tablaEquiposGarantia").DataTable({
 	processing: true,
     serverSide: true,
-	ajax :"/obtenerequipogarantia",
+	ajax :ruta+"/obtenerequipogarantia",
 
 	columns: [
 		{data:'nombre_equipoGarantia' ,name:'nombre_equipoGarantia'}, //nombre de equipo
@@ -92,7 +92,7 @@ $('#tablaEquiposGarantia').on('click', '.editar-btn', function() {
 
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/equipogarantia/json/' + id, function(data) {
+    $.get(ruta +'/equipogarantia/json/' + id, function(data) {
         // console.log("Datos recibidos:",data);
         // Completa el formulario del modal con los datos recibidos
         $('#id').val(data.id_departamento);
@@ -127,7 +127,7 @@ $('#tablaEquiposGarantia').on('click', '.editar-btn', function() {
     
             // Realiza una petición AJAX para actualizar el registro
             $.ajax({
-                url: '/equiposGarantia/' + id,
+                url: ruta + '/equiposGarantia/' + id,
                 type: 'POST',
                 data: formData,
 				contentType: false,

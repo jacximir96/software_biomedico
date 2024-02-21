@@ -4,7 +4,7 @@ DataTable de Jornadas Laborales
 $("#tablaOrdenServicios").DataTable({
     processing: true,
     serverSide: true,
-	ajax :"/obtenerequiposervicios",
+	ajax :ruta +"/obtenerequiposervicios",
 
 	columns:[	
 		{
@@ -86,7 +86,7 @@ $('#tablaOrdenServicios').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
 
     // Realiza una petición AJAX para obtener los datos del registro
-    $.get('/ordenservicio/json/' + id, function(data) {
+    $.get(ruta +'/ordenservicio/json/' + id, function(data) {
         // console.log("Datos recibidos:",data);
         // Completa el formulario del modal con los datos recibidos
         $('#codigo_ordenServicio').val(data.codigo_ordenServicio);
@@ -117,7 +117,7 @@ $('#tablaOrdenServicios').on('click', '.editar-btn', function() {
     
             // Realiza una petición AJAX para actualizar el registro
             $.ajax({
-                url: '/ordenServicios/' + id,
+                url: ruta+'/ordenServicios/' + id,
                 type: 'POST',
                 data: formData,
 				contentType: false,

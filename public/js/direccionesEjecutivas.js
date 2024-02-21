@@ -4,7 +4,7 @@ DataTable Servidor de Direcciones Ejecutivas
 
 /* Petición AJAX */
 $.ajax({
-    url: 'http://127.0.0.1:8000/direccionesEjecutivas',
+    url: ruta +'/direccionesEjecutivas',
     success: function(respuesta){
         console.log("respuesta",respuesta);
     },
@@ -22,7 +22,7 @@ var tablaDireccionesEjecutivas = $("#tablaDireccionesEjecutivas").DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: 'http://127.0.0.1:8000/direccionesEjecutivas'
+        url: ruta +'/direccionesEjecutivas'
     },
 
     "columnDefs":[{
