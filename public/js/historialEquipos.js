@@ -105,7 +105,7 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
 				 ${(cronograma.realizado == 1) ? 'REALIZADO' : 'NO REALIZADO'}
 			 </td>
 			 <td>
-				 ${(cronograma.bool_archivo ? `<a href="${cronograma.pdf_cronograma}" download="Archivo de finalización${cronograma.pdf_cronograma.match(/\.\w+$/).pop()}" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>` : '')}
+				 ${(cronograma.bool_archivo ? `<a href="${ruta}${cronograma.pdf_cronograma}" download="Archivo de finalización${cronograma.pdf_cronograma.match(/\.\w+$/).pop()}" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>` : '')}
 			 </td>
 		 </tr>`;
 		 }
