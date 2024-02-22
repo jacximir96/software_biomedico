@@ -27,7 +27,7 @@
 
             <div class="col-lg-3 col-6">
 
-                <div class="small-box bg-info">
+                <div class="small-box bg-orange" >
                 <div class="inner">
                     <h3>
                         @foreach($cantidad_equipos as $key => $value_equipos)
@@ -47,7 +47,7 @@
 
             <div class="col-lg-3 col-6">
 
-                <div class="small-box bg-success">
+                <div class="small-box bg-gray">
                 <div class="inner">
                     <h3>
                         @foreach($cantidad_equiposGarantia as $key => $value_equiposGarantia)
@@ -67,7 +67,7 @@
 
             <div class="col-lg-3 col-6">
 
-                <div class="small-box bg-warning">
+                <div class="small-box bg-indigo">
                 <div class="inner">
                     <h3>
                         @foreach($cantidad_usuarios as $key => $value_usuarios)

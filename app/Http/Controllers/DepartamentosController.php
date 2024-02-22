@@ -108,8 +108,8 @@ class DepartamentosController extends Controller
                                     estado E ON D.estado_departamento = E.id_estado INNER JOIN
                                     direccionejecutiva Dir ON D.id_direccionEjecutiva = Dir.id_direccionEjecutiva');
 
-        $datos = array("nombre_departamento"=>$request->input("nombre_departamento"),
-                       "iniciales_departamento"=>$request->input("iniciales_departamento"),
+        $datos = array("nombre_departamento"=>strtoupper($request->input("nombre_departamento")),
+                       "iniciales_departamento"=>strtoupper($request->input("iniciales_departamento")),
                        "estado_departamento"=>$request->input("estado_departamento"),
                        "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"));
 

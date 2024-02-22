@@ -69,7 +69,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 }
 
                     public function store(Request $request){
-                        $datos = array("nombre_ambiente"=>$request->input("nombre_ambiente"),
+                        $datos = array("nombre_ambiente"=>strtoupper($request->input("nombre_ambiente")),
                                         "estado_ambiente"=>$request->input("estado_ambiente"),
                                         "id_departamento"=>$request->input("id_departamento"),
                                         "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"));

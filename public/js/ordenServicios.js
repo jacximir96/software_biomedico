@@ -35,7 +35,7 @@ $("#tablaOrdenServicios").DataTable({
 			render: function(data, type, full, meta) {
 				// Verificar si data.pdf_ordenServicio es nulo
 				if (full.pdf) {
-                    return '<a href="' + data + '" download="Orden de Servicio" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i> Descargar Archivo</a>';
+                    return '<a href="'+ruta+''+ data +'" download="Orden de Servicio" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i> Descargar Archivo</a>';
                 } else {
                     return'<button class="btn btn-default btn-sm" disabled><i class="fas fa-download text-black"></i> Descargar Archivo</button>';;
                 }
