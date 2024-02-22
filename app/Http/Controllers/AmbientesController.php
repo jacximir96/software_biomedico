@@ -53,6 +53,8 @@ class AmbientesController extends Controller
     $departamentos = DepartamentosModel::all();
     $equipos = EquiposModel::all();
     $estado = DB::select('select * from estado');
+    $ambiente_departamento = DB::select('select * from ambiente A INNER JOIN
+        departamento D ON D.id_departamento = A.id_departamento');
     $ambientes = AmbientesModel::all();
     $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
@@ -61,7 +63,7 @@ class AmbientesController extends Controller
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
     AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-    return view("paginas.ambientes",array("ambientes"=>$ambientes,"equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,'estado' => $estado,
+    return view("paginas.ambientes",array("ambientes"=>$ambientes,"equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,'estado' => $estado,'ambiente_departamento' => $ambiente_departamento,
                                             "direccionesEjecutivas"=>$direccionesEjecutivas,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                             "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,"ambientes_general"=>$ambientes_general));
 }

@@ -45,7 +45,7 @@ $("#tablaEquiposGarantia").DataTable({
 			data: "id_equipoGarantia",
 			name: 'id_equipoGarantia',
 			render: function(data, type, full, meta) {
-				return '<a href="/reportesEquiposGarantia/EquiposGarantiaPdf/'+ data +'" class="btn btn-default btn-sm">'+
+				return '<a href="'+	ruta+'/reportesEquiposGarantia/EquiposGarantiaPdf/'+ data +'" class="btn btn-default btn-sm">'+
 				'<i class="fas fa-download text-black"></i> Descargar Archivo</a>'
 			}
 		},
@@ -54,7 +54,7 @@ $("#tablaEquiposGarantia").DataTable({
 			name: 'acciones',
 			render: function(data, type, full, meta) {
 				return'<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>'+
-				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="/equiposGarantia/'+ data +'" method=DELETE pagina="equiposGarantia">'+
+				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="'+ruta+'/equiposGarantia/'+ data +'" method=DELETE pagina="equiposGarantia">'+
 					'<i class="fas fa-trash-alt text-white"></i>'+
 				 '</button>'
 			}

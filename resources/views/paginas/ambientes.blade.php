@@ -261,13 +261,22 @@
     
                         <div class="col-md-8">
                             <select class="form-control" id="id_direccionEjecutiva" name="id_direccionEjecutiva">
-                                @foreach ($direccionesEjecutivas as $key => $value1)
-    
-                                    <option value="{{$value1->id_direccionEjecutiva}}">
-                                        {{$value1->nombre_direccionEjecutiva}}
+                                @foreach ($ambiente_departamento as $key => $value1)
+
+                                    <option value="{{$value1->id_departamento}}">
+                                        {{$value1->nombre_departamento}}
                                     </option>
-    
-    
+
+                                    @foreach ($departamentos as $key => $value2)
+
+                                        @if ($value2->id_departamento != $value1->id_departamento)
+                                            <option value="{{$value2->id_departamento}}">
+                                                {{$value2->nombre_departamento}}
+                                            </option>
+                                        @endif{{-- Aparece todo menos el que es diferente --}}
+
+                                    @endforeach
+
                                 @endforeach
                             </select>
                         </div>

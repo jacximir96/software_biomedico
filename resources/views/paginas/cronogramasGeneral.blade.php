@@ -344,7 +344,7 @@
                     </div>
 
                     <div>
-                        <button type="button" class="btn btn-primary" id="guardarCronogramaGeneral">Guardar</button>
+                        <button type="submit" class="btn btn-primary" id="guardarCronogramaGeneral">Guardar</button>
                     </div>
                 </div>
             </form>

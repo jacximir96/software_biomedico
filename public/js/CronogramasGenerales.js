@@ -55,7 +55,7 @@ $("#tablaCronogramasGenerales").DataTable({
 			name: 'acciones',
 			render: function(data, type, full, meta) {
 				return ' <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>'+  
-				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="/cronogramasGeneral/'+ data +'" method=DELETE pagina="cronogramasGeneral" token=token>'+
+				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="'+ruta+'/cronogramasGeneral/'+ data +'" method=DELETE pagina="cronogramasGeneral" token=token>'+
 					'<i class="fas fa-trash-alt text-white"></i>'+
 				 '</button>'
 			}
@@ -110,7 +110,7 @@ $('#tablaCronogramasGenerales').on('click', '.editar-btn', function() {
     
             // Realiza una petición AJAX para actualizar el registro
             $.ajax({
-                url: '/cronogramasGeneral/' + id,
+                url: ruta+'/cronogramasGeneral/' + id,
                 type: 'POST',
                 data: formData,
                 success: function(response) {

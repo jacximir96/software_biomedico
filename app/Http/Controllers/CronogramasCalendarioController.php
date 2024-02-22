@@ -149,7 +149,7 @@ class CronogramasCalendarioController extends Controller
                 // $cronogramas = CronogramasCalendarioModel::all();
                 $cronogramasCalendario_fecha = DB::select("select E.cp_equipoGarantia,C.fecha_final,C.realizado,C.id_cronogramaCalendario,C.id_equipoGarantia,C.fecha,E.nombre_equipoGarantia from cronogramacalendario C
                                                 INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
-                                                WHERE C.realizado = 0 AND C.fecha_final <> ''");
+                                                WHERE C.realizado = 0");
                 $tipoMantenimientos_estado = DB::select('select * from mantenimiento where estado_mantenimiento <> 2');
                 $proveedores = ProveedoresModel::all();
                 $ordenServicios = OrdenServiciosModel::all();

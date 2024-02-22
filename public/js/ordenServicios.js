@@ -34,9 +34,13 @@ $("#tablaOrdenServicios").DataTable({
             name: 'Acciones', // Nombre de la columna
 			render: function(data, type, full, meta) {
 				// Verificar si data.pdf_ordenServicio es nulo
-				
+				if (full.pdf) {
+                    return '<a href="' + data + '" download="Orden de Servicio" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i> Descargar Archivo</a>';
+                } else {
+                    return'<button class="btn btn-default btn-sm" disabled><i class="fas fa-download text-black"></i> Descargar Archivo</button>';;
+                }
 					// Si el enlace comienza con '/storage/', el archivo se encuentra en la carpeta 'storage', por lo que renderizamos el botón de descarga
-					return '<a href="'+data+'" download="Orden de Servicio" class="btn btn-default btn-sm" disabled><i class="fas fa-download text-black"></i> Descargar Archivo</a>';
+					
 			
 					// Si el enlace no comienza con '/storage/', el archivo no se encuentra en la carpeta 'storage', por lo que deshabilitamos el botón y mostramos un mensaje indicando que el PDF no está disponible
 			
@@ -47,7 +51,7 @@ $("#tablaOrdenServicios").DataTable({
 		name: 'acciones',
 		render: function(data, type, full, meta) {
 			return '<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>'+
-			 '<button class="btn btn-danger btn-sm eliminarRegistro" action="/ordenServicios/'+ data +'" method=DELETE pagina="ordenServicios">'+
+			 '<button class="btn btn-danger btn-sm eliminarRegistro" action="'+ruta+'/ordenServicios/'+ data +'" method=DELETE pagina="ordenServicios">'+
 				'<i class="fas fa-trash-alt text-white"></i>'+
 			 '</button>'
 		}

@@ -1,7 +1,7 @@
 /*=============================================
 DataTable de Jornadas Laborales
 =============================================*/
-var tablaCronogramasGeneral = $("#tablaCronogramasGeneralesNuevo").DataTable({
+var tablaCronogramasGeneralNuevo = $("#tablaCronogramasGeneralesNuevo").DataTable({
     "language": {
   
       "sProcessing": "Procesando...",
@@ -39,17 +39,17 @@ var tablaCronogramasGeneral = $("#tablaCronogramasGeneralesNuevo").DataTable({
     }
   });
   
-  $('#guardarCronogramaGeneral').on('click', function (event) {
+  $('#guardarCronogramaGeneralNuevo').on('click', function (event) {
     event.preventDefault();
   
     $('#form').find('input[type="hidden"]').remove();
     var token_cronograma = $('#token').val();
     var mes_cronograma = $('#mes_cronograma').val();
     var año_cronograma = $('#año_cronograma').val();
-    var seleccionados = tablaCronogramasGeneral.rows({ selected: true });
+    var seleccionados = tablaCronogramasGeneralNuevo.rows({ selected: true });
   
     if(!seleccionados.data().length)
-      alert("No ha seleccionado ningún producto");
+      console.log(seleccionados);
     else{
         $('<input>', {
             type: 'hidden',

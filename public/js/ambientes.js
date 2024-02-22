@@ -37,7 +37,7 @@ $("#tablaAmbientes").DataTable({
 			name: 'acciones',
 			render: function(data, type, full, meta) {
 				return'<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>'+ 
-				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="/ambientes/'+ data +'" method=DELETE pagina="ambientes">'+
+				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="'+ ruta +'/ambientes/'+ data +'" method=DELETE pagina="ambientes">'+
 					'<i class="fas fa-trash-alt text-white"></i>'+
 				 '</button>'
 			}

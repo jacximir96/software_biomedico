@@ -72,7 +72,7 @@ var table = $("#tablaCronogramasGeneralNuevo").DataTable({
 			name: 'acciones',
 			render: function(data, type, full, meta) {
 				return '<button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>'+  
-				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="/cronogramasGeneralNuevo/'+ data +'" method=DELETE pagina="cronogramasGeneralNuevo">'+
+				 '<button class="btn btn-danger btn-sm eliminarRegistro" action="'+ruta+'/cronogramasGeneralNuevo/'+ data +'" method=DELETE pagina="cronogramasGeneralNuevo">'+
 					'<i class="fas fa-trash-alt text-white"></i>'+
 				 '</button>'
 			}
@@ -107,41 +107,6 @@ var table = $("#tablaCronogramasGeneralNuevo").DataTable({
   
 });
 
-$('#vender').on('click', function (event) {
-  event.preventDefault();
-
-  $('#form').find('input[type="hidden"]').remove();
-  var token_cronograma = $('#token').val();
-  var mes_cronograma = $('#mes_cronograma').val();
-  var año_cronograma = $('#año_cronograma').val();
-  var seleccionados = table.rows({ selected: true });
-
-  if(!seleccionados.data().length)
-    alert("No ha seleccionado ningún producto");
-  else{
-      console.log(token_cronograma);
-      console.log(mes_cronograma);
-      console.log(año_cronograma);
-
-      $('<input>', {
-          type: 'hidden',
-          value: token_cronograma,
-          name: 'token'
-      }).appendTo('#form');
-
-    seleccionados.every(function(key,data){
-      console.log(this.data()[0]);
-
-      $('<input>', {
-          type: 'hidden',
-          value: this.data()[0],
-          name: 'equipos_cronograma[]'
-      }).appendTo('#form');
-
-      $("#form").submit(); //submiteas el form
-    });
-  }
-});
 
 $('#tablaCronogramasGeneralNuevo').on('click', '.editar-btn', function() {
   var id = $(this).data('id');
