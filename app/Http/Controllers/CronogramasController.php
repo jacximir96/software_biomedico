@@ -264,7 +264,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
             $cronogramas_fecha = DB::select("select M.nombre_mantenimiento,C.fecha_final,C.realizado,C.id_cronograma,C.id_equipo,C.fecha,E.nombre_equipo,E.cp_equipo from cronograma C
                                             INNER JOIN equipo E ON C.id_equipo = E.id_equipo
                                             INNER JOIN mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento
-                                            WHERE C.realizado = 0 AND C.fecha_final <> ''");
+                                            WHERE C.realizado = 0");
             $tipoMantenimientos_estado = DB::select('select * from mantenimiento where estado_mantenimiento <> 2');
             $proveedores = ProveedoresModel::all();
             $ordenServicios = OrdenServiciosModel::all();
@@ -274,7 +274,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
             FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
             WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-$cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
+            $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
             AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
             if(count($cronograma) != 0){
@@ -291,7 +291,6 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                 "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo, "events" => $events));
             }
         }
-
         public function destroy(Request $request, $id){
 
             // $cronograma = CronogramasModel::all();

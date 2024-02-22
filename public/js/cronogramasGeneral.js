@@ -49,7 +49,7 @@ $('#guardarCronogramaGeneral').on('click', function (event) {
   var seleccionados = tablaCronogramasGeneral.rows({ selected: true });
 
   if(!seleccionados.data().length)
-    alert("No ha seleccionado ningún producto");
+   console.log(seleccionados);
   else{
       $('<input>', {
           type: 'hidden',
