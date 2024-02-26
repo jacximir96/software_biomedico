@@ -767,10 +767,6 @@ $(document).on("keyup",".inputRutaMonto",function(){
     )
 })
 
-$(document).on("click",".nav-link",function(){
-        $(this).addClass("active");
-})
-
 
 
 

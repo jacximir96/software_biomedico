@@ -1,3 +1,4 @@
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
@@ -46,7 +47,7 @@
                                 <!--=====================================
                                 Botón Dashboard
                                 ======================================-->
-                                <li class="nav-item">
+                                <li class="nav-item ">
                                     <a href="{{ url("/dashboard") }}" class="nav-link">
                                     <i class="nav-icon fas fa-users-cog"></i>
                                     <p>Inicio</p>
@@ -343,3 +344,30 @@
     </div>
     <!-- /.sidebar -->
   </aside>
+  <script>
+ $(function () {
+    // Función para marcar el enlace activo
+    function markActiveLink(url) {
+        // for single sidebar menu
+        $('ul.nav-sidebar a').filter(function () {
+            return this.href == url;
+        }).addClass('active');
+
+        // for sidebar menu and treeview
+        $('ul.nav-treeview a').filter(function () {
+            return this.href == url;
+        }).parentsUntil(".nav-sidebar > .nav-treeview")
+            .css({'display': 'block'})
+            .addClass('menu-open').prev('a')
+            .addClass('active');
+    }
+
+    // Marcar el enlace activo en la carga inicial de la página
+    markActiveLink(window.location.href);
+
+    // Manejar cambios en el historial del navegador
+    $(window).on('popstate', function () {
+        // No hacer nada al retroceder en el historial del navegador
+    });
+});
+  </script>

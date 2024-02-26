@@ -10,7 +10,6 @@ use App\AmbientesModel;
 use App\DepartamentosModel;
 use App\DireccionesEjecutivasModel;
 use App\EquiposModel;
-use Illuminate\Support\Facades\Cookie;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
@@ -30,12 +29,12 @@ class DireccionesEjecutivasController extends Controller
         if(request()->ajax()){
             return datatables()->of(DB::select('select * from direccionejecutiva D INNER JOIN
                                                 estado E ON D.estado_direccionEjecutiva = E.id_estado
-                                                WHERE D.id_direccionEjecutiva <> 5'))
+                                                '))
             ->addColumn('acciones', function($data){
                 $acciones = '<div class="btn-group">
-                                <a href="'.url()->current().'/'.$data->id_direccionEjecutiva.'" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-pencil-alt text-white"></i>
-                                </a>
+                <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModal" data-id="' .$data->id_direccionEjecutiva.'">
+                <i class="fas fa-pencil-alt text-white"></i></button>
+
 
                                 <button class="btn btn-danger btn-sm eliminarRegistro" action="'.url()->current().'/'.$data->id_direccionEjecutiva.'"
                                 method="DELETE" pagina="direccionesEjecutivas" token="'.csrf_token().'">
@@ -51,7 +50,7 @@ class DireccionesEjecutivasController extends Controller
         $direccionesEjecutivas = DireccionesEjecutivasModel::all();
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
-        $cookie = Cookie::queue('email_login', '', 1);
+        
         $estado = DB::select('select * from estado');
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                                     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
@@ -61,7 +60,7 @@ class DireccionesEjecutivasController extends Controller
                                                     AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
         return view("paginas.direccionesEjecutivas",array("departamentos"=>$departamentos,"administradores"=>$administradores,
-                                                "direccionesEjecutivas"=>$direccionesEjecutivas,"cookie"=>$cookie,"estado"=>$estado,
+                                                "direccionesEjecutivas"=>$direccionesEjecutivas,"estado"=>$estado,
                                                 "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                 "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
 
@@ -170,6 +169,11 @@ class DireccionesEjecutivasController extends Controller
         }else{
             return redirect("/direccionesEjecutivas")->with("error","");
         }
+    }
+
+    public function showJson($id) {
+        $direccionesEjecutivas = DireccionesEjecutivasModel::find($id);
+        return $direccionesEjecutivas;
     }
 
 }

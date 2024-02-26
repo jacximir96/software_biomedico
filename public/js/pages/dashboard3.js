@@ -1,7 +1,7 @@
 $(document).ready(function()  {
   'use strict'
   $.ajax({
-        url: "/software_biomedico/public/dashboard/datosActual/listarActual",
+        url: ruta+"/dashboard/datosActual/listarActual",
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         method: "GET",

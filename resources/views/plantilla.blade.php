@@ -158,9 +158,10 @@
     <script src="{{ url('/') }}/js/ambientes.js"></script>
     <script src="{{ url('/') }}/js/proveedores.js"></script>
     <script src="{{ url('/') }}/js/roles.js"></script>
-    <script src="{{ url('/') }}/js/historial.js"></script>
+    <script src="{{ url('/') }}/js/historialCronograma.js"></script>
     <script src="{{ url('/') }}/js/tipoMantenimientos.js"></script>
     <script src="{{ url('/') }}/js/historialEquipos.js"></script>
+    <script src="{{ url('/') }}/js/historialCronogramaCompra.js"></script>
     <script src="{{ url('/') }}/js/historialCompras.js"></script>
     <script src="{{ url('/') }}/js/ordenServicios.js"></script>
     <script src="{{ url('/') }}/js/cronogramasGeneral.js"></script>

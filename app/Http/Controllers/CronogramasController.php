@@ -12,16 +12,31 @@ use App\CronogramasModel;
 use App\TipoMantenimientosModel;
 use App\OrdenServiciosModel;
 use App\DepartamentosModel;
+use App\DireccionesEjecutivasModel;
+use Facade\Ignition\DumpRecorder\Dump;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Yajra\DataTables\Facades\DataTables;
 
 class CronogramasController extends Controller
 {
-        /* Mostrar todos los registros */
+       public function getcronogramaFecha() {
+        if (request()->ajax()) {
+            $cronogramas_fecha = DB::select("select M.nombre_mantenimiento,C.fecha_final,C.realizado,C.id_cronograma,C.id_equipo,C.fecha,E.nombre_equipo,E.cp_equipo from cronograma C
+            INNER JOIN equipo E ON C.id_equipo = E.id_equipo
+            INNER JOIN mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento
+            WHERE C.realizado = 0 AND C.fecha_final IS NOT NULL");
+            return DataTables::of($cronogramas_fecha)->make(true);
+        }
+       }
+
+    
+    /* Mostrar todos los registros */
         public function index(){
 
             $administradores = AdministradoresModel::all();
+            $direccionesEjecutivas = DireccionesEjecutivasModel::all();
             $proveedores = ProveedoresModel::all();
             $equipos = EquiposModel::all();
             $cronogramas = CronogramasModel::all();
@@ -95,7 +110,7 @@ class CronogramasController extends Controller
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
                                             AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-            return view("paginas.cronogramas",array("cronogramas"=>$cronogramas,"administradores"=>$administradores,
+            return view("paginas.cronogramas",array("cronogramas"=>$cronogramas,"administradores"=>$administradores,'direccionesEjecutivas' =>$direccionesEjecutivas,
                                                     "proveedores"=>$proveedores,"equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,
                                                     "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"cronogramas_fecha"=>$cronogramas_fecha,
                                                     "ordenServicios"=>$ordenServicios,"departamentos"=>$departamentos,
@@ -381,8 +396,10 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                                     "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"),
                                     "garantia"=>$request->input("cronograma_garantia"),
                                     "otm_cronograma"=>$request->input("otm_cronograma"));
-
+                  
+                    
                     $cronograma = CronogramasModel::where('id_cronograma',$id)->update($datos);
+                    // dd($cronograma);
                     return redirect("/cronogramas")->with("ok-editar","");
                 }
 
@@ -390,4 +407,9 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                 return redirect("/cronogramas")->with("error","");
             }
         }
+
+    public function showJson($id) {
+        $cronogramas = CronogramasModel::with('equipo','mantenimiento')->find($id);
+        return $cronogramas;
+    }
 }

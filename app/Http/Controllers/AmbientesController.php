@@ -70,7 +70,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
                     public function store(Request $request){
                         $datos = array("nombre_ambiente"=>strtoupper($request->input("nombre_ambiente")),
-                                        "estado_ambiente"=>$request->input("estado_ambiente"),
+                                        "estado_ambiente"=>strtoupper($request->input("estado_ambiente")),
                                         "id_departamento"=>$request->input("id_departamento"),
                                         "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"));
 
@@ -177,8 +177,8 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                                             estado E ON D.estado_departamento = E.id_estado INNER JOIN
                                             direccionejecutiva Dir ON D.id_direccionEjecutiva = Dir.id_direccionEjecutiva'); */
 
-        $datos = array("nombre_ambiente"=>$request->input("nombre_ambiente"),
-                        "estado_ambiente"=>$request->input("estado_ambiente"),
+        $datos = array("nombre_ambiente"=>strtoupper($request->input("nombre_ambiente")),
+                        "estado_ambiente"=>strtoupper($request->input("estado_ambiente")),
                         "id_departamento"=>$request->input("id_departamento"),
                         "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"));
 
@@ -193,8 +193,8 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                 return redirect("/ambientes")->with("no-validacion","");
             }else{
 
-                $datos = array("nombre_ambiente"=>$request->input("nombre_ambiente"),
-                                "estado_ambiente"=>$request->input("estado_ambiente"),
+                $datos = array("nombre_ambiente"=>strtoupper($request->input("nombre_ambiente")),
+                                "estado_ambiente"=>strtoupper($request->input("estado_ambiente")),
                                 "id_departamento"=>$request->input("id_departamento"),
                                 "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"));
 
