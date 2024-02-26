@@ -5,7 +5,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -52,45 +52,7 @@
 
                     <tbody>
 
-                        {{-- @foreach ($administradores as $key => $value)
-
-                            <tr>
-                                <td>{{($key+1)}}</td>
-                                <td>{{($value["name"])}}</td>
-                                <td>{{($value["email"])}}</td>
-
-                                @php
-                                    if ($value["foto"] == "") {
-                                        echo '<td><img src="'.url('/').'/img/administradores/administrador.png"
-                                        class="img-fluid rounded-circle"></td>';
-                                    }else{
-                                        echo '<td><img src="'.url('/').'/'.$value["foto"].'" class="img-fluid
-                                        rounded-circle"></td>';
-                                    }
-
-                                    if ($value["rol"] == "") {
-                                        echo '<td>administrador</td>';
-                                    }else {
-                                        echo '<td>'.$value["rol"].'</td>';
-                                    }
-                                @endphp
-
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="{{url('/')}}/administradores/{{$value["id"]}}" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-pencil-alt text-white"></i>
-                                        </a>
-
-                                        <button class="btn btn-danger btn-sm eliminarRegistro" action="{{url('/')}}/administradores/{{$value["id"]}}" method="DELETE" pagina="administradores">
-                                            @csrf
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                        @endforeach --}}
-
+                      
                     </tbody>
                 </table>
 
@@ -167,6 +129,82 @@
     </div>
   </div>
 
+
+
+ 
+  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Editar Dirección Ejecutiva</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Nombre:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="nombre_direccionEjecutiva"  id="nombre_direccionEjecutiva"
+                            required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin nombre de dirección Ejecutiva --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Iniciales:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="iniciales_direccionEjecutiva"  id="iniciales_direccionEjecutiva"
+                             required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin iniciales de dirección Ejecutiva --}}
+
+                    {{-- Estado --}}
+                    <div class="input-group mb-3">
+
+                        <label for="email" class="col-md-3 control-label">Estado:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control"  id="estado_direccionEjecutiva" name="estado_direccionEjecutiva" required>
+
+
+                                @foreach ($estado as $key => $value2)
+
+                                        
+                                            <option value="{{$value2->id_estado}}">
+                                                {{$value2->nombre_estado}}
+                                            </option>
+                                        
+
+                                @endforeach
+
+                          
+                            </select>
+                        </div>
+                    </div>{{-- fin estado de dirección Ejecutiva --}}
+
+                </div>
+                    
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  
   {{-- Editar Administrador en modal --}}
 
 @if (isset($status))

@@ -48,7 +48,7 @@
 
                 <div id="tabla_ocultar">
                     <table class="table table-bordered table-striped dt-responsive" width="100%"
-                    id="historial">
+                    id="historialCronogramaCompra">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -60,24 +60,25 @@
                         </tr>
                     </thead>
 
-                    <tbody>
-                    @foreach ($cronogramasCalendario_fecha as $key => $data)
-                        <tr>
-                            <th>{{($key+1)}}</th>
-                            <td>{{$data->nombre_equipoGarantia}}</td>
-                            <td>{{$data->fecha}}</td>
-                            <td>{{$data->fecha_final}}</td>
-                            <td>{{$data->cp_equipoGarantia}}</td>
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    <a href="{{url('/')}}/cronogramasCalendario/{{$data->id_cronogramaCalendario}}" class="btn btn-warning btn-sm">
-                                        Registrar
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
+                    <tbody></tbody>
+                    {{-- <tbody>
+                        @foreach ($cronogramasCalendario_fecha as $key => $data)
+                            <tr>
+                                <th>{{($key+1)}}</th>
+                                <td>{{$data->nombre_equipoGarantia}}</td>
+                                <td>{{$data->fecha}}</td>
+                                <td>{{$data->fecha_final}}</td>
+                                <td>{{$data->cp_equipoGarantia}}</td>
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <a href="{{url('/')}}/cronogramasCalendario/{{$data->id_cronogramaCalendario}}" class="btn btn-warning btn-sm">
+                                            Registrar
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody> --}}
                 </table>
             </div>
             </div>
@@ -187,6 +188,131 @@
 </div>
 
 {{-- Editar departamento en modal --}}
+
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Registrar Mantenimiento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        {{-- Tipo Cronograma --}}
+                        <div class="input-group mb-3">
+
+                            <label for="email" class="col-md-4 control-label">Equipo:</label>
+                            {{-- idequipogarantia --}}
+                            <div class="col-md-8">
+                                <input type="hidden" class="form-control" name="cronograma_equipo" id="cronograma_equipo"
+                                 required autofocus
+                                style="text-transform: uppercase;" readonly="">
+    
+                                <input type="text" class="form-control" name="nombre_equipoGarantia" id="nombre_equipoGarantia"
+                                 required autofocus
+                                style="text-transform: uppercase;" readonly="">
+                            </div>
+                        </div>{{-- fin equipo --}}
+    
+                        <div class="input-group mb-3">
+
+                            <label for="email" class="col-md-4 control-label">Fecha Inicial:</label>
+    
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="cronograma_fecha"  id="cronograma_fecha"
+                                 required autofocus
+                                style="text-transform: uppercase;" readonly="">
+                            </div>
+                        </div>{{-- fin fecha inicial--}}
+    
+                        {{-- fecha Final --}}
+                        <div class="input-group mb-3">
+    
+                            <label for="email" class="col-md-4 control-label">Fecha Final:</label>
+    
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="cronograma_fecha_final" id="cronograma_fecha_final"
+                                 required autofocus
+                                style="text-transform: uppercase;" readonly="">
+                            </div>
+                        </div>{{-- fin fecha final --}}
+    
+                        {{-- Realizado --}}
+                        <div class="input-group mb-3" >
+    
+                            <label for="email" class="col-md-4 control-label">Fecha:</label>
+    
+                            <div class="col-md-6">
+                                <input class="form-control" name="cronograma_realizado" 
+                                value="1" required autofocus
+                                style="text-transform: uppercase;" readonly="">
+                            </div>
+                        </div>{{-- fin Realizado --}}
+    
+                        {{-- Proveedor --}}
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-4 control-label">Empresa:</label>
+    
+                            <div class="col-md-8">
+                                <select class="form-control" name="id_proveedor" id="id_proveedor" required>
+                                        <option value="">
+                                            -- Seleccionar el Proveedor --
+                                        </option>
+    
+                                        @foreach($proveedores as $key => $valorProveedor)
+                                        <option value="{{$valorProveedor->id_proveedor}}">{{$valorProveedor->razonSocial_proveedor}}</option>
+                                        @endforeach
+    
+                                    </select>
+                            </div>
+                        </div>{{-- fin Proveedor --}}
+    
+                        {{-- Observación --}}
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-4 control-label">Detalles del Servicio:</label>
+    
+                            <div class="col-md-8">
+                                <textarea class="form-control" name="cronograma_observacion" id="cronograma_observacion" autofocus style="text-transform: uppercase;"></textarea>
+                            </div>
+                        </div>{{-- Observación --}}
+    
+                        {{-- pdf --}}
+                            <hr class="pb-2">
+                                <div class="form-group my-2 text-center">
+                                    <div class="btn btn-default btn-file">
+                                        <i class="fas fa-paperclip"></i> Adjuntar Archivo
+                                        <p><label for="pdf_archivo_final">
+                                            <input type="file" name="pdf_archivo_final" id="pdf_archivo_final">
+                                        </label></p>
+    
+                                    </div><br>
+    
+                                    <p class="help-block small">Tamaño máximo de archivos: 20MB</p>
+                                </div>
+    
+        
+                           
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 @if (isset($status))
 

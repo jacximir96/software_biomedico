@@ -95,3 +95,42 @@ tablaDireccionesEjecutivas.on('order.dt search.dt', function(){
     tablaDireccionesEjecutivas.column(0, {search:'applied', order:'applied'}).nodes().each(function(cell,i){cell.innerHTML = i+1})
 }).draw();
 
+
+$('#tablaDireccionesEjecutivas').on('click', '.editar-btn', function() {
+    var id = $(this).data('id');
+
+    // Realiza una petición AJAX para obtener los datos del registro
+    $.get(ruta +'/direccionesejecutivas/json/' + id, function(data) {
+        // console.log("Datos recibidos:",data);
+        // Completa el formulario del modal con los datos recibidos
+        // $('#id').val(data.id_departamento);
+        $('#nombre_direccionEjecutiva').val(data.nombre_direccionEjecutiva);
+        $('#iniciales_direccionEjecutiva').val(data.iniciales_direccionEjecutiva);
+        $('#estado_direccionEjecutiva').val(data.estado_direccionEjecutiva);
+        // Continúa con los demás campos
+        $('#editForm').submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+    
+            // Realiza una petición AJAX para actualizar el registro
+            $.ajax({
+                url:ruta + '/direccionesEjecutivas/' + id,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    //console.log(response.data);
+                    // Cierra el modal de edición
+                    //$('#editModal').modal('hide');
+                    // Recarga los datos en la tabla
+                    // location.reload();
+                    // return false;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+            location.reload();
+        });
+    });
+    
+});

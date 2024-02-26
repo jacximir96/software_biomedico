@@ -125,7 +125,7 @@ $('#tablaDepartamentos').on('click', '.editar-btn', function() {
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                    //console.log(response.data);
+                    console.log(response.data);
                     // Cierra el modal de edición
                     //$('#editModal').modal('hide');
                     // Recarga los datos en la tabla
