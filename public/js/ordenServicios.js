@@ -102,47 +102,49 @@ $('#tablaOrdenServicios').on('click', '.editar-btn', function() {
 
 		// $('#pdf_archivo_editar_actual').val(data.pdf_ordenServicio);
 
+		$('#editForm').attr('action', ruta+`/ordenServicios/${id}`);
+
 
 		
 
         // $('#estado_departamento').val(data.estado_departamento);
         // $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
         // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
+        // $('#editForm').submit(function(event) {
+        //     event.preventDefault();
 
-            var formData = new FormData(this);
-			var pdfArchivoEditar = document.getElementById('pdf_ordenServicio_editar').files[0];
+        //     var formData = new FormData(this);
+		// 	var pdfArchivoEditar = document.getElementById('pdf_ordenServicio_editar').files[0];
 
-            // Agregar el archivo PDF al formData si está presente
-            if (pdfArchivoEditar) {
-                formData.append('pdf_archivo_editar', pdfArchivoEditar);
-            }
+        //     // Agregar el archivo PDF al formData si está presente
+        //     if (pdfArchivoEditar) {
+        //         formData.append('pdf_archivo_editar', pdfArchivoEditar);
+        //     }
     
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: ruta+'/ordenServicios/' + id,
-                type: 'POST',
-                data: formData,
-				contentType: false,
-                processData: false, // No procesar los datos (ya están en FormData)
-                success: function(response) {
-					alert(response);
+        //     // Realiza una petición AJAX para actualizar el registro
+        //     $.ajax({
+        //         url: ruta+'/ordenServicios/' + id,
+        //         type: 'POST',
+        //         data: formData,
+		// 		contentType: false,
+        //         processData: false, // No procesar los datos (ya están en FormData)
+        //         success: function(response) {
+		// 			alert(response);
                     
-                    // Muestra los datos de sesión devueltos en la respuesta JSON
-                    console.log('Datos de sesión:', response.sesion);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-            location.reload();
-        });
+        //             // Muestra los datos de sesión devueltos en la respuesta JSON
+        //             console.log('Datos de sesión:', response.sesion);
+        //             // Cierra el modal de edición
+        //             //$('#editModal').modal('hide');
+        //             // Recarga los datos en la tabla
+        //             // location.reload();
+        //             // return false;
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error(xhr.responseText);
+        //         }
+        //     });
+        //     location.reload();
+        // });
     });
     
 });

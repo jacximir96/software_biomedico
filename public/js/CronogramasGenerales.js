@@ -103,30 +103,32 @@ $('#tablaCronogramasGenerales').on('click', '.editar-btn', function() {
 		$('#cp_equipo').val(data.equipo.cp_equipo);
 		$('#mes_cronogramaGeneral').val(data.mes_cronogramaGeneral);
 		$('#año_cronogramaGeneral').val(data.año_cronogramaGeneral);
+
+		$('#editForm').attr('action', ruta+`/cronogramasGeneral/${id}`);
         // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
+        // $('#editForm').submit(function(event) {
+        //     event.preventDefault();
+        //     var formData = $(this).serialize();
     
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: ruta+'/cronogramasGeneral/' + id,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    //console.log(response.data);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-            location.reload();
-        });
+        //     // Realiza una petición AJAX para actualizar el registro
+        //     $.ajax({
+        //         url: ruta+'/cronogramasGeneral/' + id,
+        //         type: 'POST',
+        //         data: formData,
+        //         success: function(response) {
+        //             //console.log(response.data);
+        //             // Cierra el modal de edición
+        //             //$('#editModal').modal('hide');
+        //             // Recarga los datos en la tabla
+        //             // location.reload();
+        //             // return false;
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error(xhr.responseText);
+        //         }
+        //     });
+        //     location.reload();
+        // });
     });
     
 });

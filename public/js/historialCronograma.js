@@ -87,39 +87,7 @@ $('#historial').on('click', '.editar-btn', function() {
         // $('#id_departamento').val(data.id_departamento);
        
         // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            // var formData = $(this).serialize();
-			var formData = new FormData(this);
-			var pdfArchivoEditar = document.getElementById('pdf_archivo_final').files[0];
-
-            // Agregar el archivo PDF al formData si está presente
-            if (pdfArchivoEditar) {
-                formData.append('pdf_archivo_final', pdfArchivoEditar);
-            }
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: ruta+'/cronogramas/' + id,
-                type: 'POST',
-                data: formData,
-				contentType: false,
-                processData: false, // No procesar los datos (ya están en FormData)
-                success: function(response) {
-					// console.log("id",id);
-                    //  console.log('Datos de sesión:', response.data);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                     location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-             //location.reload();
-        });
+        $('#editForm').attr('action', ruta+`/cronogramas/${id}`);
     });
     
 });

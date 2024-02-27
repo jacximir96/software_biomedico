@@ -81,30 +81,9 @@ $('#tablaAmbientes').on('click', '.editar-btn', function() {
         $('#estado_ambiente').val(data.estado_ambiente);
         $('#id_departamento').val(data.id_departamento);
         $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
-        // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: ruta + '/ambientes/' + id,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    //console.log(response);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-					console.error(textStatus + " " + errorThrown);
-                }
-            });
-            location.reload();
-        });
+
+		$('#editForm').attr('action', ruta+`/ambientes/${id}`);
+        
 		
     });
     

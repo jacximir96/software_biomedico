@@ -107,30 +107,9 @@ $('#tablaDireccionesEjecutivas').on('click', '.editar-btn', function() {
         $('#nombre_direccionEjecutiva').val(data.nombre_direccionEjecutiva);
         $('#iniciales_direccionEjecutiva').val(data.iniciales_direccionEjecutiva);
         $('#estado_direccionEjecutiva').val(data.estado_direccionEjecutiva);
-        // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url:ruta + '/direccionesEjecutivas/' + id,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    //console.log(response.data);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-            location.reload();
-        });
+
+        $('#editForm').attr('action', ruta+`/direccionesEjecutivas/${id}`);
+       
     });
     
 });
