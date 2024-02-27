@@ -74,52 +74,10 @@ $('#historialCronogramaCompra').on('click', '.editar-btn', function() {
          $('#pdf_archivo_final').val(data.pdf_cronograma);
          //id_proveedor
         $('#id_proveedor').val(data.id_proveedor);
-       
-        // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            // var formData = $(this).serialize();
-			var formData = new FormData(this);
-			var pdfArchivoEditar = document.getElementById('pdf_archivo_final').files[0];
+		
+		$('#editForm').attr('action', ruta+`/cronogramasCalendario/${id}`);
 
-            // Agregar el archivo PDF al formData si está presente
-            if (pdfArchivoEditar) {
-                formData.append('pdf_archivo_final', pdfArchivoEditar);
-            }
-            // event.preventDefault();
-    
-            // // Serializar los datos del formulario
-            // var formData = $(this).serialize();
-            // var pdfArchivoEditar = document.getElementById('pdf_archivo_final').files[0];
 
-            // // Convertir la cadena serializada a un objeto FormData
-            // var formDataObject = new FormData();
-            // // Agregar los datos serializados al objeto FormData
-            // formDataObject.append('formData', formData);
-            
-            // // Agregar el archivo PDF al formData si está presente
-            // if (pdfArchivoEditar) {
-            //     formDataObject.append('pdf_archivo_final', pdfArchivoEditar);
-            // }
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: ruta+'/cronogramasCalendario/' + id,
-                type: 'POST',
-                data:formData,
-				contentType: false,
-                processData: false, // No procesar los datos (ya están en FormData)
-                success: function(response) {
-                    location.reload();
-                    // if (response) {
-                        
-                    // }
-                }, 
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-           
-        });
+        
     });   
 });

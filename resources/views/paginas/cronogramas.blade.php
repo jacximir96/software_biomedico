@@ -246,7 +246,7 @@
             </div>
             <div class="modal-body">
                
-                <form id="editForm" method="POST"  enctype="multipart/form-data">
+                <form id="editForm" method="POST"  accept-charset="UTF-8" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         {{-- Tipo Cronograma --}}

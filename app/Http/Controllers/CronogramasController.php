@@ -14,6 +14,7 @@ use App\OrdenServiciosModel;
 use App\DepartamentosModel;
 use App\DireccionesEjecutivasModel;
 use Facade\Ignition\DumpRecorder\Dump;
+use Illuminate\Support\Facades\Storage;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
@@ -332,7 +333,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
             //     $cronograma_unidad->each->delete();
             // }
         }
-        public function update($id,Request $request){
+        public function update($id, Request $request){
 
             $extraer_cronograma_penultimo = DB::select('SELECT * FROM cronograma C WHERE C.id_equipo = ? AND C.realizado = 1 AND (C.id_mantenimiento IN (1,2) OR C.id_mantenimiento IS NULL) ORDER BY C.id_cronograma DESC LIMIT 1',[$request->input("cronograma_equipo")]);
             $extraer_cronograma = $extraer_cronograma_penultimo[0]->acumulado_cronograma;
@@ -353,12 +354,11 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
             $observacion = json_encode(explode(",",$datos["observacion"]));
 
-            if ($request->hasFile('pdf_archivo_final')) {
-                $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
+            if ($request->file('pdf_archivo_final')) {
+                $pdf = array("pdf_cronograma"=>$request->file('pdf_archivo_final')->store('public/pdf/cronograma'));
             }else{
                 $pdf = null;
             }
-
            
 
             //validar los datos

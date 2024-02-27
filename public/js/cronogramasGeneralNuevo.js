@@ -126,27 +126,29 @@ $('#tablaCronogramasGeneralNuevo').on('click', '.editar-btn', function() {
       $('#año_cronogramaGeneral').val(data.año_cronogramaGeneralNuevo);
 
 
+      $('#editForm').attr('action', ruta+`/cronogramasGeneralNuevo/${id}`);
+
 
       
       // Continúa con los demás campos
-      $('#editForm').submit(function(event) {
-          event.preventDefault();
-          var formData = $(this).serialize();
+    //   $('#editForm').submit(function(event) {
+    //       event.preventDefault();
+    //       var formData = $(this).serialize();
   
-          // Realiza una petición AJAX para actualizar el registro
-          $.ajax({
-              url:ruta + '/cronogramasGeneralNuevo/' + id,
-              type: 'POST',
-              data: formData,
-              success: function(response) {
+    //       // Realiza una petición AJAX para actualizar el registro
+    //       $.ajax({
+    //           url:ruta + '/cronogramasGeneralNuevo/' + id,
+    //           type: 'POST',
+    //           data: formData,
+    //           success: function(response) {
                 
-              },
-              error: function(xhr, status, error) {
-        console.error(textStatus + " " + errorThrown);
-              }
-          });
-          location.reload();
-      });
+    //           },
+    //           error: function(xhr, status, error) {
+    //     console.error(textStatus + " " + errorThrown);
+    //           }
+    //       });
+    //       location.reload();
+    //   });
   
   });
   

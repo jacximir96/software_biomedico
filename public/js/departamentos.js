@@ -114,30 +114,9 @@ $('#tablaDepartamentos').on('click', '.editar-btn', function() {
         $('#iniciales_departamento').val(data.iniciales_departamento);
         $('#estado_departamento').val(data.estado_departamento);
         $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
-        // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url:ruta+ '/departamentos/' + id,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    console.log(response.data);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-            location.reload();
-        });
+
+        $('#editForm').attr('action', ruta+`/departamentos/${id}`);
+       
     });
     
 });

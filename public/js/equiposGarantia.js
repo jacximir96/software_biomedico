@@ -114,38 +114,8 @@ $('#tablaEquiposGarantia').on('click', '.editar-btn', function() {
 			// Si hay una URL de imagen, establece la imagen recibida
 			$('#imagenEquipo').attr('src', data.imagen_equipoGarantia);
 		}
-		//$('#imagen_actual').val(data.imagen_equipoGarantia);
-		// Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            var formData = new FormData(this);
-			var fileInput = document.getElementById('imagen_equipoGarantia_editar').files[0];
-
-			if (fileInput) {
-				formData.append('foto', fileInput);
-			}
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: ruta + '/equiposGarantia/' + id,
-                type: 'POST',
-                data: formData,
-				contentType: false,
-                processData: false, // No procesar los datos (ya están en FormData)
-                success: function(response) {
-                    //console.log(response.data);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-            location.reload();
-        });
+		$('#editForm').attr('action', ruta+`/equiposGarantia/${id}`);
+		
     });
     
 });
