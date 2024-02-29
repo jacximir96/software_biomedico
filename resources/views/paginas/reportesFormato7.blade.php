@@ -45,7 +45,7 @@
               <div class="card-body">
 
                 <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="tablaRoles">
+                 id="defecto">
                     <thead>
                         <tr>
                             <th>#</th>
