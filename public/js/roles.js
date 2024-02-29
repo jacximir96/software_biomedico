@@ -4,7 +4,7 @@ DataTable de Jornadas Laborales
 $("#tablaRoles").DataTable({
 	processing: true,
     serverSide: true,
-	ajax :"/obtenerequiporeposicion",
+	ajax : ruta+"/obtenerequiporeposicion",
 
 	
 	columns:[
@@ -130,29 +130,9 @@ $('#tablaRoles').on('click', '.editar-btn', function() {
         // $('#estado_departamento').val(data.estado_departamento);
         // $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
         // Continúa con los demás campos
-        $('#editForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-    
-            // Realiza una petición AJAX para actualizar el registro
-            $.ajax({
-                url: '/equiposReposicion/' + id,
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    //console.log(response.data);
-                    // Cierra el modal de edición
-                    //$('#editModal').modal('hide');
-                    // Recarga los datos en la tabla
-                    // location.reload();
-                    // return false;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-            location.reload();
-        });
+
+		$('#editForm').attr('action', ruta+`/equiposReposicion/${id}`);
+	  
    
     
 });

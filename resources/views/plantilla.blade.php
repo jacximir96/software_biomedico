@@ -168,6 +168,7 @@
     <script src="{{ url('/') }}/js/cronogramasGenerales.js"></script>
     <script src="{{ url('/') }}/js/cronogramasGeneralNuevo.js"></script>
     <script src="{{ url('/') }}/js/cronogramasGeneralesNuevo.js"></script>
+    <script src="{{ url('/') }}/js/defecto.js"></script>
 
 
 </body>
