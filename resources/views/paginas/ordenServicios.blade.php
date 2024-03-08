@@ -22,7 +22,7 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
+    
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -33,6 +33,10 @@
               <div class="card-header">
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#crearOrdenServicio">
                     Crear nueva orden de Servicio</button>
+                    <a class="btn btn-warning btn-sm" href="{{ route('ordenServicios.pdf') }}">
+                        pdf prueba</a>
+                    
+                    
               </div>
               <div class="card-body">
 
