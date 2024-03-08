@@ -121,6 +121,8 @@ Route::get('/reportesFormato7R/formato7Pdf','ReportesFormato7Controller@createPD
 Route::get('/reportesFormato8R/formato8Pdf','ReportesFormato8Controller@createPDF');
 
 
+
+
 Route::get('/reportesEquipos/EquiposPdf/{id_equipo}','EquiposController@createPDF');
 Route::get('/reportesEquiposGarantia/EquiposGarantiaPdf/{id_equipoGarantia}','EquiposGarantiaController@createPDF');
 
@@ -129,6 +131,9 @@ Route::get('/dashboard/datosActual/listarActual','DashboardController@listarActu
 Route::get('/reportesEntreFechas/entreFechasPDF','ReportesEntreFechasController@createPDF');
 Route::get('/reportesEntreFechas/entreFechasOTM','ReportesEntreFechasController@createPDF_OTM');
 Route::get('/reportesEntreFechas','ReportesEntreFechasController@index');
+
+
+Route::get('pdf','OrdenServiciosController@createPDF')->name('ordenServicios.pdf');
 
 
 

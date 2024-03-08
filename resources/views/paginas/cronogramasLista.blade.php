@@ -33,7 +33,7 @@
 
                 <div id="tabla_ocultar">
                     <table class="table table-bordered table-striped dt-responsive" width="100%"
-                    id="tablaRoles">
+                    id="defecto">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -47,23 +47,23 @@
                     </thead>
 
                     <tbody>
-                    @foreach ($cronogramas_fecha as $key => $data)
-                        <tr>
-                            <th>{{($key+1)}}</th>
-                            <td>{{$data->nombre_equipo}}</td>
-                            <td>{{$data->cp_equipo}}</td>
-                            <td>{{$data->nombre_mantenimiento}}</td>
-                            <td>{{ \Carbon\Carbon::parse($data->fecha)->format('d-m-Y')}}</td>
-                            <td>{{ \Carbon\Carbon::parse($data->fecha_final)->format('d-m-Y')}}</td>
-                            <td style="text-align: center;">
-                                <div class="btn-group">
-                                    <a href="{{url('/')}}/cronogramasLista/{{$data->id_cronograma}}" class="btn btn-warning btn-sm">
-                                        Registrar
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                        @foreach ($cronogramas_fecha as $key => $data)
+                            <tr>
+                                <th>{{($key+1)}}</th>
+                                <td>{{$data->nombre_equipo}}</td>
+                                <td>{{$data->cp_equipo}}</td>
+                                <td>{{$data->nombre_mantenimiento}}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->fecha)->format('d-m-Y')}}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->fecha_final)->format('d-m-Y')}}</td>
+                                <td style="text-align: center;">
+                                    <div class="btn-group">
+                                        <a href="{{url('/')}}/cronogramasLista/{{$data->id_cronograma}}" class="btn btn-warning btn-sm">
+                                            Registrar
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -87,7 +87,7 @@
               <div class="card-body">
 
                 <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="tablaOrdenServicios">
+                 id="tablaAdministradores">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -110,8 +110,7 @@
                     </thead>
 
                     <tbody>
-
-                    @foreach($cronogramas_general as $key => $valor_cronogramas_general)
+                        @foreach($cronogramas_general as $key => $valor_cronogramas_general)
                         <tr>
                             <td style="text-align: center;">{{($key+1)}}</td>
                             <td style="text-align: center; text-transform: uppercase;">{{$valor_cronogramas_general->nombre_equipo}}</td>
@@ -172,6 +171,7 @@
                             </td>
                         </tr>
                     @endforeach
+                   
 
                     </tbody>
                 </table>

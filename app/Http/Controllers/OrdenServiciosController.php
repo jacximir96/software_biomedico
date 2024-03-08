@@ -202,29 +202,17 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                 }
     public function showJson($id) {
         $ordenServicio = OrdenServiciosModel::find($id);
-        // $findPDF = Storage::exists($ordenServicio->pdf_OrdenServicio);
-        // if ($findPDF) {
-        //     $ordenServicio->pdf_OrdenServicio =Storage::url($ordenServicio->pdf_OrdenServicio);
-        // }
+    
         return $ordenServicio;
     }
-    // public function showJson($id) {
-    //     $historial = EquiposModel::with('cronogramas')->find($id);
-    //     //$historial->pdf_cronograma = Storage::url($historial->pdf_cronograma);
-    //     $historial->cronogramas = collect($historial->cronogramas)->map(function ($cronograma) {
-    //         if(empty($cronograma['fecha'])){
-    //             $cronograma['bool_fecha'] = false && $cronograma['realizado'] == 0;
-    //         } else {
-    //             $fecha = new Carbon($cronograma['fecha']);
-    //             $hoy = Carbon::today();
-    //             $cronograma['bool_fecha'] =  $fecha->lessThan($hoy) && $cronograma['realizado'] == 0;
-    //         }
-    //         $cronograma['bool_archivo'] = Storage::exists($cronograma['pdf_cronograma']);
-    //         if($cronograma['bool_archivo']){
-    //             $cronograma['pdf_cronograma'] = Storage::url($cronograma['pdf_cronograma']);
-    //         }
-    //         return $cronograma;
-    //     })->toArray();
-    //     return $historial;
-    // }
+   
+
+    public function createPDF(){
+      
+        // compartir datos para ver
+        $pdf = \PDF::loadView('paginas.pdf');
+
+        // descargar archivo PDF con método de descarga 
+        return $pdf->download('prueba.pdf');
+    }
 }
