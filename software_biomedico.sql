@@ -2643,7 +2643,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `foto`, `id_rol`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', 'administrador@inr.gob.pe', 'img/administradores/182.png', 17, NULL, '$2y$10$WkeUltuneOHconejH.YqhOYihwNnwUEERssKa5u.YsM2Y28n5.lDa', NULL, '2021-04-12 21:59:04', '2021-05-10 15:46:52'),
+(1, 'Administrador', 'administrador@inr.gob.pe', 'img/administradores/182.png', 17, NULL, '$2y$10$rZOZHKBSpor5iqU.m/Bs8O.83SdYmTz1JRC1CVOlZ15l7DzKJvX9G', NULL, '2021-04-12 21:59:04', '2021-05-10 15:46:52'),
 (47, 'Camilo Sanchez Chacon', 'camilo.sanchez.chacon@gmail.com', NULL, 17, NULL, '$2y$10$63msPfkQRwg4PGOKJruXxOpipPlHDWmSteyC6lrqpeYKB0DQEzrXG', NULL, '2021-05-04 19:12:00', '2021-05-14 17:16:47'),
 (48, 'Oscar Llagas Chafloque', 'oscarlc_0207@yahoo.com', NULL, 17, NULL, '$2y$10$P2qTq6yaSbbFwSidJD3JK.WSYoMc3ZlU26kJGQf6yZGBU9zqK2cai', NULL, '2021-05-12 20:04:30', '2021-09-01 16:03:32'),
 (53, 'Invitado', 'invitado@inr.gob.pe', NULL, 18, NULL, '$2y$10$wysQ5hBxRmDvSnrDXT5l6.a/Tuvf09Y6YHV410jkDxnTtpG2cvSiC', NULL, '2021-05-20 18:55:15', '2021-05-21 14:51:07');

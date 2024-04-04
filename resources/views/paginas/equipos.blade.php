@@ -335,8 +335,8 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-               
-                <form id="editForm" method="POST">
+            {{-- Estoy añadiendo enctype="multipart/form-data" --}}
+                <form id="editForm" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="input-group mb-3">
@@ -519,10 +519,9 @@
                                 <i class="fas fa-paperclip"></i> Adjuntar Foto
                                 <input type="file" name="foto" id="imagen_equipo_editar">
                         </div><br>
-
+                        {{-- <img id="imagenEquipo" src="/images/default.jpg" alt="Imagen predeterminada"> --}}
                         <img  id="imagenEquipo"class="previsualizarImg_foto
                                     img-fluid py-2 w-25">
-
                         <input type="hidden" name="imagen_actual" id="imagen_actual">
                         <p class="help-block small">Dimensiones: 200px * 200px | Peso Max. 10MB |
                         Formato: JPG o PNG</p>
