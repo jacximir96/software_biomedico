@@ -88,8 +88,9 @@
             </div>
             <div class="modal-body">
                
-                <form id="editForm" method="POST">
-                    <table class="table table-bordered" id="miTabla">
+                <form id="editForm" method="GET" action="{{route('crearPdf.MantenimientoServicioHistorial')}}" target="#">
+                  
+                    <table class="table table-bordered" id="historialCompra2">
                         <thead>
                              <tr>
                                 <th colspan="2" style="text-align:center;">Información del Equipo</th>
@@ -97,18 +98,20 @@
                         </thead>
     
                         <tbody>
-                            <input type="text" style="display:none" id="id_equipoHistorial" id="id_equipoHistorial">
+                            <input type="text" style="display:none" name="id_equipoHistorial" id="id_equipoHistorial">
                            
                             
                         </tbody>
                     </table>
-                    <table  class="table table-bordered table-striped dt-responsive" id="historialCompra">
+                    <table class="table table-bordered table-striped dt-responsive" width="auto" id="historialCompra1">
                         <thead>
-                            <tr>
-                                
+                            <tr>       
+                                <th>#</th>
+                                <th>Tipo</th>
                                 <th>Fecha</th>
+                                <th>N° ODS/OTM</th>
                                 <th>Estado</th>
-                                <th>Archivo</th>
+                                <th>Conformidad</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,14 +125,14 @@
                         </div>
     
                         <div>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="submit" class="btn btn-success">Imprimi1r</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
+  </div>
 </div>
 
 

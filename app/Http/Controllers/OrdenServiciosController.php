@@ -78,8 +78,12 @@ class OrdenServiciosController extends Controller
                             "monto_ordenServicio"=>$request->input("monto_ordenServicio"));
 
             $orden_validacion = DB::select('select * from ordenservicio where codigo_ordenServicio = ?', [$request->input("codigo_ordenServicio")]);
-            $pdf = array("pdf_ordenServicio"=>$request->file("pdf_archivo")->store('public/pdf/ordenServicio'));
-
+            
+            if($request->file("pdf_archivo") != null){
+                $pdf = array("pdf_ordenServicio"=>$request->file("pdf_archivo")->store('public/pdf/ordenServicio'));
+            }else{
+                return redirect("/ordenServicios")->with("no-pdf","");
+            }
                     /* echo "<pre>"; print_r($datos); echo "</pre>";
                     return; */
 

@@ -195,7 +195,7 @@
                                 <td style="text-align: center; text-transform: uppercase;"></td>
                                 <td style="text-align: center; text-transform: uppercase;">
                                     <div class="btn-group">
-                                        <a href="{{url('/')}}/reportesFormato8/" class="btn btn-warning btn-sm">
+                                        <a href="{{url('/')}}/reportesFormato8" class="btn btn-warning btn-sm">
                                             <i class="fas fa-pencil-alt text-white"></i>
                                         </a>
                                     </div>

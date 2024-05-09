@@ -101,7 +101,7 @@ $('#id_departamento_a').on('change',function(){
     if(valor == ''){
         $('#id_direccionEjecutiva_a').css("display","");
     }else{
-        $('#id_direccionEjecutiva_a').css("display","none");
+        $('#id_direccionEjecutiva_a').css("display","");
     }
 
 });

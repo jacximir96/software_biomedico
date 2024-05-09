@@ -211,7 +211,7 @@
                         <label for="email" class="col-md-3 control-label">Cod. Patrim:</label>
 
                         <div class="col-md-7">
-                            <input type="text" class="form-control" name="cp_equipo"
+                            <input type="text" class="form-control inputRutaMonto" name="cp_equipo"
                             value="{{ old("cp_equipo") }}" required autofocus
                             placeholder="Ingrese el código Patrimonial" style="text-transform: uppercase;">
                         </div>
@@ -277,7 +277,7 @@
                         <label for="email" class="col-md-3 control-label">Vida Util:</label>
 
                         <div class="col-md-7">
-                            <input type="text" class="form-control" name="tiempo_vida_util_equipo"
+                            <input type="text" class="form-control inputRutaMonto" name="tiempo_vida_util_equipo"
                             value="{{ old("tiempo_vida_util_equipo") }}" required autofocus
                             placeholder="Ingrese la vida util (Años)" style="text-transform: uppercase;" maxlength="2">
                         </div>
@@ -287,7 +287,7 @@
                         <label for="email" class="col-md-3 control-label">Prioridad:</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="prioridad_equipo"
+                            <input type="text" class="form-control inputRutaMonto" name="prioridad_equipo"
                             value="{{ old("prioridad_equipo") }}" required autofocus
                             placeholder="Ingrese la prioridad" style="text-transform: uppercase;" maxlength="2">
                         </div>

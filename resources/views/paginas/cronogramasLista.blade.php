@@ -4,7 +4,7 @@
 @extends('plantilla')
 
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -87,7 +87,7 @@
               <div class="card-body">
 
                 <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="tablaAdministradores">
+                 id="tablaCronogramaLista">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -110,7 +110,7 @@
                     </thead>
 
                     <tbody>
-                        @foreach($cronogramas_general as $key => $valor_cronogramas_general)
+                        {{-- @foreach($cronogramas_general as $key => $valor_cronogramas_general)
                         <tr>
                             <td style="text-align: center;">{{($key+1)}}</td>
                             <td style="text-align: center; text-transform: uppercase;">{{$valor_cronogramas_general->nombre_equipo}}</td>
@@ -143,21 +143,22 @@
                             </td>
                             <td style="text-align: center; text-transform: uppercase;">
                                 @if($valor_cronogramas_general->realizado == NULL)
-                                    <p style="color:red;">NO REALIZADO</p>
+                                    <span style="color:red;">NO REALIZADO</span>
                                 @elseif($valor_cronogramas_general->realizado == 1)
-                                    <p style="color:green;">REALIZADO</p>
+                                    <span style="color:green;">REALIZADO</span>
                                 @endif
                             </td>
                             <td style="text-align: center;">
                                 <div class="btn-group">
-<!--                                     <a href="{{url('/')}}/cronogramasLista/{{$valor_cronogramas_general->id_cronograma}}/editar" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-pencil-alt text-white"></i>
-                                    </a> -->
+                                        
+                                    <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarModalCronograma" data-id="' +data+'"><i class="fas fa-pencil-alt text-white"></i></button>
+
+
+
 
                                     <form method="POST" id="frmVerDa" action="{{url('/')}}/cronogramasLista/editar">
                                         @csrf
-                                        <input type="text" id="probando0101" value="{{$valor_cronogramas_general->id_cronograma}}">
-
+                                     
                                         <button style="width:100%;font-weight:400;" type="submit" class="btn btn-warning btn-sm"> 
 							            <i class="fas fa-pencil-alt text-white"></i></button>
                                     </form>
@@ -170,7 +171,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                        @endforeach --}}
                    
 
                     </tbody>
@@ -188,6 +189,132 @@
     </section>
     <!-- /.content -->
 </div>
+
+
+
+
+<div class="modal fade" id="editarModalCronograma" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Cronograma de Mantenimiento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+            
+                <form id="editFormCronogramaList" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                        <!-- Inicio de Fecha -->
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Fecha Inicial:</label>
+        
+                            <div class="col-md-8">
+                                <input id="fecha_actual_editar" name="fecha_actual" type="date" class="form-control">
+        
+                            </div>
+                        </div><!-- Fin de fecha -->
+        
+                        <!-- Inicio de Fecha final -->
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Fecha Final:</label>
+        
+                            <div class="col-md-8">
+                                <input id="fecha_final_editar" name="fecha_final" type="date" class="form-control">
+        
+                            </div>
+                        </div><!-- Fin de fecha -->
+        
+                        <!-- Inicio de Equipo -->
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Equipo:</label>
+        
+                            <div class="col-md-8">
+                                <select class="form-control " name="id_equipo" id="nombres_equipo_editar" required>
+                                        <option value="">
+                                            -- Seleccionar el Equipo --
+                                        </option>
+        
+                                        @foreach($equipos as $key => $value)
+                                            <option  value="{{$value->id_equipo}}">
+                                                {{$value->nombre_equipo}}<span> - </span><p>Cod. Patrimonial: {{$value->cp_equipo}}</p>
+                                            </option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div><!-- Fin de Equipo -->
+        
+                        {{-- Realizado --}}
+                            <div class="input-group mb-3" style="display:none;">
+        
+                                <label for="email" class="col-md-3 control-label">Realizado:</label>
+        
+                                <div class="col-md-6">
+                                    <input class="form-control" name="realizado_crear"
+                                    value="0" required autofocus
+                                    style="text-transform: uppercase;" readonly="">
+                                </div>
+                            </div>{{-- fin Realizado --}}
+        
+                        <!-- Inicio de Mantenimiento -->
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Tipo:</label>
+        
+                            <div class="col-md-8">
+                                <select class="form-control" name="id_mantenimiento" id="nombres_mantenimiento_editar" required>
+                                        <option value="">
+                                            -- Seleccionar el Tipo de Mantenimiento --
+                                        </option>
+        
+                                        @foreach($tipoMantenimientos_estado as $key => $valorMantenimiento)
+                                        <option value="{{$valorMantenimiento->id_mantenimiento}}">{{$valorMantenimiento->nombre_mantenimiento}}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div><!-- Fin de Mantenimiento -->
+        
+                        <!-- Inicio de Garantia -->
+                        <div class="input-group mb-3" id="valor_garantia">
+                            <label for="email" class="col-md-3 control-label">Garantía:</label>
+        
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="garantia"
+                                value="0" autofocus
+                                placeholder="Ingrese la garantía (Meses)" style="text-transform: uppercase;" maxlength="2">
+                            </div>
+                        </div><!-- Fin de Garantia -->
+        
+                    
+        
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+        
+                        <div>
+                            <button type="submit" id="boton_enviar_calendario" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {{-- Agregar calendario en modal --}}
 <div class="modal fade" id="agregarCalendario">
@@ -550,7 +677,7 @@
 @endif
 
 @endif
-
+{{-- 
 <script type="text/javascript">
 
     var id = $("#probando0101").val();
@@ -567,7 +694,7 @@
             console.error(textStatus + " " + errorThrown);
           }
     });
-</script>
+</script> --}}
 
 @if (Session::has("ok-crear"))
   <script>

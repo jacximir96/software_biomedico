@@ -125,7 +125,7 @@
                             <i class="fas fa-angle-double-right"></i>
                         </div>
 
-                        <input type="text" class="form-control" name="codigo_ordenServicio"
+                        <input type="text" class="form-control inputRutaMonto" name="codigo_ordenServicio"
                         value="{{ old("codigo_ordenServicio") }}" required autofocus
                         placeholder="Ingrese el número de orden" style="text-transform: uppercase;">
                     </div>{{-- fin codigo de orden de servicio --}}
@@ -155,7 +155,7 @@
                             <i class="fas fa-angle-double-right"></i>
                         </div>
 
-                        <input type="text" class="form-control" name="monto_ordenServicio"
+                        <input type="text" class="form-control inputRutaMonto" name="monto_ordenServicio"
                         value="{{ old("monto_ordenServicio") }}" required autofocus
                         placeholder="Ingrese el monto total" style="text-transform: uppercase;">
                     </div>{{-- fin monto de orden de servicio --}}
@@ -446,6 +446,14 @@
 
 <script>
     notie.alert({ type: 2, text: '¡Este administrador no se puede borrar!', time: 10 })
+</script>
+
+@endif
+
+@if (Session::has("no-pdf"))
+
+<script>
+    notie.alert({ type: 2, text: '¡El archivo PDF es requerido!', time: 10 })
 </script>
 
 @endif

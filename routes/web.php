@@ -40,6 +40,7 @@ Route::group(['middleware' => ['permission:ver_proveedores|editar_proveedores|el
 Route::get('/obtenerproveedor','ProveedoresController@getProveedor')->name('proveedor.getproveedor');
 Route::get('/obtener','EquiposController@obtenerDatos')->name('equipos.obtenerDatos');
 Route::get('/obtenercronograma','CronogramasGeneralController@obtenercronogramageneral')->name('cronogramageneral');
+Route::get('/obtenerCronogramaLista','CronogramaListaController@obtenerDatos')->name('cronogramaLista.obtenerDatos');
 // Route::get('/prueba','EquiposController@prueba')->name('equipos.pruebas');
 Route::get('/obtenerequipogarantia','EquiposGarantiaController@getequipoGarantia')->name('equipos.obtenergarantias');
 Route::get('/obtenerequiporeposicion','EquiposReposicionController@getequipoReposicion')->name('equipos.reposicion');
@@ -61,6 +62,9 @@ Route::resource('/departamentos','DepartamentosController');
 Route::resource('/manual','ManualController');
 Route::resource('/direccionesEjecutivas','DireccionesEjecutivasController');
 Route::resource('/equipos','EquiposController');
+
+Route::resource('/cronogramaLista','CronogramaListaController');
+
 Route::resource('/equiposGarantia','EquiposGarantiaController');
 Route::resource('/equiposReposicion','EquiposReposicionController');
 Route::resource('/equiposBaja','EquiposBajaController');
@@ -107,7 +111,7 @@ Route::get('/cronogramasCalendario/calendario/listar','CronogramasCalendarioCont
 Route::post('/cronogramasCalendario/guardar','CronogramasCalendarioController@guardar');
 Route::post('/cronogramasCalendario/{id_cronogramaCalendario}/eliminar','CronogramasCalendarioController@destroy');
 
-Route::get('/reportesHistorial/historialPdf','HistorialEquiposController@createPDF');
+Route::get('/reportesHistorial/historialPdf','HistorialEquiposController@createPDF')->name('crearPdf.MantenimientoServicioHistorial');
 Route::get('/reportesHistorialCompra/historialPdf','HistorialEquiposCompraController@createPDF');
 // cronograma para pdf
 Route::get('/reportesCronogramaGeneral/cronogramaGeneralPdf','CronogramasGeneralController@createPDF');
@@ -144,6 +148,7 @@ Route::get('/ordenservicio/json/{id}','OrdenServiciosController@showJson')->name
 Route::get('/cronogramasgeneral/json/{id}','CronogramasGeneralController@showJson')->name('cronogramasgeneral.showjson'); 
 Route::get('/equipogarantia/json/{id}','EquiposGarantiaController@showJson')->name('equipogarantia.showjson'); 
 Route::get('/equipos/json/{id}','EquiposController@showJson')->name('equipos.showjson'); 
+Route::get('/cronogramaLista/json/{id}','CronogramaListaController@showJson')->name('cronogramaLista.showjson'); 
 Route::get('/proveedores/json/{id}','ProveedoresController@showJson')->name('proveedor.json');
 Route::get('/equiporeposicion/json/{id}','EquiposReposicionController@showJson')->name('reposicion.json');
 Route::get('/historialgarantia/json/{id}','HistorialEquiposCompraController@showJson')->name('historial.json');
@@ -151,3 +156,7 @@ Route::get('/historialequipo/json/{id}','HistorialEquiposController@showJson')->
 Route::get('/direccionesejecutivas/json/{id}','DireccionesEjecutivasController@showJson')->name('direccionesEjecutivas.json');
 Route::get('/cronogramasfecha/json/{id}','CronogramasController@showJson')->name('cronogramas.json');
 Route::get('/cronogramasfechacompras/json/{id}','CronogramasCalendarioController@showJson')->name('cronogramascompras.json');
+
+Route::get('/mantenimientoServicioHistorial/json/{id}','MantenimientoServicioHistorial@obtenerDatos')->name('mantenimientoServicioHistorial.json');
+Route::get('/equipoDatos/json/{id}','MantenimientoServicioHistorial@obtenerEquipo')->name('equipoDatos.json');
+

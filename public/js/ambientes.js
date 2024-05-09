@@ -25,7 +25,7 @@ $("#tablaAmbientes").DataTable({
 		{data:'nombre_estado' ,name:'nombre_estado'}, 
 		{data:'nombre_departamento' ,name:'nombre_departamento'}, 
 		{data:function (row) {
-			if (row.id_departamento == '') {
+			if (row.id_departamento != '') {
 				return row.nombre_direccionAmbiente
 			}else{
 				return row.nombre_direccionDepartamento
