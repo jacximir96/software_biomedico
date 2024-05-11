@@ -54,6 +54,13 @@ $("#tablaEquipos").DataTable({
 			   return '<img style=width:200px; height:200px; src="' + data + '" alt="Imagen">';
 		   }
 	   },
+	   {
+		data: 'estado',
+		name: 'estado',
+		render: function (data, type, row) {
+			return data === 0 ? 'Servicio' : 'Garantia';
+		}
+	   },
 	   { 
 		   data: "id_equipo",
 		   name: 'acciones',
@@ -183,6 +190,7 @@ $('#tablaEquipos').on('click', '.editar-btn', function() {
 	   $('#monto_adquisicion_equipo').val(data.monto_adquisicion_equipo);
 	   $('#tiempo_vida_util_equipo').val(data.tiempo_vida_util_equipo);
 	   $('#prioridad_equipo').val(data.prioridad_equipo);
+	   $('#estado_editar').val(data.estado);
 	   $('#imagen_actual').val(data.imagen_equipo);
 	   // $('#customSwitch1_1').val(data.criterio_1);
 	   $('#customSwitch1_1').prop('checked', data.criterio_1 == 1 ? true : false);

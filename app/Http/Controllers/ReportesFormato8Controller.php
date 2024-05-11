@@ -14,6 +14,23 @@ use PDF;/* Apuntamos al modelo que existe por defecto para obtener información 
 
 class ReportesFormato8Controller extends Controller
 {
+
+    public function obtenerDatos($id){
+        $query = "SELECT *, ROUND(TIMESTAMPDIFF(MONTH, E.fecha_adquisicion_equipo, CURDATE())/12) AS antiguedad_equipo 
+                  FROM equipo E 
+                  INNER JOIN cronograma C ON E.id_equipo = C.id_equipo 
+                  LEFT JOIN formato8 F ON E.id_equipo = F.id_equipoExterno1
+                  WHERE E.id_equipo = ? 
+                  ORDER BY C.updated_at DESC 
+                  LIMIT 1";
+    
+        $equipos_criterios = DB::select($query, [$id]);
+    
+        return $equipos_criterios;
+    }
+    
+
+
     public function index(){
 
         $administradores = AdministradoresModel::all();

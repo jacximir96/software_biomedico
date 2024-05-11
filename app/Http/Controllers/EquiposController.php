@@ -136,7 +136,8 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                         "fecha_adquisicion_equipo"=>$request->input("fecha_adquisicion_equipo"),
                         "monto_adquisicion_equipo"=>$request->input("monto_adquisicion_equipo"),
                         "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"),
-                        "prioridad_equipo"=>$request->input("prioridad_equipo"));
+                        "prioridad_equipo"=>$request->input("prioridad_equipo"),
+                        "estado"=>$request->input("estado"));
 
         $imagenEquipo = array("imagen_equipo"=>$request->file("foto"));
 
@@ -187,6 +188,7 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                         $equipo->monto_adquisicion_equipo = $datos["monto_adquisicion_equipo"];
                         $equipo->tiempo_vida_util_equipo = $datos["tiempo_vida_util_equipo"];
                         $equipo->prioridad_equipo = $datos["prioridad_equipo"];
+                        $equipo->estado = $datos["estado"];
                         $equipo->criterio_1 = 0;
                         $equipo->criterio_3 = 0;
                         $equipo->criterio_4 = 0;
@@ -233,6 +235,7 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                         "fecha_adquisicion_equipo"=>$request->input("fecha_adquisicion_equipo"),
                         "monto_adquisicion_equipo"=>$request->input("monto_adquisicion_equipo"),
                         "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"),
+                        "estado"=>$request->input("estado_editar"),
                         "prioridad_equipo"=>$request->input("prioridad_equipo"),
                         "criterio1_equipo"=>$request->input("criterio1_equipo"),
                         "criterio3_equipo"=>$request->input("criterio3_equipo"),
@@ -299,6 +302,7 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                                 "monto_adquisicion_equipo"=>$request->input("monto_adquisicion_equipo"),
                                 "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"),
                                 "prioridad_equipo"=>$request->input("prioridad_equipo"),
+                                "estado"=>$request->input("estado_editar"),
                                 "criterio_1"=>$request->input("criterio1_equipo"),
                                 "criterio_3"=>$request->input("criterio3_equipo"),
                                 "criterio_4"=>$request->input("criterio4_equipo"),

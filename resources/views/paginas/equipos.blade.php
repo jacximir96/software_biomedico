@@ -62,6 +62,7 @@
                             <th>Vida Util</th>
                             <th>Prioridad</th>
                             <th>Imagen</th>
+                            <th>Estado</th>
                             {{-- <th>Tarjeta de Control</th> --}}
                             <th>Acciones</th>
                         </tr>
@@ -293,6 +294,18 @@
                         </div>
                     </div>{{-- fin prioridad de equipo medico --}}
 
+                    <div class="input-group mb-3">
+                        <label for="estado" class="col-md-3 control-label">Estado:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" name="estado" id="" required>
+                                <option value="">SELECCIONE EL ESTADO DEL EQUIPO</option>
+                                <option value="0">Servicio</option>
+                                <option value="1">Garantia</option>
+                            </select>
+                        </div>    
+                    </div>
+
                     {{-- Imagen --}}
                         <hr class="pb-2">
                             <div class="form-group my-2 text-center">
@@ -454,7 +467,18 @@
                             required autofocus
                             placeholder="Ingrese la prioridad" style="text-transform: uppercase;" maxlength="2">
                         </div>
-                    </div>{{-- fin prioridad de equipo medico --}}
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <label for="estado_editar" class="col-md-3 control-label">Estado:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" name="estado_editar" id="estado_editar" required>
+                                <option value="0">Servicio</option>
+                                <option value="1">Garantia</option>
+                            </select>
+                        </div>    
+                    </div>
                     
                     {{-- inicio de switch --}}
                     <hr class="pb-2">

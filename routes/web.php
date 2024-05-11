@@ -125,7 +125,7 @@ Route::get('/reportesFormato7R/formato7Pdf','ReportesFormato7Controller@createPD
 Route::get('/reportesFormato8R/formato8Pdf','ReportesFormato8Controller@createPDF');
 
 
-
+Route::get('/formato8/json/{id}','ReportesFormato8Controller@obtenerDatos');
 
 Route::get('/reportesEquipos/EquiposPdf/{id_equipo}','EquiposController@createPDF');
 Route::get('/reportesEquiposGarantia/EquiposGarantiaPdf/{id_equipoGarantia}','EquiposGarantiaController@createPDF');

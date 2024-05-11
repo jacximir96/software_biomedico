@@ -162,11 +162,13 @@
                                 @endif
                             </td>
                             <td style="text-align: center;">
-                                <div class="btn-group">
+                                {{-- <div class="btn-group">
                                     <a href="{{url('/')}}/reportesFormato8/" class="btn btn-warning btn-sm">
                                         <i class="fas fa-pencil-alt text-white"></i>
                                     </a>
-                                </div>
+                                </div> --}}
+                                <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarEquipo" data-id={{$data->id_equipo}}><i class="fas fa-pencil-alt text-white"></i></button>
+
                             </td>
                         </tr>
                         @endif
@@ -194,11 +196,12 @@
                                 <td style="text-align: center; text-transform: uppercase;"></td>
                                 <td style="text-align: center; text-transform: uppercase;"></td>
                                 <td style="text-align: center; text-transform: uppercase;">
-                                    <div class="btn-group">
+                                    {{-- <div class="btn-group">
                                         <a href="{{url('/')}}/reportesFormato8" class="btn btn-warning btn-sm">
                                             <i class="fas fa-pencil-alt text-white"></i>
                                         </a>
-                                    </div>
+                                    </div> --}}
+                                    <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarEquipo"><i class="fas fa-pencil-alt text-white"></i></button>
                                 </td>
                         </tr>
                         @endforeach
@@ -218,6 +221,8 @@
     </section>
     <!-- /.content -->
 </div>
+
+
 
 <div class="modal" id="crearEquipoNuevo">
     <div class="modal-dialog">
@@ -446,6 +451,269 @@
     </div>
 </div>
 
+<div class="modal" id="editarEquipo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url('/') }}/reportesFormato8">
+                @csrf
+
+                <div class="modal-header bg-info">
+                    <h4 class="modal-tittle">Añadir equipo Nuevo</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Nombre:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="nombre_equipo_editar"
+                            value="{{ old("nombre_equipo_editar") }}" id="nombre_equipo_editar" required autofocus
+                            placeholder="Ingrese el nombre" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin nombre de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Marca:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="marca_equipo_editar" name="marca_equipo_editar"
+                            value="{{ old("marca_equipo_editar") }}" required autofocus
+                            placeholder="Ingrese la marca" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin marca de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Modelo:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="modelo_equipo_editar" name="modelo_equipo_editar"
+                            value="{{ old("modelo_equipo_editar") }}" required autofocus
+                            placeholder="Ingrese el modelo" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin modelo de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Serie:</label>
+
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" id="serie_equipo_editar" name="serie_equipo_editar"
+                            value="{{ old("serie_equipo_editar") }}" required autofocus
+                            placeholder="Ingrese el número de serie" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin serie de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Cod. Patrim:</label>
+
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" id="cp_equipo_editar" name="cp_equipo_editar"
+                            value="{{ old("cp_equipo_editar") }}" required autofocus
+                            placeholder="Ingrese el código Patrimonial" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin cp de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">T. Equipam:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" name="id_tipoEquipamiento_editar" id="id_tipoEquipamiento_editar" required style="text-transform: uppercase;">
+                                <option value="">
+                                    -- Seleccionar el Tipo de Equipamiento --
+                                </option>
+
+                                @foreach ($tipoEquipamientos as $key => $value)
+                                    <option value="{{$value->id_tipoEquipamiento}}">
+                                        {{$value->nombre_tipoEquipamiento}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin id de tipoEquipamiento --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Ambiente:</label>
+
+                        <div class="col-md-8">
+                            <select class="form-control" name="id_ambiente_editar" id="id_ambiente_editar" required style="text-transform: uppercase;">
+                                <option value="">
+                                    -- Seleccionar el Ambiente --
+                                </option>
+
+                                @foreach ($ambientes as $key => $value)
+                                    <option value="{{$value->id_ambiente}}">
+                                        {{$value->nombre_ambiente}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>{{-- fin id de ambiente --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Fecha Adquis:</label>
+
+                        <div class="col-md-7">
+                            <input type="date" class="form-control" id="fecha_adquisicion_equipo_editar" name="fecha_adquisicion_equipo_editar"
+                            value="{{ old("fecha_adquisicion_equipo_editar") }}" required autofocus
+                            style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin FECHA DE ADQUISICIONS --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Vida Util:</label>
+
+                        <div class="col-md-7">
+                            <input type="text" class="form-control inputRuta" id="tiempo_vida_util_equipo_editar" name="tiempo_vida_util_equipo_editar"
+                            value="{{ old("tiempo_vida_util_equipo_editar") }}" required autofocus
+                            placeholder="Ingrese la vida util (Años)" style="text-transform: uppercase;" maxlength="2">
+                        </div>
+                    </div>{{-- fin vida util de equipo medico --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Prog. Presup:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="programa_presupuestal_editar" name="programa_presupuestal_editar"
+                            value="{{ old("programa_presupuestal_editar") }}" autofocus
+                            placeholder="Ingrese el programa presupuestal" style="text-transform: uppercase;">
+                        </div>
+
+                    </div>{{-- fin programa presupuestal --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Producto:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="producto_editar" name="producto_editar"
+                            value="{{ old("producto_editar") }}" autofocus
+                            placeholder="Ingrese el producto" style="text-transform: uppercase;">
+                        </div>
+
+                    </div>{{-- fin PRODUCTO--}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Actividad:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="actividad_editar" name="actividad_editar"
+                            value="{{ old("actividad_editar") }}" required autofocus
+                            placeholder="Ingrese la actividad" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin ACTIVIDAD --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Familia:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="familia_editar" name="familia_editar"
+                            value="{{ old("familia_editar") }}" required autofocus
+                            placeholder="Ingrese la familia" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin FAMILIA --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Equip. Adqu:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="equipamiento_adquirir_editar" name="equipamiento_adquirir_editar"
+                            value="{{ old("equipamiento_adquirir_editar") }}" required autofocus
+                            placeholder="Ingrese el equipamiento a adquirir" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin EQUIPAMIENTO A ADQUIRIR --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Costo Refer:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control inputRutaMonto" id="costo_referencial_editar" name="costo_referencial_editar"
+                            value="{{ old("costo_referencial_editar") }}" required autofocus
+                            placeholder="Ingrese el costo referencial" style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin COSTO REFERENCIAL --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Fuente:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="fuente_costo_editar" name="fuente_costo_editar"
+                            value="{{ old("fuente_costo_editar") }}" required autofocus
+                            placeholder="Ingrese la fuente del costo refer." style="text-transform: uppercase;">
+                        </div>
+                    </div>{{-- fin COSTO REFERENCIAL --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Prd. M.Anual:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control inputRuta" id="prioridad_multianual_editar" name="prioridad_multianual_editar"
+                            value="{{ old("prioridad_multianual_editar") }}" required autofocus
+                            placeholder="Ingrese la prioridad Multianual" style="text-transform: uppercase;" maxlength="4">
+                        </div>
+                    </div>{{-- fin prioridad multianual --}}
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Ord. Prelac:</label>
+
+                        <div class="col-md-8">
+                            <input type="text" class="form-control inputRuta" id="orden_prelacion_editar" name="orden_prelacion_editar"
+                            value="{{ old("orden_prelacion_editar") }}" autofocus
+                            placeholder="Ingrese la orden de Prelación" style="text-transform: uppercase;" maxlength="2">
+                        </div>
+                    </div>{{-- fin orden prelación --}}
+
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#defecto').on('click', '.editar-btn', function() {
+    var id = $(this).data('id');
+console.log(id);
+    // Realiza una petición AJAX para obtener los datos del registro
+    $.get(ruta + '/formato8/json/' + id, function(data) {
+        console.log(data);
+        // console.log("Datos recibidos:",data);
+        // Completa el formulario del modal con los datos recibidos
+        //$('#id').val(data.id_departamento);
+        $('#nombre_equipo_editar').val(data[0].nombre_equipo);
+        $('#marca_equipo_editar').val(data[0].marca_equipo);
+        $('#modelo_equipo_editar').val(data[0].modelo_equipo);
+        $('#serie_equipo_editar').val(data[0].serie_equipo);
+        $('#cp_equipo_editar').val(data[0].cp_equipo);
+        $('#id_tipoEquipamiento_editar').val(data[0].id_tipoEquipamiento);
+        $('#id_ambiente_editar').val(data[0].id_ambiente);
+        $('#fecha_adquisicion_equipo_editar').val(data[0].fecha_adquisicion_equipo);
+        $('#tiempo_vida_util_equipo_editar').val(data[0].tiempo_vida_util_equipo);
+        $('#programa_presupuestal_editar').val(data[0].programa_presupuestal);
+        $('#producto_editar').val(data[0].producto);
+        $('#actividad_editar').val(data[0].actividad);
+        $('#familia_editar').val(data[0].familia);
+        $('#equipamiento_adquirir_editar').val(data[0].equipamiento_adquirir);
+        $('#costo_referencial_editar').val(data[0].costo_referencial);
+        $('#fuente_costo_editar').val(data[0].fuente_costo);
+        $('#prioridad_multianual_editar').val(data[0].prioridad_multianual);
+        $('#orden_prelacion_editar').val(data[0].orden_prelacion);
+
+        
+        // $('#id_departamento').val(data.id_departamento);
+        // $('#id_direccionEjecutiva').val(data.id_direccionEjecutiva);
+
+		// $('#editForm').attr('action', ruta+`/ambientes/${id}`);
+    });
+});
+ </script>
 @if (Session::has("ok-crear"))
   <script>
       notie.alert({type:1,text:'!El Equipo Nuevo ha sido creado correctamente', time:10})
