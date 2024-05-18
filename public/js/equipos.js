@@ -1,14 +1,10 @@
-/*=============================================
-DataTable de Jornadas Laborales
-=============================================*/
-
-$("#tablaEquipos").DataTable({
+let tablaEquipos = $("#tablaEquipos").DataTable({
 	
 	processing: true,
-   serverSide: true,
-   lengthChange: false,
-   ajax :ruta +"/obtener",
-   columns:[	
+   	serverSide: true,
+   	lengthChange: false,
+   	ajax :ruta +"/obtener",
+    columns:[	
 	   {
 		   data: null, // Utilizamos null ya que no hay una propiedad específica asociada
 		   name: 'correlativo', // Nombre de la columna
@@ -22,7 +18,7 @@ $("#tablaEquipos").DataTable({
 	   {data:'marca_equipo' ,name:'marca_equipo'}, // marca de equipo
 	   {data:'modelo_equipo' ,name:'modelo_equipo'}, // modelo de equipo
 	   {data:'serie_equipo' ,name:'serie_equipo'}, // serie de equipo
-	   {data:'cp_equipo' ,name:'cp_equipo'}, // codigo patronal de equip
+	   
 	   {data:'nombre_tipoEquipamiento' ,name:'nombre_tipoEquipamiento'}, // tipo de equipo
 	   {data:function (row) {
 		   if (row.id_departamento == '') {
@@ -43,7 +39,15 @@ $("#tablaEquipos").DataTable({
 		   return 'S/.' + parseFloat(data).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 	   }
 	   },
-		   
+	   {
+		data: 'estado',
+		name: 'estado',
+		render: function (data, type, row) {
+			return data === 0 ? 'Servicio' : 'Garantia';
+		}
+	   },
+
+	   {data:'cp_equipo' ,name:'cp_equipo'}, // codigo patronal de equip  
 	   {data:'antiguedad_equipo' ,name:'antiguedad_equipo'},
 	   {data:'tiempo_vida_util_equipo' ,name:'tiempo_vida_util_equipo'},
 	   {data:'prioridad_equipo',name:'prioridad_equipo'},
@@ -54,13 +58,7 @@ $("#tablaEquipos").DataTable({
 			   return '<img style=width:200px; height:200px; src="' + data + '" alt="Imagen">';
 		   }
 	   },
-	   {
-		data: 'estado',
-		name: 'estado',
-		render: function (data, type, row) {
-			return data === 0 ? 'Servicio' : 'Garantia';
-		}
-	   },
+	   
 	   { 
 		   data: "id_equipo",
 		   name: 'acciones',
@@ -148,8 +146,143 @@ $("#tablaEquipos").DataTable({
 		 "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 		 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 	   }
-	 }
+	 },
+
+
+	 initComplete: function () {
+		direccionEjecutivaFilter(tablaEquipos);
+		departamentoFilter(tablaEquipos);
+		estadoFilter(tablaEquipos);
+		marcaFilter(tablaEquipos);
+	}
+
 });
+
+
+
+
+
+function direccionEjecutivaFilter(tablaEquipos) {
+
+	tablaEquipos.columns(7).every(function() {
+		var column = tablaEquipos.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="codigo_direccionEjecutivaFilter" id="codigo_direccionEjecutivaFilter"><option value="">-- SELECCIONAR LA DIRECCION EJECUTIVA --</option></select>')
+			.appendTo($('#direccionEjecutivaFilter').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+
+function departamentoFilter(tablaEquipos) {
+	tablaEquipos.columns(8).every(function() {
+		var column = tablaEquipos.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="codigo_departamentoFilter" id="codigo_departamentoFilter"><option value="">-- SELECCIONAR EL DEPARTAMENTO --</option></select>')
+			.appendTo($('#departamentoFilter').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+function estadoFilter(tablaEquipos) {
+    tablaEquipos.columns(11).every(function() {
+        var column = this;
+
+        var select = $('<select class="form-control select2 select-2" name="codigo_estadoFilter" id="codigo_estadoFilter"><option value="">-- SELECCIONAR EL ESTADO --</option><option value="0">Servicio</option><option value="1">Garantia</option></select>')
+            .appendTo($('#estadoFilter').empty())
+            .on('change', function() {
+                var val = $(this).val();
+
+                // Convert the selection to the corresponding value in the column
+                column
+                    .search(val ? val : '', true, false)
+                    .draw();
+            });
+
+        // Initialize select2
+        $('.select2').select2();
+    });
+}
+
+
+function marcaFilter(tablaEquipos) {
+    var select = $('<select class="form-control select2 select-2" name="codigo_marcaFilter" id="codigo_marcaFilter"><option value="">-- SELECCIONAR LA MARCA --</option></select>')
+        .appendTo($('#marcaFilter').empty())
+        .on('change', function() {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            tablaEquipos.column(2)
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        });
+
+    // Obtener todas las marcas únicas en la tabla
+    tablaEquipos.column(2).data().unique().sort().each(function(d, j) {
+        select.append('<option value="' + d + '">' + d + '</option>');
+    });
+
+    // Establecer la opción seleccionada si ya hay un filtro aplicado
+    var currSearch = tablaEquipos.column(2).search();
+    if (currSearch) {
+        select.val(currSearch.substring(1, currSearch.length - 1));
+    }
+
+    // Inicializar select2
+    $('.select2').select2();
+}
+
+
+
+
+
+
+
+
+
 $('#tablaEquipos').on('click', '.editar-btn', function() {
    var id = $(this).data('id');
    
@@ -157,7 +290,7 @@ $('#tablaEquipos').on('click', '.editar-btn', function() {
    // Realiza una petición AJAX para obtener los datos del registro
    $.get( ruta + '/equipos/json/' + id, function(data) {
 	   var fechaAdquisicionEquipo = new Date(data.fecha_adquisicion_equipo);
-
+		console.log(data);
    // Calcula la diferencia en meses entre la fecha_adquisicion_equipo y la fecha actual
 	   var diffMeses = (new Date().getFullYear() - fechaAdquisicionEquipo.getFullYear()) * 12;
 	   diffMeses -= fechaAdquisicionEquipo.getMonth();
@@ -190,6 +323,8 @@ $('#tablaEquipos').on('click', '.editar-btn', function() {
 	   $('#monto_adquisicion_equipo').val(data.monto_adquisicion_equipo);
 	   $('#tiempo_vida_util_equipo').val(data.tiempo_vida_util_equipo);
 	   $('#prioridad_equipo').val(data.prioridad_equipo);
+	   $('#id_direccionEjecutiva_editar').val(data.id_direccionEjecutiva);
+	   $('#id_departamento_editar').val(data.id_departamento);
 	   $('#estado_editar').val(data.estado);
 	   $('#imagen_actual').val(data.imagen_equipo);
 	   // $('#customSwitch1_1').val(data.criterio_1);

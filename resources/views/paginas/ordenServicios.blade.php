@@ -287,7 +287,7 @@
 
 {{-- Editar departamento en modal --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -316,7 +316,7 @@
                         <input type="text" class="form-control" name="codigo_ordenServicio"
                         value="{{ $value["codigo_ordenServicio"] }}" required autofocus
                         style="text-transform: uppercase;">
-                    </div>{{-- fin codigo de orden de servicio --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-append input-group-text">
@@ -326,7 +326,7 @@
                         <input type="date" class="form-control" name="fecha_ordenServicio"
                         value="{{ $value["fecha_ordenServicio"] }}" required autofocus
                         style="text-transform: uppercase;">
-                    </div>{{-- fin fecha de orden de servicio --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-append input-group-text">
@@ -336,7 +336,7 @@
                         <input type="text" class="form-control" name="expediente_ordenServicio"
                         value="{{ $value["expediente_ordenServicio"] }}" required autofocus
                         style="text-transform: uppercase;">
-                    </div>{{-- fin expediente de orden de servicio --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-append input-group-text">
@@ -346,9 +346,8 @@
                         <input type="text" class="form-control" name="monto_ordenServicio"
                         value="{{ $value["monto_ordenServicio"] }}" required autofocus
                         style="text-transform: uppercase;">
-                    </div>{{-- fin monto de orden de servicio --}}
+                    </div>
 
-                    {{-- pdf --}}
                         <hr class="pb-2">
                             <div class="form-group my-2 text-center">
                                 <div class="btn btn-default btn-file">
@@ -370,7 +369,7 @@
                         <input type="text" class="form-control" name="pdf_archivo_editar_actual"
                         value="{{ $value["pdf_ordenServicio"] }}" required autofocus
                         style="text-transform: uppercase;">
-                    </div>{{-- fin pdf actual --}}
+                    </div>
 
                 </div>
 
@@ -402,7 +401,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

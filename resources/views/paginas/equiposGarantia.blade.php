@@ -405,7 +405,7 @@
 </div>
 
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -435,7 +435,7 @@
                             value="{{$value["nombre_equipoGarantia"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin nombre de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Marca:</label>
@@ -445,7 +445,7 @@
                             value="{{$value["marca_equipoGarantia"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin marca de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Modelo:</label>
@@ -455,7 +455,7 @@
                             value="{{$value["modelo_equipoGarantia"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin modelo de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Serie:</label>
@@ -465,7 +465,7 @@
                             value="{{$value["serie_equipoGarantia"]}}" required autofocus
                             placeholder="Ingrese el número de serie" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin serie de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Cod. Patrim:</label>
@@ -475,7 +475,7 @@
                             value="{{$value["cp_equipoGarantia"]}}" required autofocus
                             placeholder="Ingrese el código Patrimonial" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin cp de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Ambiente:</label>
@@ -494,14 +494,14 @@
                                             <option value="{{$value2->id_ambiente}}">
                                                 {{$value2->nombre_ambiente}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
+                                        @endif
 
                                     @endforeach
 
                                 @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin id de ambiente --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Fecha Adquis:</label>
@@ -511,7 +511,7 @@
                             value="{{$value["fecha_adquisicion_equipoGarantia"]}}" required autofocus
                             placeholder="Ingrese la fecha de adquisición" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin fecha adquisicion de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Monto Adquis:</label>
@@ -521,7 +521,7 @@
                             value="{{$value["monto_adquisicion_equipoGarantia"]}}" required autofocus
                             placeholder="Ingrese el monto de adquisición" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin monto adquisicion de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Vida Util:</label>
@@ -531,9 +531,9 @@
                             value="{{$value["tiempo_vida_util_equipoGarantia"]}}" required autofocus
                             placeholder="Ingrese el tiempo de vida util (años)" style="text-transform: uppercase;" maxlength="2">
                         </div>
-                    </div>{{-- fin vida util de equipo medico --}}
+                    </div>
 
-                    {{-- Imagen --}}
+                 
                         <hr class="pb-2">
                             <div class="form-group my-2 text-center">
                                 <div class="btn btn-default btn-file">
@@ -585,7 +585,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

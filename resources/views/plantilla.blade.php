@@ -170,7 +170,7 @@
     <script src="{{ url('/') }}/js/cronogramasGeneralesNuevo.js"></script>
     <script src="{{ url('/') }}/js/defecto.js"></script>
     <script src="{{ url('/') }}/js/cronogramaLista.js"></script>
-
+    <script src="{{ url('/') }}/js/equiposBaja.js"></script>
 
 </body>
 

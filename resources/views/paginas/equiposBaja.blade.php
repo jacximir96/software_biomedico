@@ -37,7 +37,7 @@
               <div class="card-body">
 
                 <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="defecto">
+                 id="equiposBaja">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -53,7 +53,7 @@
 
                     <tbody>
 
-                    @foreach($equipos_baja as $key => $data)
+                    {{-- @foreach($equipos_baja as $key => $data)
                         <tr>
                             <td style="text-align: center;">{{($key+1)}}</td>
                             <td style="text-transform: uppercase;">{{$data->nombre_equipo}}</td>
@@ -63,7 +63,7 @@
                             <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
                             <td style="text-transform: uppercase;">{{$data->idEquipo_baja}}</td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
 
                     </tbody>
                 </table>
