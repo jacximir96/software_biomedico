@@ -51,7 +51,7 @@ Route::get('/obtenerhistorialcompras','HistorialEquiposCompraController@gethisto
 Route::get('/obtenerambiente','AmbientesController@getAmbiente')->name('ambientes.getambiente');
 Route::get('/obtenercronogramafecha','CronogramasController@getcronogramaFecha')->name('cronogramas.getfechas');
 Route::get('/obtenercronogramacompra','CronogramasCalendarioController@getConogramaCompra')->name('cronogramas.compras');
-
+Route::get('/obtenerEquipoBaja','EquiposBajaController@obtenerEquipoBaja')->name('equipos.obtenerEquipoBaja');
 
 
 

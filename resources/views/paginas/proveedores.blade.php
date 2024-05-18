@@ -252,49 +252,49 @@
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">RUC:</label>
                                     <div class="col-md-6">
-                                        <input id="txtdni" name="txtdni" type="text" class="form-control"  placeholder="RUC" readonly="">
+                                        <input id="txtdniBuscar" name="txtdni" type="text" class="form-control"  placeholder="RUC" readonly="">
                                     </div>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">Razón Social:</label>
                                     <div class="col-md-8">
-                                        <textarea id="txtrazon" name="txtrazon" class="form-control" placeholder="Razon social" readonly=""></textarea>
+                                        <textarea id="txtrazonBuscar" name="txtrazon" class="form-control" placeholder="Razon social" readonly=""></textarea>
                                     </div>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">Estado:</label>
                                     <div class="col-md-6">
-                                        <input id="txtgrupo" name="txtgrupo" type="text" class="form-control"  placeholder="Estado" readonly="">
+                                        <input id="txtgrupoBuscar" name="txtgrupo" type="text" class="form-control"  placeholder="Estado" readonly="">
                                     </div>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">Direccion: <i class="fa fa-map-marker"></i> </label>
                                     <div class="col-md-8">
-                                    <textarea id="txtdireccion" name="txtdireccion" class="form-control" placeholder="Direccion" readonly="" rows="2"></textarea>
+                                    <textarea id="txtdireccionBuscar" name="txtdireccion" class="form-control" placeholder="Direccion" readonly="" rows="2"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">Distrito:</label>
                                     <div class="col-md-7">
-                                        <input id="txtdistrito" name="txtdistrito" type="text" class="form-control"  placeholder="Distrito" readonly="">
+                                        <input id="txtdistritoBuscar" name="txtdistrito" type="text" class="form-control"  placeholder="Distrito" readonly="">
                                     </div>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">Provincia:</label>
                                     <div class="col-md-7">
-                                        <input id="txtprovincia" name="txtprovincia" type="text" class="form-control"  placeholder="Provincia" readonly="">
+                                        <input id="txtprovinciaBuscar" name="txtprovincia" type="text" class="form-control"  placeholder="Provincia" readonly="">
                                     </div>
                                 </div>
 
                                 <div class="input-group mb-3">
                                     <label for="email" class="col-md-3 control-label">Departamento:</label>
                                     <div class="col-md-7">
-                                        <input id="txtdepartamento" name="txtdepartamento" type="text" class="form-control"  placeholder="Departamento" readonly="">
+                                        <input id="txtdepartamentoBuscar" name="txtdepartamento" type="text" class="form-control"  placeholder="Departamento" readonly="">
                                     </div>
                                 </div>
                            <!--  </div>
@@ -313,14 +313,14 @@
             </form>
         </div>
     </div>
-  </div>
+</div>
 
   {{-- Editar departamento en modal --}}
 
 
 
 
-  @if (isset($status))
+  {{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -341,7 +341,6 @@
                 </div>
                 <div class="modal-body">
 
-                    {{-- Ruc --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">RUC:</label>
@@ -351,18 +350,16 @@
                             value="{{$value["ruc_proveedor"]}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin ruc --}}
+                    </div>
 
-                    {{-- Razon Social --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Razón Social:</label>
 
                         <div class="col-md-8">
                             <textarea class="form-control" name="txtrazon" required autofocus style="text-transform: uppercase;" readonly="">{{$value["razonSocial_proveedor"]}}</textarea>
                         </div>
-                    </div>{{-- fin razon social --}}
+                    </div>
 
-                    {{-- Estado --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Estado:</label>
 
@@ -371,18 +368,16 @@
                             value="{{$value["estado_proveedor"]}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin estado --}}
+                    </div>
 
-                    {{-- Direccion --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Direccion: <i class="fa fa-map-marker"></i> </label>
 
                         <div class="col-md-8">
                             <textarea class="form-control" name="txtdireccion" required autofocus style="text-transform: uppercase;">{{$value["direccion_proveedor"]}}</textarea>
                         </div>
-                    </div>{{-- fin DIRECCION --}}
+                    </div>
 
-                    {{-- Distrito --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Distrito:</label>
 
@@ -391,9 +386,8 @@
                             value="{{$value["distrito_proveedor"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin distrito --}}
+                    </div>
 
-                    {{-- provincia --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Provincia:</label>
 
@@ -402,9 +396,8 @@
                             value="{{$value["provincia_proveedor"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin provincia --}}
+                    </div>
 
-                    {{-- departamento --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Departamento:</label>
 
@@ -413,8 +406,7 @@
                             value="{{$value["departamento_proveedor"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin departamento --}}
-
+                    </div>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-between">
@@ -445,13 +437,14 @@
 
 @endif
 
-@endif
+@endif --}}
 
   <script type="text/javascript">
     $(document).ready(function(){
 
         $('#btnbuscar').click(function(){
             var numdni=$('#ruc').val();
+            
             if (numdni!='') {
                 $.ajax({
                     url:"{{ route('consultar.sunat') }}",
@@ -459,30 +452,32 @@
                     data:{ruc:numdni},
                     dataType:'json',
                     success:function(data){
+                        
                         var resultados=data.entidad['success'];
                         if (resultados==true) {
+                            
                           var razon=data.entidad['entity']['nombre_o_razon_social'];
                           var direccion=data.entidad['entity']['direccion'];
                           var distrito=data.entidad['entity']['distrito'];
                           var provincia=data.entidad['entity']['provincia'];
                           var departamento=data.entidad['entity']['departamento'];
                           var estado=data.entidad['entity']['estado_del_contribuyente'];
-
-                            $('#txtdni').val(numdni);
-                            $('#txtrazon').val(razon);
-                            $('#txtgrupo').val(estado);
-                            $('#txtdireccion').val(direccion);
-                            $('#txtdistrito').val(distrito);
-                            $('#txtprovincia').val(provincia);
-                            $('#txtdepartamento').val(departamento);
+                          console.log(razon);
+                            $('#txtdniBuscar').val(numdni);
+                            $('#txtrazonBuscar').val(razon);
+                            $('#txtgrupoBuscar').val(estado);
+                            $('#txtdireccionBuscar').val(direccion);
+                            $('#txtdistritoBuscar').val(distrito);
+                            $('#txtprovinciaBuscar').val(provincia);
+                            $('#txtdepartamentoBuscar').val(departamento);
                         }else{
-                            $('#txtdni').val('');
-                            $('#txtrazon').val('');
-                            $('#txtgrupo').val('');
-                            $('#txtdireccion').val('');
-                            $('#txtdistrito').val('');
-                            $('#txtprovincia').val('');
-                            $('#txtdepartamento').val('');
+                            $('#txtdniBuscar').val('');
+                            $('#txtrazonBuscar').val('');
+                            $('#txtgrupoBuscar').val('');
+                            $('#txtdireccionBuscar').val('');
+                            $('#txtdistritoBuscar').val('');
+                            $('#txtprovinciaBuscar').val('');
+                            $('#txtdepartamentoBuscar').val('');
                             $('#mensaje').show();
                             $('#mensaje').delay(2000).hide(2500);
                         }

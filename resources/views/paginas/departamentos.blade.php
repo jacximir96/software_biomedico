@@ -240,7 +240,7 @@
 
 {{-- Editar departamento en modal --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -261,7 +261,6 @@
                 </div>
                 <div class="modal-body">
 
-                    {{-- Nombre --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Nombre:</label>
@@ -271,9 +270,7 @@
                             value="{{$value["nombre_departamento"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin nombre de departamento --}}
-
-                    {{-- Iniciales --}}
+                    </div>
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Iniciales:</label>
@@ -283,9 +280,9 @@
                             value="{{$value["iniciales_departamento"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin iniciales de departamento --}}
+                    </div>
 
-                    {{-- Estado --}}
+      
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Estado:</label>
@@ -304,16 +301,15 @@
                                             <option value="{{$value2->id_estado}}">
                                                 {{$value2->nombre_estado}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
+                                        @endif
 
                                 @endforeach
 
                             @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin estado de departamento --}}
+                    </div>
 
-                    {{-- Direccion ejecutiva --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Dir. Ejecutiva:</label>
@@ -332,14 +328,14 @@
                                                 <option value="{{$value2->id_direccionEjecutiva}}">
                                                     {{$value2->nombre_direccionEjecutiva}}
                                                 </option>
-                                            @endif{{-- Aparece todo menos el que es diferente --}}
+                                            @endif
 
                                         @endforeach
 
                                     @endforeach
                                 </select>
                         </div>
-                    </div>{{-- fin id de dirección Ejecutiva --}}
+                    </div>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-between">
@@ -370,7 +366,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

@@ -308,7 +308,7 @@
 
   {{-- Editar ambiente en modal --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -329,7 +329,6 @@
                 </div>
                 <div class="modal-body">
 
-                    {{-- Nombre --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Nombre:</label>
@@ -339,9 +338,8 @@
                             value="{{$value["nombre_ambiente"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin nombre de ambiente --}}
+                    </div>
 
-                    {{-- Estado --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Estado:</label>
@@ -360,14 +358,14 @@
                                             <option value="{{$value2->id_estado}}">
                                                 {{$value2->nombre_estado}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
+                                        @endif
 
                                 @endforeach
 
                             @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin estado de ambiente --}}
+                    </div>
 
                     <div class="input-group mb-3">
 
@@ -387,15 +385,14 @@
                                             <option value="{{$value2->id_departamento}}">
                                                 {{$value2->nombre_departamento}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
+                                        @endif
 
                                     @endforeach
 
                                 @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin id de departamento --}}
-
+                    </div>
                     <div class="input-group mb-3" id="id_direccionEjecutiva_c">
 
                     <label for="email" class="col-md-3 control-label">Dir. Ejecutiva:</label>
@@ -414,14 +411,14 @@
                                         <option value="{{$value2->id_direccionEjecutiva}}">
                                             {{$value2->nombre_direccionEjecutiva}}
                                         </option>
-                                    @endif{{-- Aparece todo menos el que es diferente --}}
+                                    @endif
 
                                 @endforeach
 
                             @endforeach
                         </select>
                     </div>
-                    </div>{{-- fin id de direccion Ejecutiva --}}
+                    </div>
 
                 </div>
 
@@ -453,7 +450,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

@@ -133,13 +133,13 @@
 
 {{-- Modal de Historial del equipo --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
     @foreach ($equipo as $key => $value)
 
-<div  class="modal" id="historial_visualizar" >
+    <div  class="modal" id="historial_visualizar" >
     <div class="modal-dialog">
         <div class="modal-content">
         <form action="{{ url('/') }}/reportesHistorialCompra/historialPdf" method="get" target="_blank">
@@ -245,7 +245,7 @@
             </form>
         </div>
     </div>
-</div>
+    </div>
 
     @endforeach
 
@@ -259,7 +259,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

@@ -243,7 +243,7 @@
     </div>
 </div>
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -263,7 +263,6 @@
                     <a href="{{url("/")}}/equiposReposicion" type="button" class="close">&times;</a>
                 </div>
                 <div class="modal-body">
-                    {{-- fecha Inicial --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-4 control-label">Fecha:</label>
@@ -273,9 +272,8 @@
                             value="" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin fecha inicial--}}
+                    </div>
 
-                    {{-- Equipo para baja--}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-4 control-label">Reemplazado por:</label>
 
@@ -289,7 +287,7 @@
                             @endforeach
                         </select>
                         </div>
-                    </div>{{-- fin equipo para baja --}}
+                    </div>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-between">
@@ -320,7 +318,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

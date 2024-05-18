@@ -5,11 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\AdministradoresModel;
 use App\EquiposModel;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
 
 class EquiposBajaController extends Controller
 {
+    public function obtenerEquipoBaja(){
+      
+        if (request()->ajax()) {
+            $equipos_baja = DB::select('SELECT * FROM equipo WHERE baja_equipo = 1');
+            return DataTablesDataTables::of($equipos_baja)->make(true);
+        }
+    }
+    
     public function index(){
         $administradores = AdministradoresModel::all();
         $equipos_baja = DB::select('SELECT * FROM equipo WHERE baja_equipo = 1');
@@ -25,4 +34,6 @@ class EquiposBajaController extends Controller
                                                         "equipos_baja"=>$equipos_baja,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
                                                         "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
     }
+
+   
 }

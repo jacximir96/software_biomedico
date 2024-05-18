@@ -128,9 +128,6 @@
         </div>
     </div>
   </div>
-
-
-
  
   <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -207,7 +204,7 @@
 </div>  
   {{-- Editar Administrador en modal --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -228,7 +225,6 @@
                 </div>
                 <div class="modal-body">
 
-                    {{-- Nombre --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Nombre:</label>
@@ -238,9 +234,7 @@
                             value="{{$value["nombre_direccionEjecutiva"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin nombre de dirección Ejecutiva --}}
-
-                    {{-- Iniciales --}}
+                    </div>
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Iniciales:</label>
@@ -250,9 +244,7 @@
                             value="{{$value["iniciales_direccionEjecutiva"]}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin iniciales de dirección Ejecutiva --}}
-
-                    {{-- Estado --}}
+                    </div>
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-3 control-label">Estado:</label>
@@ -271,14 +263,13 @@
                                             <option value="{{$value2->id_estado}}">
                                                 {{$value2->nombre_estado}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
-
+                                        @endif
                                 @endforeach
 
                             @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin estado de dirección Ejecutiva --}}
+                    </div>
 
                 </div>
 
@@ -310,7 +301,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
     <script>

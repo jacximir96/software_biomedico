@@ -507,7 +507,7 @@
 
 {{-- Editar cronograma general en modal --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -527,7 +527,6 @@
                 </div>
                 <div class="modal-body">
 
-                    {{-- Id de Equipo --}}
                     <div class="input-group mb-3" style="display:none;">
                         <label for="email" class="col-md-3 control-label">ID:</label>
 
@@ -536,9 +535,8 @@
                             value="{{$value->id_equipoGarantia}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Id de Equipo --}}
+                    </div>
 
-                    {{-- Nombre de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Equipo:</label>
 
@@ -547,9 +545,8 @@
                             value="{{$value->nombre_equipoGarantia}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Nombre de Equipo --}}
+                    </div>
 
-                    {{-- Marca de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Marca:</label>
 
@@ -558,9 +555,8 @@
                             value="{{$value->marca_equipoGarantia}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Marca de Equipo --}}
+                    </div>
 
-                    {{-- Modelo de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Modelo:</label>
 
@@ -569,9 +565,8 @@
                             value="{{$value->modelo_equipoGarantia}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Modelo de Equipo --}}
+                    </div>
 
-                    {{-- Serie de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label"># Serie:</label>
 
@@ -580,9 +575,8 @@
                             value="{{$value->serie_equipoGarantia}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Serie de Equipo --}}
+                    </div>
 
-                    {{-- CP de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label"># C. Patrim:</label>
 
@@ -591,9 +585,8 @@
                             value="{{$value->cp_equipoGarantia}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin CP de Equipo --}}
+                    </div>
 
-                    {{-- Mes de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Mes:</label>
 
@@ -759,9 +752,8 @@
 
                             </select>
                         </div>
-                    </div>{{-- fin Mes de Equipo --}}
+                    </div>
 
-                    {{-- Año de Equipo --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Año:</label>
 
@@ -770,7 +762,7 @@
                             value="{{$value->año_cronogramaGeneralNuevo}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin Año de Equipo --}}
+                    </div>
 
                 </div>
 
@@ -802,7 +794,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 
 @if (Session::has("ok-crear"))

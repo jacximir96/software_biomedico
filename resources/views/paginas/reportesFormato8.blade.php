@@ -204,7 +204,7 @@
                                     <button class="btn btn-warning btn-sm editar-btn" data-toggle="modal" data-target="#editarEquipo"><i class="fas fa-pencil-alt text-white"></i></button>
                                 </td>
                         </tr>
-                        @endforeach
+                    @endforeach
 
                     </tbody>
                 </table>

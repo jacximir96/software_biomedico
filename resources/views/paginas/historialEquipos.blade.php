@@ -125,7 +125,7 @@
                         </div>
     
                         <div>
-                            <button type="submit" class="btn btn-success">Imprimi1r</button>
+                            <button type="submit" class="btn btn-success">Imprimir</button>
                         </div>
                     </div>
                 </form>
@@ -138,19 +138,19 @@
 
 {{-- Modal de Historial del equipo --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
     @foreach ($equipo as $key => $value)
 
-<div class="modal" id="historial_visualizar">
+    <div class="modal" id="historial_visualizar">
     <div class="modal-dialog">
         <div class="modal-content">
         <form action="{{ url('/') }}/reportesHistorial/historialPdf" method="get" target="_blank">
             <div class="modal-header bg-info">
                 <h4 class="modal-tittle">Historial</h4>
-                {{-- <a href="{{url("/")}}/historialEquipos" type="button" class="close">&times;</a> --}}
+                <a href="{{url("/")}}/historialEquipos" type="button" class="close">&times;</a>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -240,9 +240,9 @@
                                         <i class="fas fa-download text-black"></i>
                                     </a>
                                 @endif
-                                {{-- <a href="{{route('download')}}" download="Archivo de finalización" class="btn btn-default btn-sm">
+                                <a href="{{route('download')}}" download="Archivo de finalización" class="btn btn-default btn-sm">
                                     <i class="fas fa-download text-black"></i>
-                                </a> --}}
+                                </a>
                             </td>
 
                         </tr>
@@ -256,8 +256,8 @@
 
                 <div class="modal-footer d-flex justify-content-between">
                     <div>
-                        {{-- <a href="{{url("/")}}/historialEquipos" type="button" class="btn btn-danger">Cerrar</a>
-                         --}}
+                        <a href="{{url("/")}}/historialEquipos" type="button" class="btn btn-danger">Cerrar</a>
+                        
                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
 
@@ -269,7 +269,7 @@
             </form>
         </div>
     </div>
-</div>
+    </div>
 
     @endforeach
 
@@ -283,7 +283,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>

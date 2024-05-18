@@ -427,7 +427,7 @@
 
 {{-- Editar departamento en modal --}}
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -448,7 +448,7 @@
                 </div>
 
                 <div class="modal-body">
-                {{-- Tipo Cronograma --}}
+                
                     <div class="input-group mb-3" style="display:none;">
 
                         <label for="email" class="col-md-4 control-label">Mantenimiento:</label>
@@ -458,9 +458,8 @@
                             value="{{$value->id_mantenimiento}}" autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Tipo Cronograma --}}
+                    </div>
 
-                    {{-- Equipo --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-4 control-label">Equipo:</label>
@@ -474,9 +473,8 @@
                             value="{{$value->nombre_equipo}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin equipo --}}
+                    </div>
 
-                    {{-- fecha Inicial --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-4 control-label">Fecha Inicial:</label>
@@ -486,9 +484,8 @@
                             value="{{$value->fecha}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin fecha inicial--}}
+                    </div>
 
-                    {{-- fecha Final --}}
                     <div class="input-group mb-3">
 
                         <label for="email" class="col-md-4 control-label">Fecha Final:</label>
@@ -498,9 +495,8 @@
                             value="{{$value->fecha_final}}" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin fecha final --}}
+                    </div>
 
-                    {{-- Orden de Servicio --}}
                     <div class="input-group mb-3" id="orden_servicio_cronograma">
                         <label for="email" class="col-md-4 control-label">ODS:</label>
 
@@ -518,9 +514,7 @@
                             </select>
                         </div>
                     </div>
-                    {{-- Fin de Orden de Servicio --}}
 
-                    {{-- Realizado --}}
                     <div class="input-group mb-3" style="display:none;">
 
                         <label for="email" class="col-md-4 control-label">Fecha:</label>
@@ -530,9 +524,8 @@
                             value="1" required autofocus
                             style="text-transform: uppercase;" readonly="">
                         </div>
-                    </div>{{-- fin Realizado --}}
+                    </div>
 
-                    {{-- Proveedor --}}
                     <div class="input-group mb-3" id="proveedor_cronograma">
                         <label for="email" class="col-md-4 control-label">Empresa:</label>
 
@@ -548,9 +541,8 @@
 
                                 </select>
                         </div>
-                    </div>{{-- fin Proveedor --}}
+                    </div>
 
-                    {{-- Departamento --}}
                     <div class="input-group mb-3" id="nombres_departamento_editar">
                         <label for="email" class="col-md-4 control-label">Solicitado por:</label>
 
@@ -568,9 +560,8 @@
                         </div>
 
                         <label for="email" class="col-md-1 control-label">o</label>
-                    </div>{{-- fin Departamento --}}
+                    </div>
 
-                    {{-- Dirección Ejecutiva--}}
                     <div class="input-group mb-3" id="nombres_direccionEjecutiva_editar">
                         <label for="email" class="col-md-4 control-label" style="color:white;">Solicitado por:</label>
 
@@ -585,9 +576,8 @@
                                     @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin Departamento --}}
+                    </div>
 
-                    {{-- Garantia --}}
                     <div class="input-group mb-3" id="garantia_cronograma">
 
                         <label for="email" class="col-md-4 control-label">Garantía (Meses):</label>
@@ -597,18 +587,16 @@
                             value="{{$value->garantia}}" autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin garantia--}}
+                    </div>
 
-                    {{-- Observación --}}
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-4 control-label">Detalles del Servicio:</label>
 
                         <div class="col-md-8">
                             <textarea class="form-control" name="cronograma_observacion" autofocus style="text-transform: uppercase;"></textarea>
                         </div>
-                    </div>{{-- Observación --}}
+                    </div>
 
-                    {{-- Monto--}}
                     <div class="input-group mb-3" id="monto_cronograma">
 
                         <label for="email" class="col-md-4 control-label">Monto:</label>
@@ -618,9 +606,8 @@
                             value="" autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin monto --}}
+                    </div>
 
-                    {{-- número de OTM--}}
                     <div class="input-group mb-3" id="otm_cronograma">
 
                         <label for="email" class="col-md-4 control-label">N° OTM:</label>
@@ -630,9 +617,8 @@
                             value="" autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin número de OTM --}}
+                    </div>
 
-                    {{-- pdf --}}
                         <hr class="pb-2">
                             <div class="form-group my-2 text-center">
                                 <div class="btn btn-default btn-file">
@@ -676,7 +662,7 @@
 
 @endif
 
-@endif
+@endif --}}
 {{-- 
 <script type="text/javascript">
 

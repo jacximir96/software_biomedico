@@ -31,6 +31,30 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
+
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label for="direccionEjecutivaFilter" class="col-md-2 control-label">DIRECCION EJECUTIVA:</label>
+                            <div class="col-md-4" id="direccionEjecutivaFilter"></div>
+
+                            <label for="departamentoFilter" class="col-md-2 control-label">DEPARTAMENTO:</label>
+                            <div class="col-md-4" id="departamentoFilter"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label for="estadoFilter" class="col-md-2 control-label">ESTADO:</label>
+                            <div class="col-md-4" id="estadoFilter"></div>
+
+                            <label for="marcaFilter" class="col-md-2 control-label">MARCA:</label>
+                            <div class="col-md-4" id="marcaFilter"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#crearEquipo">
                     Crear nuevo equipo médico</button>
 
@@ -50,7 +74,7 @@
                             <th style="min-width:150px;">Equipo</th>
                             <th>Marca</th>
                             <th>Modelo</th>
-                            <th># Serie</th>
+                            
                             <th>Cod. Patrimonial</th>
                             <th>Tipo Equipamiento</th>
                             <th>Dir. Ejecutiva</th>
@@ -58,11 +82,13 @@
                             <th>Ambiente</th>
                             <th>Fecha (Adquisición)</th>
                             <th>Monto (Adquisición)</th>
+                            <th>Estado</th>
+                            <th># Serie</th>
                             <th>Antig.</th>
                             <th>Vida Util</th>
                             <th>Prioridad</th>
                             <th>Imagen</th>
-                            <th>Estado</th>
+                            
                             {{-- <th>Tarjeta de Control</th> --}}
                             <th>Acciones</th>
                         </tr>
@@ -418,7 +444,7 @@
                         <label for="email" class="col-md-3 control-label">Ambiente:</label>
 
                         <div class="col-md-8">
-                            <select class="form-control" id="id_ambiente" name="id_ambiente" required style="text-transform: uppercase;">
+                            <select class="form-control" id="id_ambiente_editar" name="id_ambiente_editar" required style="text-transform: uppercase;">
                                 @foreach ($ambientes as $key => $value1)
 
                                     <option value="{{$value1->id_ambiente}}">
@@ -568,7 +594,7 @@
 
 
 
-@if (isset($status))
+{{-- @if (isset($status))
 
 @if ($status == 200)
 
@@ -598,7 +624,7 @@
                             value="{{$value->nombre_equipo}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin nombre de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Marca:</label>
@@ -608,7 +634,7 @@
                             value="{{$value->marca_equipo}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin marca de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Modelo:</label>
@@ -618,7 +644,7 @@
                             value="{{$value->modelo_equipo}}" required autofocus
                             style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin modelo de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Serie:</label>
@@ -628,7 +654,7 @@
                             value="{{$value->serie_equipo}}" required autofocus
                             placeholder="Ingrese el número de serie" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin serie de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Cod. Patrim:</label>
@@ -638,7 +664,7 @@
                             value="{{$value->cp_equipo}}" required autofocus
                             placeholder="Ingrese el código Patrimonial" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin cp de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">T. Equipam:</label>
@@ -657,14 +683,14 @@
                                             <option value="{{$value2->id_tipoEquipamiento}}">
                                                 {{$value2->nombre_tipoEquipamiento}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
+                                        @endif
 
                                     @endforeach
 
                                 @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin id de tipoEquipamiento --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Ambiente:</label>
@@ -683,14 +709,14 @@
                                             <option value="{{$value2->id_ambiente}}">
                                                 {{$value2->nombre_ambiente}}
                                             </option>
-                                        @endif{{-- Aparece todo menos el que es diferente --}}
+                                        @endif
 
                                     @endforeach
 
                                 @endforeach
                             </select>
                         </div>
-                    </div>{{-- fin id de ambiente --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Fecha Adquis:</label>
@@ -700,7 +726,7 @@
                             value="{{$value->fecha_adquisicion_equipo}}" required autofocus
                             placeholder="Ingrese la fecha de adquisición" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin fecha adquisicion de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Monto Adquis:</label>
@@ -710,7 +736,7 @@
                             value="{{$value->monto_adquisicion_equipo}}" required autofocus
                             placeholder="Ingrese el monto de adquisición" style="text-transform: uppercase;">
                         </div>
-                    </div>{{-- fin monto adquisicion de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Vida Util:</label>
@@ -720,7 +746,7 @@
                             value="{{$value->tiempo_vida_util_equipo}}" required autofocus
                             placeholder="Ingrese el tiempo de vida util (años)" style="text-transform: uppercase;" maxlength="2">
                         </div>
-                    </div>{{-- fin vida util de equipo medico --}}
+                    </div>
 
                     <div class="input-group mb-3">
                         <label for="email" class="col-md-3 control-label">Prioridad:</label>
@@ -730,7 +756,7 @@
                             value="{{$value->prioridad_equipo}}" required autofocus
                             placeholder="Ingrese la prioridad" style="text-transform: uppercase;" maxlength="2">
                         </div>
-                    </div>{{-- fin prioridad de equipo medico --}}
+                    </div>
 
                     <hr class="pb-2">
 
@@ -815,7 +841,7 @@
                         </div>
                     </div>
 
-                    {{-- Imagen --}}
+          
                         <hr class="pb-2">
                             <div class="form-group my-2 text-center">
                                 <div class="btn btn-default btn-file">
@@ -866,7 +892,7 @@
 
 @endif
 
-@endif
+@endif --}}
 
 @if (Session::has("ok-crear"))
   <script>
