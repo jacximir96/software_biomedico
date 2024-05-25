@@ -12,6 +12,7 @@ use App\CronogramasModel;
 use App\TipoMantenimientosModel;
 use App\OrdenServiciosModel;
 use App\DepartamentosModel;
+use App\DireccionesEjecutivasModel;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
@@ -32,7 +33,7 @@ class CronogramasListaController extends Controller
     public function index(){
 
      
-
+        $direccionesEjecutivas = DireccionesEjecutivasModel::all();
         $administradores = AdministradoresModel::all();
         $proveedores = ProveedoresModel::all();
         $equipos = EquiposModel::all();
@@ -56,7 +57,7 @@ class CronogramasListaController extends Controller
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
         AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-        return view("paginas.cronogramasLista",array("cronogramas"=>$cronogramas,"administradores"=>$administradores,
+        return view("paginas.cronogramasLista",array("cronogramas"=>$cronogramas,"administradores"=>$administradores,'direccionesEjecutivas' =>$direccionesEjecutivas,
                                                 "proveedores"=>$proveedores,"equipos"=>$equipos,"tipoMantenimientos"=>$tipoMantenimientos,
                                                 "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"cronogramas_fecha"=>$cronogramas_fecha,
                                                 "ordenServicios"=>$ordenServicios,"departamentos"=>$departamentos,

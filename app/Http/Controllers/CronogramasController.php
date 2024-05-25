@@ -370,18 +370,23 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                     "garantia"=>'required'
                 ]);
 
-                if($validar->fails()){
-                    return redirect("/cronogramas")->with("no-validacion","");
+                if($validar->fails()){   
+                    if($request->has('lista')){
+                        return redirect("/cronogramasLista")->with("no-validacion","");
+                    }
+                    else{
+                        return redirect("/cronogramas")->with("no-validacion","");
+                    }
                 }else{
                     if ($request->hasFile('pdf_archivo_final')) {
                         $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
                         $ruta = $pdf["pdf_cronograma"];
+                        $ruta_sin_public = str_replace("public/", "", $ruta);
                     }else{
-                        $ruta = null;
+                        $ruta_sin_public = null;
                     }
                    
-                   
-
+  
                     $datos = array("id_equipo"=>$request->input("cronograma_equipo"),
                                     "fecha"=>$request->input("cronograma_fecha"),
                                     "fecha_final"=>$request->input("cronograma_fecha_final"),
@@ -390,7 +395,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                                     "monto_cronograma"=>$request->input("monto_cronograma"),
                                     "acumulado_cronograma"=>$request->input("monto_cronograma")+$extraer_cronograma,
                                     "id_ordenServicio"=>$request->input("id_ordenServicio"),
-                                    "pdf_cronograma"=>$ruta,
+                                    "pdf_cronograma"=>$ruta_sin_public,
                                     "id_proveedor"=>$request->input("id_proveedor"),
                                     "id_departamento"=>$request->input("id_departamento"),
                                     "id_direccionEjecutiva"=>$request->input("id_direccionEjecutiva"),
@@ -400,11 +405,21 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                     
                     $cronograma = CronogramasModel::where('id_cronograma',$id)->update($datos);
                     // dd($cronograma);
-                    return redirect("/cronogramas")->with("ok-editar","");
+                    
+                    if($request->has('lista')){
+                        return redirect("/cronogramasLista")->with("ok-editar","");
+                    }
+                    else{
+                        return redirect("/cronogramas")->with("ok-editar","");
+                    }
                 }
 
             }else{
-                return redirect("/cronogramas")->with("error","");
+                if($request->has('lista')){
+                    return redirect("/cronogramasLista")->with("error","");
+                }else{
+                    return redirect("/cronogramas")->with("error","");
+                }       
             }
         }
 
