@@ -29,7 +29,7 @@ $("#tablaCronogramaLista").DataTable({
             return row.codigo_ordenServicio;
         }	
     },name:'otm_cronograma'},
-    
+
 
        {data:'ruc_proveedor' ,name:'ruc_proveedor'},
 
@@ -73,7 +73,7 @@ $("#tablaCronogramaLista").DataTable({
 		render: function(data, type, row) {
 			return `
 				<td style="text-align: center; text-transform: uppercase;">
-					<a href="../storage/app/${row.pdf_cronograma}" download="Conformidad del Servicio" class="btn btn-default btn-sm">
+					<a href="../storage/${row.pdf_cronograma}" download="Conformidad del Servicio" class="btn btn-default btn-sm">
 						<i class="fas fa-download text-black"></i> Descargar Archivo
 					</a>
 				</td>
@@ -210,12 +210,27 @@ $('#tablaCronogramaLista').on('click', '.editar-btn', function() {
 
 	   //console.log(diffAnios);
 	   // Completa el formulario del modal con los datos recibidos
+
+	   console.log(data.realizado);
+	   
+	   if(data.realizado === 0){
+		$('#class_detalle').hide();
+		$('#class_otm').hide();
+		$('#class_archivo').hide();
+	   } else if (data.realizado === 1){
+		$('#class_detalle').show();
+		$('#class_otm').show();
+		$('#class_archivo').show();
+	   }
+
 	   $('#fecha_actual_editar').val(data.fecha);	
 	   $('#fecha_final_editar').val(data.fecha_final);
 	   $('#estado_departamento').val(data.estado_departamento);
 	   $('#nombres_equipo_editar').val(data.id_equipo);
 	   $('#nombres_mantenimiento_editar').val(data.id_mantenimiento);
 	   $('#cp_equipo').val(data.cp_equipo);
+	   $('#cronograma_observacion_editar').val(data.observacion);
+	   $('#otm_cronograma_editar').val(data.otm_cronograma);
 	   $('#id_tipoEquipamiento').val(data.id_tipoEquipamiento);
 	   $('#id_ambiente').val(data.id_ambiente);
 	   $('#fecha_adquisicion_equipo').val(data.fecha_adquisicion_equipo);

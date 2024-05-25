@@ -12,10 +12,12 @@ class MantenimientoServicioHistorial extends Controller
         if (request()->ajax()) {
 
             $historialDatos = DB::select("SELECT C.id_cronograma, M.nombre_mantenimiento, C.fecha, C.fecha_final, O.codigo_ordenServicio, 
-            C.realizado, C.pdf_cronograma, E.id_equipo, E.nombre_equipo FROM cronograma C INNER JOIN mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento 
-            INNER JOIN ordenservicio O ON C.id_ordenServicio = O.id_ordenServicio INNER JOIN equipo E ON C.id_equipo = E.id_equipo WHERE C.id_equipo = $id");
-
-            
+            C.realizado, C.pdf_cronograma, E.id_equipo, E.nombre_equipo 
+            FROM cronograma C 
+            INNER JOIN mantenimiento M ON C.id_mantenimiento = M.id_mantenimiento 
+            LEFT JOIN ordenservicio O ON C.id_ordenServicio = O.id_ordenServicio 
+            INNER JOIN equipo E ON C.id_equipo = E.id_equipo  WHERE C.id_equipo = $id ORDER BY C.id_cronograma DESC");
+        
             return DataTablesDataTables::of($historialDatos)->make(true);
         }
 

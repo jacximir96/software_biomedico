@@ -157,6 +157,6 @@ Route::get('/direccionesejecutivas/json/{id}','DireccionesEjecutivasController@s
 Route::get('/cronogramasfecha/json/{id}','CronogramasController@showJson')->name('cronogramas.json');
 Route::get('/cronogramasfechacompras/json/{id}','CronogramasCalendarioController@showJson')->name('cronogramascompras.json');
 
-Route::get('/mantenimientoServicioHistorial/json/{id}','MantenimientoServicioHistorial@obtenerDatos')->name('mantenimientoServicioHistorial.json');
+Route::get('/mantenimientoServicioHistorial/json/{id}','cr@obtenerDatos')->name('mantenimientoServicioHistorial.json');
 Route::get('/equipoDatos/json/{id}','MantenimientoServicioHistorial@obtenerEquipo')->name('equipoDatos.json');
 

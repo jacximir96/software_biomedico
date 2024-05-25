@@ -23,62 +23,54 @@
       </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <!-- Default box -->
-            <div class="card">
-              <div class="card-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped dt-responsive" width="100%"
+                            id="tablaHistorialEquipos">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Equipo</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Serie</th>
+                                        <th>Cod. Patr.</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                <table class="table table-bordered table-striped dt-responsive" width="100%"
-                 id="tablaHistorialEquipos">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Equipo</th>
-                            <th>Marca</th>
-                            <th>Modelo</th>
-                            <th>Serie</th>
-                            <th>Cod. Patr.</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                    {{-- <tbody>
-                        @foreach ($equipos as $key => $data)
-                            <tr>
-                                <td style="text-align: center;">{{($key+1)}}</td>
-                                <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipo}}</td>
-                                <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipo}}</td>
-                                <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipo}}</td>
-                                <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipo}}</td>
-                                <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
-                                <td>
-                                    <a href="{{url('/')}}/historialEquipos/{{$data->id_equipo}}" class="btn btn-warning btn-sm">
-                                        Historial
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody> --}}
-                </table>
-
-              </div>
-              <!-- /.card-body -->
-
-              <!-- /.card-footer-->
+                                </tbody>
+                                {{-- <tbody>
+                                    @foreach ($equipos as $key => $data)
+                                        <tr>
+                                            <td style="text-align: center;">{{($key+1)}}</td>
+                                            <td style="text-align: center; text-transform: uppercase;">{{$data->nombre_equipo}}</td>
+                                            <td style="text-align: center; text-transform: uppercase;">{{$data->marca_equipo}}</td>
+                                            <td style="text-align: center; text-transform: uppercase;">{{$data->modelo_equipo}}</td>
+                                            <td style="text-align: center; text-transform: uppercase;">{{$data->serie_equipo}}</td>
+                                            <td style="text-align: center; text-transform: uppercase;">{{$data->cp_equipo}}</td>
+                                            <td>
+                                                <a href="{{url('/')}}/historialEquipos/{{$data->id_equipo}}" class="btn btn-warning btn-sm">
+                                                    Historial
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody> --}}
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.card -->
-          </div>
         </div>
-      </div>
     </section>
-    <!-- /.content -->
   </div>
+
   <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -88,36 +80,54 @@
             </div>
             <div class="modal-body">
                
-                <form id="editForm" method="GET" action="{{route('crearPdf.MantenimientoServicioHistorial')}}" target="#">
+                {{-- <form id="editForm" method="GET" action="{{route('crearPdf.MantenimientoServicioHistorial')}}" target="#"> --}}
                   
-                    <table class="table table-bordered" id="historialCompra2">
+                    <table class="table table-bordered table-striped dt-responsive" width="100%"
+                    id="historialCompra2">
                         <thead>
-                             <tr>
+                            <tr>
                                 <th colspan="2" style="text-align:center;">Información del Equipo</th>
                             </tr>
                         </thead>
     
                         <tbody>
                             <input type="text" style="display:none" name="id_equipoHistorial" id="id_equipoHistorial">
-                           
+                        
                             
                         </tbody>
                     </table>
-                    <table class="table table-bordered table-striped dt-responsive" width="auto" id="historialCompra1">
-                        <thead>
-                            <tr>       
-                                <th>#</th>
-                                <th>Tipo</th>
-                                <th>Fecha</th>
-                                <th>N° ODS/OTM</th>
-                                <th>Estado</th>
-                                <th>Conformidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
 
-                        </tbody>
-                    </table>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                           
+                                            
+                                            <table class="table table-bordered table-striped dt-responsive" width="100%" id="historialCompra1">
+                                                <thead>
+                                                    <tr>       
+                                                        <th>#</th>
+                                                        <th>Tipo</th>
+                                                        <th>Fecha</th>
+                                                        <th>N° ODS/OTM</th>
+                                                        <th>Estado</th>
+                                                        <th>Conformidad</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                        
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    
                     
                     <div class="modal-footer d-flex justify-content-between">
                         <div>
@@ -128,12 +138,12 @@
                             <button type="submit" class="btn btn-success">Imprimir</button>
                         </div>
                     </div>
-                </form>
+                {{-- </form> --}}
             </div>
         </div>
     </div>
   </div>
-</div>
+
 
 
 {{-- Modal de Historial del equipo --}}

@@ -102,13 +102,16 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
 	});
 
 
-
+	if ($.fn.DataTable.isDataTable('#historialCompra1')) {
+        $('#historialCompra1').DataTable().destroy();
+    }
 
 
 	$('#historialCompra1').DataTable({
 		processing: true,
 		serverSide: true,
 		ajax :ruta +"/mantenimientoServicioHistorial/json/" + id,
+		pageLength: 5,
 		columns:[
 			{
 				data: null, 

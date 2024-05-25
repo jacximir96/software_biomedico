@@ -33,7 +33,7 @@
 
                 <div id="tabla_ocultar">
                     <table class="table table-bordered table-striped dt-responsive" width="100%"
-                    id="defecto">
+                    id="historial">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -46,7 +46,7 @@
                         </tr>
                     </thead>
 
-                    <tbody>
+                    {{-- <tbody>
                         @foreach ($cronogramas_fecha as $key => $data)
                             <tr>
                                 <th>{{($key+1)}}</th>
@@ -64,7 +64,7 @@
                                 </td>
                             </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
             </div>
             </div>
@@ -285,6 +285,58 @@
                         </div><!-- Fin de Garantia -->
         
                     
+
+
+                        {{-- Observación --}}
+                        <div class="input-group mb-3" id="class_detalle">
+                            <label for="email" class="col-md-3 control-label">Detalles del Servicio:</label>
+    
+                            <div class="col-md-8">
+                                <textarea class="form-control" name="cronograma_observacion_editar" id="cronograma_observacion_editar" autofocus style="text-transform: uppercase;"></textarea>
+                            </div>
+                        </div>{{-- Observación --}}
+    
+                        {{-- Monto--}}
+                        <div class="input-group mb-3" id="monto_cronograma">
+    
+                            <label for="email" class="col-md-4 control-label">Monto:</label>
+    
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="monto_cronograma" id="monto_cronograma"
+                                 autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>{{-- fin monto --}}
+    
+                        {{-- número de OTM--}}
+                        <div class="input-group mb-3" id="class_otm">
+    
+                            <label for="email" class="col-md-3 control-label">N° OTM:</label>
+    
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="otm_cronograma_editar" id="otm_cronograma_editar"
+                                autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>{{-- fin número de OTM --}}
+    
+                        {{-- pdf --}}
+                            
+                                <div class="form-group my-2 text-center" id="class_archivo">
+                                    <hr class="pb-2">
+                                    <div class="btn btn-default btn-file">
+                                        <i class="fas fa-paperclip"></i> Adjuntar Archivo
+                                        <p><label for="pdf_archivo_final">
+                                            <input type="file" name="pdf_archivo_final_editar" id="pdf_archivo_final_editar">
+                                        </label></p>
+    
+                                    </div><br>
+    
+                                    <p class="help-block small">Tamaño máximo de archivos: 20MB</p>
+                                </div>
+    
+
+
         
                     <div class="modal-footer d-flex justify-content-between">
                         <div>
@@ -305,6 +357,227 @@
 
 
 
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Registrar Mantenimiento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editForm" method="POST"  accept-charset="UTF-8" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        {{-- Tipo Cronograma --}}
+                        <input type="text" name="lista" value="1" hidden>
+                            <div class="input-group mb-3" style="display:none;">
+        
+                                <label for="email" class="col-md-4 control-label">Mantenimiento:</label>
+        
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="mantenimiento_oculto" id="mantenimiento_oculto"
+                                   autofocus
+                                    style="text-transform: uppercase;" readonly="">
+                                </div>
+                            </div>{{-- fin Tipo Cronograma --}}
+        
+                            {{-- Equipo --}}
+                            <div class="input-group mb-3">
+        
+                                <label for="email" class="col-md-4 control-label">Equipo:</label>
+        
+                                <div class="col-md-8">
+                                    <input type="hidden" class="form-control" name="cronograma_equipo" id="cronograma_equipo"
+                                     required autofocus
+                                    style="text-transform: uppercase;" readonly="">
+        
+                                    <input type="text" class="form-control" name="" id="nombre_equipo"
+                                     required autofocus
+                                    style="text-transform: uppercase;" readonly="">
+                                </div>
+                            </div>{{-- fin equipo --}}
+        
+                            {{-- fecha Inicial --}}
+                            <div class="input-group mb-3">
+        
+                                <label for="email" class="col-md-4 control-label">Fecha Inicial:</label>
+        
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="cronograma_fecha"  id="cronograma_fecha"
+                                     required autofocus
+                                    style="text-transform: uppercase;" readonly="">
+                                </div>
+                            </div>{{-- fin fecha inicial--}}
+        
+                            {{-- fecha Final --}}
+                            <div class="input-group mb-3">
+        
+                                <label for="email" class="col-md-4 control-label">Fecha Final:</label>
+        
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="cronograma_fecha_final" id="cronograma_fecha_final"
+                                    required autofocus
+                                    style="text-transform: uppercase;" readonly="">
+                                </div>
+                            </div>{{-- fin fecha final --}}
+        
+                            {{-- Orden de Servicio --}}
+                            <div class="input-group mb-3" id="orden_servicio_cronograma" >
+                                <label for="email" class="col-md-4 control-label">ODS:</label>
+        
+                                <div class="col-md-8">
+                                    <select class="form-control" name="id_ordenServicio"  id="id_ordenServicio">
+                                        <option value="">
+                                            -- Seleccionar la orden de Servicio --
+                                        </option>
+        
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                            {{-- Fin de Orden de Servicio --}}
+        
+                            {{-- Realizado --}}
+                            <div class="input-group mb-3" style="display:none;">
+        
+                                <label for="email" class="col-md-4 control-label">Fecha:</label>
+        
+                                <div class="col-md-6">
+                                    <input class="form-control" name="cronograma_realizado" 
+                                    value="1" required autofocus
+                                    style="text-transform: uppercase;" readonly="">
+                                </div>
+                            </div>{{-- fin Realizado --}}
+        
+                            {{-- Proveedor --}}
+                            <div class="input-group mb-3" id="proveedor_cronograma">
+                                <label for="email" class="col-md-4 control-label">Empresa:</label>
+        
+                                <div class="col-md-8">
+                                    <select class="form-control" name="id_proveedor" id="id_proveedor">
+                                            <option value="">
+                                                -- Seleccionar el Proveedor --
+                                            </option>
+        
+                                           
+        
+                                        </select>
+                                </div>
+                            </div>{{-- fin Proveedor --}}
+        
+                            {{-- Departamento --}}
+                            <div class="input-group mb-3">
+                                <label for="email" class="col-md-4 control-label">Solicitado por:</label>
+        
+                                <div class="col-md-7">
+                                    <select class="form-control" name="id_departamento" id="id_departamento">
+                                            <option value="">
+                                                -- Seleccionar el Departamento --
+                                            </option>
+                                            @foreach ($departamentos as $item)
+                                                <option value="{{$item->id_departamento}}">{{$item->nombre_departamento}}</option>
+                                            @endforeach
+                                            
+        
+                                        </select>
+                                </div>
+        
+                                <label for="email" class="col-md-1 control-label">o</label>
+                            </div>{{-- fin Departamento --}}
+        
+                            {{-- Dirección Ejecutiva--}}
+                            <div class="input-group mb-3">
+                                <label for="email" class="col-md-4 control-label" style="color:white;">Solicitado por:</label>
+        
+                                <div class="col-md-8">
+                                    <select class="form-control" name="id_direccionEjecutiva" id="id_direccionEjecutiva" required>
+                                            <option value="">
+                                                -- Seleccionar la Dirección Ejecutiva --
+                                            </option>
+                                            @foreach ($direccionesEjecutivas as $item)
+                                                <option value="{{$item->id_direccionEjecutiva}}">{{$item->nombre_direccionEjecutiva}}</option>
+                                            @endforeach
+                                           
+                                    </select>
+                                </div>
+                            </div>{{-- fin Departamento --}}
+        
+                            {{-- Garantia --}}
+                            <div class="input-group mb-3" id="garantia_cronograma">
+        
+                                <label for="email" class="col-md-4 control-label">Garantía (Meses):</label>
+        
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="cronograma_garantia" id="cronograma_garantia"
+                                    autofocus
+                                    style="text-transform: uppercase;">
+                                </div>
+                            </div>{{-- fin garantia--}}
+        
+                            {{-- Observación --}}
+                            <div class="input-group mb-3">
+                                <label for="email" class="col-md-4 control-label">Detalles del Servicio:</label>
+        
+                                <div class="col-md-8">
+                                    <textarea class="form-control" name="cronograma_observacion" id="cronograma_observacion" autofocus style="text-transform: uppercase;"></textarea>
+                                </div>
+                            </div>{{-- Observación --}}
+        
+                            {{-- Monto--}}
+                            <div class="input-group mb-3" id="monto_cronograma">
+        
+                                <label for="email" class="col-md-4 control-label">Monto:</label>
+        
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="monto_cronograma" id="monto_cronograma"
+                                     autofocus
+                                    style="text-transform: uppercase;">
+                                </div>
+                            </div>{{-- fin monto --}}
+        
+                            {{-- número de OTM--}}
+                            <div class="input-group mb-3" >
+        
+                                <label for="email" class="col-md-4 control-label">N° OTM:</label>
+        
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="otm_cronograma" id="otm_cronograma"
+                                    autofocus
+                                    style="text-transform: uppercase;">
+                                </div>
+                            </div>{{-- fin número de OTM --}}
+        
+                            {{-- pdf --}}
+                                <hr class="pb-2">
+                                    <div class="form-group my-2 text-center">
+                                        <div class="btn btn-default btn-file">
+                                            <i class="fas fa-paperclip"></i> Adjuntar Archivo
+                                            <p><label for="pdf_archivo_final">
+                                                <input type="file" name="pdf_archivo_final" id="pdf_archivo_final">
+                                            </label></p>
+        
+                                        </div><br>
+        
+                                        <p class="help-block small">Tamaño máximo de archivos: 20MB</p>
+                                    </div>
+        
+                
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -399,7 +672,7 @@
                 </div><!-- Fin de Mantenimiento -->
 
                 <!-- Inicio de Garantia -->
-                <div class="input-group mb-3" id="valor_garantia">
+                <div class="input-group mb-3" id="valor_garantia" style="display: none">
                     <label for="email" class="col-md-3 control-label">Garantía:</label>
 
                     <div class="col-md-4">
