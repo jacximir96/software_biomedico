@@ -49,6 +49,11 @@ class CronogramaListaController extends Controller
                     );
 
                     $equipo = CronogramasModel::where('id_cronograma',$id)->update($datos);
+
+                    if($request->has('crono')){
+                        return redirect("/cronogramas")->with("ok-editar","");
+                    }
+
                     return redirect("/cronogramasLista")->with("ok-editar","");
     }
 
