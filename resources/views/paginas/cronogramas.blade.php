@@ -459,7 +459,109 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="eventActionModal" tabindex="-1" role="dialog" aria-labelledby="eventActionModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-info">
+            <h4 class="modal-tittle">Cronograma de Mantenimiento</h4>
+            <button type="button" id="cancel" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+        
+            <form id="editFormCalendario" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div  id="div_fecha_actual">
+                    <input type="text" name="crono" value="crono" hidden>
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Fecha Inicial:</label>
+                        <div class="col-md-8">
+                            <input id="cro_fecha_actual" name="fecha_actual" type="date" class="form-control">
+                        </div>
+                    </div>
 
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Fecha Final:</label>
+                        <div class="col-md-8">
+                            <input id="cro_fecha_final" name="fecha_final" type="date" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Equipo:</label>
+                        <div class="col-md-8">
+                            <select class="form-control " name="id_equipo" id="cro_equipo" required>
+                                    <option value="">
+                                        -- Seleccionar el Equipo --
+                                    </option>
+                                    @foreach($equipos as $key => $value)
+                                        <option  value="{{$value->id_equipo}}">
+                                            {{$value->nombre_equipo}}<span> - </span><p>Cod. Patrimonial: {{$value->cp_equipo}}</p>
+                                        </option>
+                                    @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <label for="email" class="col-md-3 control-label">Tipo:</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="id_mantenimiento" id="cro_tipo" required>
+                                    <option value="">
+                                        -- Seleccionar el Tipo de Mantenimiento --
+                                    </option>
+                                    @foreach($tipoMantenimientos_estado as $key => $valorMantenimiento)
+                                    <option value="{{$valorMantenimiento->id_mantenimiento}}">{{$valorMantenimiento->nombre_mantenimiento}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="realizado">
+                        <div class="input-group mb-3" id="class_detalle">
+                            <label for="email" class="col-md-3 control-label">Detalles del Servicio:</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" name="cronograma_observacion_editar" id="cro_detalle" autofocus style="text-transform: uppercase;"></textarea>
+                            </div>
+                        </div>
+    
+                        <div class="input-group mb-3" id="class_otm">
+                            <label for="email" class="col-md-3 control-label">N° OTM:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="otm_cronograma_editar" id="cro_otm"
+                                autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>
+    
+                        <div class="form-group my-2 text-center" id="class_archivo">
+                            <hr class="pb-2">
+                            <div class="btn btn-default btn-file">
+                                <i class="fas fa-paperclip"></i> Adjuntar Archivo
+                                <p><label for="pdf_archivo_final">
+                                    <input type="file" name="pdf_archivo_final_editar" id="cro_archivo">
+                                </label></p>
+                            </div><br>
+                            <p class="help-block small">Tamaño máximo de archivos: 20MB</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="saveEvent" data-dismiss="modal">Guardar</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEvent">Cancelar</button>
+              
+                    <button type="button" class="btn btn-primary" id="editEvent">Editar</button>
+                    <button type="button" class="btn btn-danger" id="deleteEvent">Eliminar</button>
+                </div>
+            </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+  
 {{-- @if (isset($status))
 
 @if ($status == 200)
@@ -738,51 +840,129 @@
             $("#agregarCalendario").modal();
             calendar.unselect(); // funcion para que no se quede seleccionado la fecha
         },
+
+eventClick: function(arg) {
+    var id = arg.event.id;
+    $('#eventActionModal').modal('show'); 
+
+        $('#saveEvent').hide();
+        $('#cancelEvent').hide();
+        $('#editEvent').show();
+        $('#deleteEvent').show();
+
+        $('#cro_fecha_actual').val('');
+        $('#cro_fecha_final').val('');
+        $('#cro_equipo').val('');
+        $('#cro_tipo').val('');
+        $('#cro_detalle').val('');
+        $('#cro_otm').val('');
+
+        $('#div_fecha_actual').hide();
+
+    $('#deleteEvent').off('click').on('click', function() {
+        swal({
+            title: "¿Estás seguro?",
+            text: "No podrás recuperar este evento!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, eliminar!'
+        }).then(function(result) {
+            if (result.value) {
+                var token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "{{ route('cronogramas.destroy', '') }}" + '/' + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    success: function(response) {
+                        arg.event.remove();
+                        $('#eventActionModal').modal('hide'); 
+                        swal("Hecho!", "El evento fue eliminado con éxito!", "success");
+                        location.reload();
+                    },
+                    error: function(error) {
+                        swal("Error al eliminar!", "Inténtalo de nuevo", "error");
+                    }
+                });
+            }
+        });
+    });
+
+    $('#editEvent').off('click').on('click', function() {
+        
+        $('#editEvent').hide();
+        $('#deleteEvent').hide();
+        $('#saveEvent').show();
+        $('#cancelEvent').show();
+
         
 
-        /* Inicio evento eliminar */
-        eventClick: function(arg) {
-            var id = arg.event.id;
-          var deleteMsg = swal({
-                            title: "Estas seguro?",
-                            text: "No podrás recuperar este archivo!",
-                            type: "warning",
-                            showCancelButton: true,
-                              confirmButtonColor: '#3085d6',
-                              cancelButtonColor: '#d33',
-                              cancelButtonText: 'Cancelar',
-                              confirmButtonText: 'Si, eliminar registro!'
-            }).then(function(result){
-                if(result.value){
-                if(deleteMsg){
+        $.get(ruta +'/cronogramasfecha/json/' + id, function(data) {
+            console.log(data.realizado);
+            $('#cro_fecha_actual').val(data.fecha);
+            $('#cro_fecha_final').val(data.fecha_final);
+            $('#cro_equipo').val(data.id_equipo);
+            $('#cro_tipo').val(data.id_mantenimiento);
+            $('#cro_detalle').val(data.observacion);
+            $('#cro_otm').val(data.otm_cronograma);
 
-            var token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                //url: '/software_biomedico/cronogramas/13/eliminar',
-                url: "{{route('cronogramas.destroy','')}}" +'/'+id,
-                type: 'DELETE',
-                dataType:'json',
-                headers: {
-                    'X-CSRF-TOKEN': token
-    },
-                success: function (response) {
-                var id = response.id
-                // console.log(id)
-                arg.event.remove();
-                swal("Hecho!", "Fue eliminado con éxito!", "success");
-                location.reload(); 
-                },
-                error: function (error) {
-                    // console.log(error)
-                swal("Error al eliminar!", "Inténtalo de nuevo", "error");
-                }
-                });
-              }
+            if(data.realizado === 0){
+                $('#realizado').hide();
             }
-            })
-        },/* Fin evento eliminar */
+            if(data.realizado === 1){
+                $('#realizado').show();
+            }
 
-       
+            $('#editFormCalendario').attr('action', ruta+`/cronogramaLista/${id}`);
+        });
+
+        $('#div_fecha_actual').show();
+    });
+
+    $('#cancelEvent').off('click').on('click', function() {
+        $('#saveEvent').hide();
+        $('#cancelEvent').hide();
+        $('#editEvent').show();
+        $('#deleteEvent').show();
+
+        $('#cro_fecha_actual').val('');
+        $('#cro_fecha_final').val('');
+        $('#cro_equipo').val('');
+        $('#cro_tipo').val('');
+        $('#cro_detalle').val('');
+        $('#cro_otm').val('');
+
+        $('#div_fecha_actual').hide();
+        
+    });
+
+    $('#cancel').off('click').on('click', function() {
+        $('#saveEvent').hide();
+        $('#cancelEvent').hide();
+        $('#editEvent').show();
+        $('#deleteEvent').show();
+
+        $('#cro_fecha_actual').val('');
+        $('#cro_fecha_final').val('');
+        $('#cro_equipo').val('');
+        $('#cro_tipo').val('');
+        $('#cro_detalle').val('');
+        $('#cro_otm').val('');
+
+        $('#div_fecha_actual').hide();
+        
+    });
+
+    $('#saveEvent').off('click').on('click', function() {
+        $('#editFormCalendario').submit(); 
+    });
+
+}, 
 
         eventMouseEnter: function(info) {
             //console.log('Mouse entered event:', info.event.extendedProps.description);   
