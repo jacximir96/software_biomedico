@@ -67,6 +67,16 @@ $('#historial').on('click', '.editar-btn', function() {
         // console.log("Datos recibidos:",data);
         // Completa el formulario del modal con los datos recibidos
 		
+
+		if(data.id_mantenimiento === 1 || data.id_mantenimiento === 2){
+			$('#ods').show();
+			$('#otm').hide();
+		   }else{
+			$('#ods').hide();
+			$('#otm').show();
+		   }
+
+
 		$('#mantenimiento_oculto').val(data.id_mantenimiento);
         $('#cronograma_equipo').val(data.id_equipo);
          $('#nombre_equipo').val(data.equipo.nombre_equipo);

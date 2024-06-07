@@ -1,7 +1,7 @@
 /*=============================================
 DataTable de Jornadas Laborales
 =============================================*/
-$("#tablaRoles").DataTable({
+let tablaRoles = $("#tablaRoles").DataTable({
 	processing: true,
     serverSide: true,
 	ajax : ruta+"/obtenerequiporeposicion",
@@ -117,7 +117,12 @@ $("#tablaRoles").DataTable({
 	      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 	      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
         }
-      }
+      },
+
+	  initComplete: function () {
+		EquipoFilterReposicion(tablaRoles);
+		MarcaFilterReposicion(tablaRoles);
+	}
 });
 
 $('#tablaRoles').on('click', '.editar-btn', function() {
@@ -136,3 +141,69 @@ $('#tablaRoles').on('click', '.editar-btn', function() {
    
     
 });
+
+function EquipoFilterReposicion(tablaRoles) {
+	tablaRoles.columns(1).every(function() {
+		var column = tablaRoles.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR EL EQUIPO --</option></select>')
+			.appendTo($('#equipoFilterReposicion').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+
+
+
+function MarcaFilterReposicion(tablaRoles) {
+	tablaRoles.columns(2).every(function() {
+		var column = tablaRoles.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR LA MARCA --</option></select>')
+			.appendTo($('#marcaFilterReposicion').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+

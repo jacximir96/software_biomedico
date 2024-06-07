@@ -21,6 +21,25 @@
             </ol>
           </div>
 
+          <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <div class="input-group">
+                                <label for="equipoFilterBaja" class="col-md-2 control-label">EQUIPO:</label>
+                                <div class="col-md-4" id="equipoFilterBaja"></div>
+            
+        
+                                <label for="marcaFilterBaja" class="col-md-2 control-label">MARCA:</label>
+                                <div class="col-md-4" id="marcaFilterBaja"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         </div>
       </div><!-- /.container-fluid -->
     </section>

@@ -55,7 +55,7 @@ let tablaEquipos = $("#tablaEquipos").DataTable({
 	   {
 		   data:'imagen_equipo',name: 'imagen_equipo',
 		   render: function (data,type,full,meta) {
-			   return '<img style=width:200px; height:200px; src="' + data + '" alt="Imagen">';
+			   return '<img style=width:200px; height:200px; src="' + data + '" alt="Imagen" onclick="showImageModal(\'' + data + '\')">';
 		   }
 	   },
 	   
@@ -168,7 +168,7 @@ function direccionEjecutivaFilter(tablaEquipos) {
 		var column = tablaEquipos.column(this, {
 			search: 'applied'
 		});
-		var select = $('<select class="form-control select2 select-2" name="codigo_direccionEjecutivaFilter" id="codigo_direccionEjecutivaFilter"><option value="">-- SELECCIONAR LA DIRECCION EJECUTIVA --</option></select>')
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR LA DIRECCION EJECUTIVA --</option></select>')
 			.appendTo($('#direccionEjecutivaFilter').empty())
 			.on('change', function() {
 				var val = $.fn.dataTable.util.escapeRegex(

@@ -277,7 +277,7 @@
                         <div class="input-group mb-3" id="valor_garantia">
                             <label for="email" class="col-md-3 control-label">Garantía:</label>
         
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <input type="text" class="form-control" name="garantia"
                                 value="0" autofocus
                                 placeholder="Ingrese la garantía (Meses)" style="text-transform: uppercase;" maxlength="2">
@@ -539,8 +539,10 @@
                             {{-- número de OTM--}}
                             <div class="input-group mb-3" >
         
-                                <label for="email" class="col-md-4 control-label">N° OTM:</label>
-        
+                                    <label for="email" id="otm" class="col-md-4 control-label">N° OTM:</label>
+
+                                    <label for="email" id="ods" class="col-md-4 control-label">N° ODS:</label>
+
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" name="otm_cronograma" id="otm_cronograma"
                                     autofocus
