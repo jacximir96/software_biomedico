@@ -69,17 +69,22 @@ $("#tablaCronogramaLista").DataTable({
 
 	{
 		data: null,
-		name: 'acciones', 
+		name: 'acciones',
 		render: function(data, type, row) {
-			return `
-				<td style="text-align: center; text-transform: uppercase;">
-					<a href="../storage/${row.pdf_cronograma}" download="Conformidad del Servicio" class="btn btn-default btn-sm">
-						<i class="fas fa-download text-black"></i> Descargar Archivo
-					</a>
-				</td>
-			`;
+			if (row.pdf_cronograma) {
+				return `
+					<td style="text-align: center; text-transform: uppercase;">
+						<a href="../storage/${row.pdf_cronograma}" download="Conformidad del Servicio" class="btn btn-default btn-sm">
+							<i class="fas fa-download text-black"></i> Descargar Archivo
+						</a>
+					</td>
+				`;
+			} else {
+				return '<td style="text-align: center; text-transform: uppercase;"><span style="color:red;">SIN ARCHIVO</span></td>'
+			}
 		}
 	},
+	
 	{
 		data: null,
 		name: 'estado', 
@@ -221,6 +226,12 @@ $('#tablaCronogramaLista').on('click', '.editar-btn', function() {
 		$('#class_detalle').show();
 		$('#class_otm').show();
 		$('#class_archivo').show();
+	   }
+
+	   if(data.id_mantenimiento === 1 || data.id_mantenimiento === 2){
+		$('#valor_garantia').show();
+	   }else{
+		$('#valor_garantia').hide();
 	   }
 
 	   $('#fecha_actual_editar').val(data.fecha);	

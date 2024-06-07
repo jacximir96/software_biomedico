@@ -20,6 +20,26 @@
               <li class="breadcrumb-item active">Equipos por Reposición</li>
             </ol>
           </div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="input-group">
+                        <label for="equipoFilterReposicion" class="col-md-2 control-label">EQUIPO:</label>
+                        <div class="col-md-4" id="equipoFilterReposicion"></div>
+    
+
+                        <label for="marcaFilterReposicion" class="col-md-2 control-label">MARCA:</label>
+                        <div class="col-md-4" id="marcaFilterReposicion"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
           <div class="col-sm-12">
             <div class="callout callout-info col-md-12" style="float:left;">

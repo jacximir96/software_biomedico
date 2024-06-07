@@ -1,4 +1,4 @@
-$("#equiposBaja").DataTable({
+let equiposBaja = $("#equiposBaja").DataTable({
 	processing: true,
     serverSide: true,
 	ajax :ruta+"/obtenerEquipoBaja",
@@ -44,5 +44,77 @@ $("#equiposBaja").DataTable({
 	      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 	      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
         }
-      }
+      },
+
+	  initComplete: function () {
+		EquipoFilterBaja(equiposBaja);
+		MarcaFilterBaja(equiposBaja);
+	}
 });
+
+
+function EquipoFilterBaja(equiposBaja) {
+	equiposBaja.columns(1).every(function() {
+		var column = equiposBaja.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR EL EQUIPO --</option></select>')
+			.appendTo($('#equipoFilterBaja').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+
+
+
+function MarcaFilterBaja(equiposBaja) {
+	equiposBaja.columns(2).every(function() {
+		var column = equiposBaja.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR LA MARCA --</option></select>')
+			.appendTo($('#marcaFilterBaja').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+

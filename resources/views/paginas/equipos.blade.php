@@ -5,6 +5,45 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    /* Estilos para el modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.9);
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -592,7 +631,34 @@
     </div>
 </div>
 
+<div id="myModal" class="modal">
+    <img class="modal-content" id="img01">
+</div>
 
+<script>
+    // Script para manejar el modal
+    function showImageModal(src) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+
+        modal.style.display = "block";
+        modalImg.src = src;
+
+        // Agregar evento para cerrar el modal al hacer clic en la 'x'
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Agregar evento para cerrar el modal al hacer clic fuera de la imagen
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+</script>
 
 {{-- @if (isset($status))
 

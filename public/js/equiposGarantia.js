@@ -1,7 +1,7 @@
 /*=============================================
 DataTable de Jornadas Laborales
 =============================================*/
-$("#tablaEquiposGarantia").DataTable({
+let tablaEquiposGarantia = $("#tablaEquiposGarantia").DataTable({
 	processing: true,
     serverSide: true,
 	ajax :ruta+"/obtenerequipogarantia",
@@ -84,7 +84,14 @@ $("#tablaEquiposGarantia").DataTable({
 	      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 	      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
         }
-      }
+      },
+
+	  initComplete: function () {
+		direccionEjecutivaFilterGarantia(tablaEquiposGarantia);
+		departamentoFilterGarantia(tablaEquiposGarantia);
+		ambienteFilterGarantia(tablaEquiposGarantia);
+		marcaFilterGarantia(tablaEquiposGarantia);
+	}
 });
 $('#tablaEquiposGarantia').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
@@ -119,4 +126,152 @@ $('#tablaEquiposGarantia').on('click', '.editar-btn', function() {
     });
     
 });
+
+function direccionEjecutivaFilterGarantia(tablaEquiposGarantia) {
+
+	tablaEquiposGarantia.columns(5).every(function() {
+		var column = tablaEquiposGarantia.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR LA DIRECCION EJECUTIVA --</option></select>')
+			.appendTo($('#direccionEjecutivaFilterGarantia').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+
+function departamentoFilterGarantia(tablaEquiposGarantia) {
+	tablaEquiposGarantia.columns(6).every(function() {
+		var column = tablaEquiposGarantia.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR EL DEPARTAMENTO --</option></select>')
+			.appendTo($('#departamentoFilterGarantia').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+// function estadoFilter(tablaEquipos) {
+//     tablaEquipos.columns(11).every(function() {
+//         var column = this;
+
+//         var select = $('<select class="form-control select2 select-2" name="codigo_estadoFilter" id="codigo_estadoFilter"><option value="">-- SELECCIONAR EL ESTADO --</option><option value="0">Servicio</option><option value="1">Garantia</option></select>')
+//             .appendTo($('#estadoFilter').empty())
+//             .on('change', function() {
+//                 var val = $(this).val();
+
+//                 // Convert the selection to the corresponding value in the column
+//                 column
+//                     .search(val ? val : '', true, false)
+//                     .draw();
+//             });
+
+//         // Initialize select2
+//         $('.select2').select2();
+//     });
+// }
+
+
+function marcaFilterGarantia(tablaEquiposGarantia) {
+    var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR LA MARCA --</option></select>')
+        .appendTo($('#marcaFilterGarantia').empty())
+        .on('change', function() {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            tablaEquiposGarantia.column(2)
+                .search(val ? '^' + val + '$' : '', true, false)
+                .draw();
+        });
+
+    // Obtener todas las marcas únicas en la tabla
+    tablaEquiposGarantia.column(2).data().unique().sort().each(function(d, j) {
+        select.append('<option value="' + d + '">' + d + '</option>');
+    });
+
+    // Establecer la opción seleccionada si ya hay un filtro aplicado
+    var currSearch = tablaEquiposGarantia.column(2).search();
+    if (currSearch) {
+        select.val(currSearch.substring(1, currSearch.length - 1));
+    }
+
+    // Inicializar select2
+    $('.select2').select2();
+}
+
+
+function ambienteFilterGarantia(tablaEquiposGarantia) {
+	tablaEquiposGarantia.columns(7).every(function() {
+		var column = tablaEquiposGarantia.column(this, {
+			search: 'applied'
+		});
+		var select = $('<select class="form-control select2 select-2" name="" id=""><option value="">-- SELECCIONAR EL AMBIENTE --</option></select>')
+			.appendTo($('#ambienteFilterGarantia').empty())
+			.on('change', function() {
+				var val = $.fn.dataTable.util.escapeRegex(
+					$(this).val()
+				);
+
+				column
+					.search(val ? '^' + val + '$' : '', true, false)
+					.draw();
+			});
+
+			column.cells('', column[0]).render('display').sort().unique().each( function ( d, j ) {
+				select.append( '<option value="'+d+'">'+d+'</option>' )
+			} );
+
+		var currSearch = column.search();
+
+		if (currSearch) {
+			select.val(currSearch.substring(1, currSearch.length - 1));
+		}
+
+		$('.select2').select2();
+	});
+}
+
+
+
 

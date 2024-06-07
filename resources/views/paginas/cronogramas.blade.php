@@ -535,6 +535,13 @@
                             </div>
                         </div>
     
+                        <div class="text-center">
+                            <a href="../storage/" id="descarga" download="Conformidad del Servicio" class="btn btn-default btn-sm">
+                                <i class="fas fa-download text-black"></i> Descargar Archivo
+                            </a>
+                        </div>
+                        
+
                         <div class="form-group my-2 text-center" id="class_archivo">
                             <hr class="pb-2">
                             <div class="btn btn-default btn-file">
@@ -917,10 +924,10 @@ eventClick: function(arg) {
             if(data.realizado === 1){
                 $('#realizado').show();
             }
-
+            $('#descarga').attr('href', '../storage/' + `${data.pdf_cronograma}`);
             $('#editFormCalendario').attr('action', ruta+`/cronogramaLista/${id}`);
         });
-
+        
         $('#div_fecha_actual').show();
     });
 

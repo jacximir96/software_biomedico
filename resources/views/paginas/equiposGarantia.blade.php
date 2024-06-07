@@ -31,6 +31,31 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-header">
+
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label for="direccionEjecutivaFilterGarantia" class="col-md-2 control-label">DIRECCION EJECUTIVA:</label>
+                            <div class="col-md-4" id="direccionEjecutivaFilterGarantia"></div>
+
+                            <label for="departamentoFilterGarantia" class="col-md-2 control-label">DEPARTAMENTO:</label>
+                            <div class="col-md-4" id="departamentoFilterGarantia"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <label for="ambienteFilterGarantia" class="col-md-2 control-label">AMBIENTE:</label>
+                            <div class="col-md-4" id="ambienteFilterGarantia"></div>
+
+                            <label for="marcaFilterGarantia" class="col-md-2 control-label">MARCA:</label>
+                            <div class="col-md-4" id="marcaFilterGarantia"></div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#crearEquipoGarantia">
                     Crear nuevo equipo médico</button>
 
