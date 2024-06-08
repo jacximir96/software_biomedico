@@ -54,7 +54,7 @@ $("#tablaHistorialEquipos").DataTable({
 	      "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 	      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
         }
-      }
+    }
 });
 
 $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
@@ -147,9 +147,15 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
 				name: 'pdf_cronograma',
 				render: function (data, type, row) {
 					if (row.pdf_cronograma) {
-						return 'Conformidad <a href="' + row.pdf_cronograma + '" download="Archivo de finalización" class="btn btn-default btn-sm"><i class="fas fa-download text-black"></i></a>';
+						return `
+							<td style="text-align: center; text-transform: uppercase;">
+								<a href="../storage/${row.pdf_cronograma}" download="Archivo de finalización" class="btn btn-default btn-sm">
+									<i class="fas fa-download text-black"></i>
+								</a>
+							</td>
+						`;
 					} else {
-						return '';
+						return '<td style="text-align: center; text-transform: uppercase;"><span style="color:red;">SIN ARCHIVO</span></td>'
 					}
 				}
 			},
