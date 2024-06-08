@@ -7,7 +7,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     /* Estilos para el modal */
-    .modal {
+    .modalDiv {
         display: none;
         position: fixed;
         z-index: 1;
@@ -20,7 +20,7 @@
         background-color: rgba(0,0,0,0.9);
     }
 
-    .modal-content {
+    .modalImg {
         margin: auto;
         display: block;
         width: 80%;
@@ -631,8 +631,8 @@
     </div>
 </div>
 
-<div id="myModal" class="modal">
-    <img class="modal-content" id="img01">
+<div id="myModal" class="modal modalDiv">
+    <img class="modal-content modalImg" id="img01">
 </div>
 
 <script>
