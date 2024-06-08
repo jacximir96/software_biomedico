@@ -222,10 +222,12 @@ $('#tablaCronogramaLista').on('click', '.editar-btn', function() {
 		$('#class_detalle').hide();
 		$('#class_otm').hide();
 		$('#class_archivo').hide();
+		$('#divLista').hide();
 	   } else if (data.realizado === 1){
 		$('#class_detalle').show();
 		$('#class_otm').show();
 		$('#class_archivo').show();
+		$('#divLista').show();	
 	   }
 
 	   if(data.id_mantenimiento === 1 || data.id_mantenimiento === 2){
@@ -257,6 +259,7 @@ $('#tablaCronogramaLista').on('click', '.editar-btn', function() {
 	   $('#customSwitch6_1').prop('checked', data.criterio_6 == 1 ? true : false);
 	   $('#customSwitch7_1').prop('checked', data.criterio_7 == 1 ? true : false);
 	   $('#customSwitch2').prop('checked', porcentajeAcumulado > 40);
+	   $('#descargaLista').attr('href', '../storage/' + `${data.pdf_cronograma}`);
 	   if (!data.imagen_equipo) {
 		   // Si no hay URL de imagen, establece una imagen predeterminada
 		   $('#imagenEquipo').attr('src', '/img/equiposGarantia/sinImagen.jpg'); // Ruta de la imagen predeterminada

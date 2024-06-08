@@ -320,7 +320,15 @@
                             </div>
                         </div>{{-- fin número de OTM --}}
     
+
+                        <div class="text-center" id="divLista">
+                            <a href="../storage/" id="descargaLista" download="Conformidad del Servicio" class="btn btn-default btn-sm">
+                                <i class="fas fa-download text-black"></i> Descargar Archivo
+                            </a>
+                        </div>
+
                         {{-- pdf --}}
+
                             
                                 <div class="form-group my-2 text-center" id="class_archivo">
                                     <hr class="pb-2">
