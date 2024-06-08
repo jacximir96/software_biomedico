@@ -325,6 +325,7 @@
                             <a href="../storage/" id="descargaLista" download="Conformidad del Servicio" class="btn btn-default btn-sm">
                                 <i class="fas fa-download text-black"></i> Descargar Archivo
                             </a>
+                            
                         </div>
 
                         {{-- pdf --}}
