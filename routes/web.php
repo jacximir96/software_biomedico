@@ -108,6 +108,7 @@ Route::get('/cronogramasLista/{id_cronograma}','CronogramasListaController@updat
 Route::delete('/cronogramasLista/{id_cronograma}','CronogramasListaController@destroy');
 
 Route::get('/cronogramasCalendario/calendario/listar','CronogramasCalendarioController@listar');
+Route::get('/cronogramasCalendario/getEquipo/{id}','CronogramasCalendarioController@getEquipo')->name('CronogramasCalendarioController.getEquipo');
 Route::post('/cronogramasCalendario/guardar','CronogramasCalendarioController@guardar');
 Route::post('/cronogramasCalendario/{id_cronogramaCalendario}/eliminar','CronogramasCalendarioController@destroy');
 

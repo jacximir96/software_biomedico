@@ -21,7 +21,7 @@ class OrdenServiciosController extends Controller
         
         public function getordenServicios() {
             if (request()->ajax()) {    
-                $ordenServicios = OrdenServiciosModel::all();
+                $ordenServicios = OrdenServiciosModel::orderBy('created_at', 'desc')->get();
                 $ordenServicios = collect($ordenServicios)->map(function($pdf) {
                    $pdf['pdf'] = Storage::exists($pdf['pdf_ordenServicio']);
                     if ($pdf['pdf']) {

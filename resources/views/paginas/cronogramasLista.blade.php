@@ -278,8 +278,8 @@
                             <label for="email" class="col-md-3 control-label">Garantía:</label>
         
                             <div class="col-md-8">
-                                <input type="text" class="form-control" name="garantia"
-                                value="0" autofocus
+                                <input type="text" class="form-control" name="garantia" id="garantia_edit"
+                                 autofocus
                                 placeholder="Ingrese la garantía (Meses)" style="text-transform: uppercase;" maxlength="2">
                             </div>
                         </div><!-- Fin de Garantia -->
@@ -513,7 +513,7 @@
                             </div>{{-- fin Departamento --}}
         
                             {{-- Garantia --}}
-                            <div class="input-group mb-3" id="garantia_cronograma">
+                            <div class="input-group mb-3" id="garantiaVer">
         
                                 <label for="email" class="col-md-4 control-label">Garantía (Meses):</label>
         
@@ -683,7 +683,7 @@
                 </div><!-- Fin de Mantenimiento -->
 
                 <!-- Inicio de Garantia -->
-                <div class="input-group mb-3" id="valor_garantia" style="display: none">
+                <div class="input-group mb-3" id="valor_garantia_div">
                     <label for="email" class="col-md-3 control-label">Garantía:</label>
 
                     <div class="col-md-4">

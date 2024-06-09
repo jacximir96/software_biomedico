@@ -136,6 +136,11 @@ class CronogramasCalendarioController extends Controller
                     }
             }
 
+            public function getEquipo($id){
+                $cronograma = CronogramasCalendarioModel::find($id);
+                return $cronograma;
+            }
+
             public function show($id){
 
                 $cronograma = DB::select('select * from cronogramacalendario C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia WHERE id_cronogramaCalendario = ?',[$id]);
@@ -205,12 +210,25 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
 
             public function update($id,Request $request){
 
+                $cronograma_unidad = CronogramasCalendarioModel::find($id);
+
+                if ($request->hasFile('pdf_archivo_final')) {
+                    $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
+                    $ruta = $pdf["pdf_cronograma"];
+                    $ruta_sin_public = str_replace("public/", "", $ruta);
+                    
+                }else{
+                    $ruta_sin_public = $cronograma_unidad->pdf_cronograma;
+                }
+
                 $datos = array("id_equipoGarantia"=>$request->input("cronograma_equipo"),
                                 "fecha"=>$request->input("cronograma_fecha"),
                                 "fecha_final"=>$request->input("cronograma_fecha_final"),
                                 "realizado"=>$request->input("cronograma_realizado"),
                                 "observacion"=>$request->input("cronograma_observacion"),
-                                "id_proveedor"=>$request->input("id_proveedor"));
+                                "id_proveedor"=>$request->input("id_proveedor"),
+                                "pdf_cronograma" => $ruta_sin_public);
+                                
 
                 $fechaMes = Carbon::parse($request->input("cronograma_fecha"))->month;
                 $fechaAño = Carbon::parse($request->input("cronograma_fecha"))->year;
@@ -231,7 +249,6 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                         "id_equipoGarantia"=>'required|regex:/^[_\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
                         "fecha"=>'required',
                         "fecha_final"=>'required',
-                        "id_proveedor"=>'required'
                     ]);
 
                     if($validar->fails()){
@@ -239,10 +256,12 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                     }else{
 
                         if ($request->hasFile('pdf_archivo_final')) {
-                            $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronogramaCalendario'));
+                            $pdf = array("pdf_cronograma"=>$request->file("pdf_archivo_final")->store('public/pdf/cronograma'));
                             $ruta = $pdf["pdf_cronograma"];
+                            $ruta_sin_public = str_replace("public/", "", $ruta);
+                            
                         }else{
-                            $ruta = null;
+                            $ruta_sin_public = $cronograma_unidad->pdf_cronograma;
                         }
 
                         $datos = array("id_equipoGarantia"=>$request->input("cronograma_equipo"),
@@ -250,7 +269,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                                         "fecha_final"=>$request->input("cronograma_fecha_final"),
                                         "realizado"=>$request->input("cronograma_realizado"),
                                         "observacion"=>$observacion,
-                                        "pdf_cronograma"=>$ruta,
+                                        "pdf_cronograma"=>$ruta_sin_public,
                                         "id_proveedor"=>$request->input("id_proveedor"));
 
                         $fechaMes = Carbon::parse($request->input("cronograma_fecha"))->month;

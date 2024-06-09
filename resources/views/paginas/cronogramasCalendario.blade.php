@@ -241,7 +241,7 @@
                         </div>{{-- fin fecha final --}}
     
                         {{-- Realizado --}}
-                        <div class="input-group mb-3" >
+                        <div class="input-group mb-3" style="display: none">
     
                             <label for="email" class="col-md-4 control-label">Fecha:</label>
     
@@ -279,6 +279,7 @@
                             </div>
                         </div>{{-- Observación --}}
     
+                        
                         {{-- pdf --}}
                             <hr class="pb-2">
                                 <div class="form-group my-2 text-center">
@@ -453,6 +454,149 @@
 
 @endif --}}
 
+
+<div class="modal fade" id="eventActionModalCompra" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-tittle">Registrar Mantenimiento</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               
+                <form id="editFormCalendarioCompra" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                       
+                        <div id="div_fecha_actualCompra">
+                             {{-- Tipo Cronograma --}}
+
+
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Equipo:</label>
+        
+                            <div class="col-md-8">
+                                <select class="form-control" name="cronograma_equipo" id="nombre_equipoGarantiaCompra" required>
+                                        <option value="">
+                                            -- Seleccionar el Equipo --
+                                        </option>
+        
+                                        @foreach($equipos as $key => $value)
+                                            <option  value="{{$value->id_equipoGarantia}}">
+                                                {{$value->nombre_equipoGarantia}}<span> - </span><p>Cod. Patrimonial: {{$value->cp_equipoGarantia}}</p>
+                                            </option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="input-group mb-3">
+
+                            <label for="email" class="col-md-3 control-label">Fecha Inicial:</label>
+    
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" name="cronograma_fecha"  id="cronograma_fechaCompra"
+                                 required autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>{{-- fin fecha inicial--}}
+    
+                        {{-- fecha Final --}}
+                        <div class="input-group mb-3">
+    
+                            <label for="email" class="col-md-3 control-label">Fecha Final:</label>
+    
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" name="cronograma_fecha_final" id="cronograma_fecha_finalCompra"
+                                 required autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>{{-- fin fecha final --}}
+    
+                        <div id="realizadoCompra">
+                            {{-- Realizado --}}
+                        <div class="input-group mb-3" style="display: none">
+    
+                            <label for="email" class="col-md-33 control-label">Fecha:</label>
+    
+                            <div class="col-md-8">
+                                <input class="form-control" name="cronograma_realizado" id="cronograma_realizadoCompra" 
+                                 required autofocus
+                                style="text-transform: uppercase;">
+                            </div>
+                        </div>{{-- fin Realizado --}}
+    
+                        {{-- Proveedor --}}
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Empresa:</label>
+    
+                            <div class="col-md-8">
+                                <select class="form-control" name="id_proveedor" id="id_proveedorCompra" required>
+                                        <option value="">
+                                            -- Seleccionar el Proveedor --
+                                        </option>
+    
+                                        @foreach($proveedores as $key => $valorProveedor)
+                                        <option value="{{$valorProveedor->id_proveedor}}">{{$valorProveedor->razonSocial_proveedor}}</option>
+                                        @endforeach
+    
+                                    </select>
+                            </div>
+                        </div>{{-- fin Proveedor --}}
+    
+                        {{-- Observación --}}
+                        <div class="input-group mb-3">
+                            <label for="email" class="col-md-3 control-label">Detalles del Servicio:</label>
+    
+                            <div class="col-md-8">
+                                <textarea class="form-control" name="cronograma_observacion" id="cronograma_observacionCompra" autofocus style="text-transform: uppercase;"></textarea>
+                            </div>
+                        </div>{{-- Observación --}}
+    
+
+                        <div class="text-center">
+                            <a href="../storage/" id="descargaCompra" download="Conformidad del Servicio" class="btn btn-default btn-sm">
+                                <i class="fas fa-download text-black"></i> Descargar Archivo
+                            </a>
+                        </div>
+
+                        {{-- pdf --}}
+                            <hr class="pb-2">
+                                <div class="form-group my-2 text-center">
+                                    <div class="btn btn-default btn-file">
+                                        <i class="fas fa-paperclip"></i> Adjuntar Archivo
+                                        <p><label for="pdf_archivo_final">
+                                            <input type="file" name="pdf_archivo_final" id="pdf_archivo_finalCompra">
+                                        </label></p>
+    
+                                    </div><br>
+    
+                                    <p class="help-block small">Tamaño máximo de archivos: 20MB</p>
+                                </div>
+    
+        
+                        </div>
+                           
+                        </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success" id="saveEventCompra" data-dismiss="modal">Guardar</button>
+                                    <button type="button" class="btn btn-secondary" id="cancelEventCompra">Cancelar</button>
+                              
+                                    <button type="button" class="btn btn-primary" id="editEventCompra">Editar</button>
+                                    <button type="button" class="btn btn-danger" id="deleteEventCompra">Eliminar</button>
+                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
         $("#fecha_actual_calendario").prop('disabled',true); //indicamos que la fecha no se pueda cambiar
@@ -496,41 +640,175 @@
                 calendar.unselect(); // funcion para que no se quede seleccionado la fecha
             },
 
-            /* Inicio evento eliminar */
+            // /* Inicio evento eliminar */
+            // eventClick: function(arg) {
+            //     var id = arg.event.id;
+            //   var deleteMsg = swal({
+            //                     title: "Estas seguro?",
+            //                     text: "No podrás recuperar este archivo!",
+            //                     type: "warning",
+            //                     showCancelButton: true,
+  		    //                     confirmButtonColor: '#3085d6',
+  		    //                     cancelButtonColor: '#d33',
+  		    //                     cancelButtonText: 'Cancelar',
+  		    //                     confirmButtonText: 'Si, eliminar registro!'
+            //     }).then(function(result){
+            //         if(result.value){
+            //         if(deleteMsg){
+            //     $.ajax({
+            //         url: "{{route('cronogramasCalendario.destroy','')}}" +'/'+id,
+            //         type: 'DELETE',
+            //         data: {
+            //                   "_token":"{{ csrf_token() }}",
+            //                   "id_cronogramaCalendario":arg.event.id
+            //               },
+            //         success: function () {
+            //         arg.event.remove();
+            //         swal("Hecho!", "Fue eliminado con éxito!", "success");
+            //         location.reload(); 
+            //         },
+            //         error: function (xhr, ajaxOptions, thrownError) {
+            //         swal("Error al eliminar!", "Inténtalo de nuevo", "error");
+            //         }
+            //         });
+            //       }
+            //     }
+            //     })
+            // },/* Fin evento eliminar */
+
+
+
+
             eventClick: function(arg) {
-                var id = arg.event.id;
-              var deleteMsg = swal({
-                                title: "Estas seguro?",
-                                text: "No podrás recuperar este archivo!",
-                                type: "warning",
-                                showCancelButton: true,
-  		                        confirmButtonColor: '#3085d6',
-  		                        cancelButtonColor: '#d33',
-  		                        cancelButtonText: 'Cancelar',
-  		                        confirmButtonText: 'Si, eliminar registro!'
-                }).then(function(result){
-                    if(result.value){
-                    if(deleteMsg){
+    var id = arg.event.id;
+    
+    $('#eventActionModalCompra').modal('show'); 
+
+        $('#saveEventCompra').hide();
+        $('#cancelEventCompra').hide();
+        $('#editEventCompra').show();
+        $('#deleteEventCompra').show();
+
+        $('#nombre_equipoGarantiaCompra').val('');
+        $('#cronograma_fechaCompra').val('');
+        $('#cronograma_fecha_finalCompra').val('');
+        $('#cronograma_realizadoCompra').val('');
+        $('#id_proveedorCompra').val('');
+        $('#cronograma_observacionCompra').val('');
+
+        $('#div_fecha_actualCompra').hide();
+
+    $('#deleteEventCompra').off('click').on('click', function() {
+        swal({
+            title: "¿Estás seguro?",
+            text: "No podrás recuperar este evento!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, eliminar!'
+        }).then(function(result) {
+            if (result.value) {
+                var token = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    url: "{{route('cronogramasCalendario.destroy','')}}" +'/'+id,
+                    url: "{{route('cronogramasCalendario.destroy','')}}" + '/' + id,
                     type: 'DELETE',
-                    data: {
-                              "_token":"{{ csrf_token() }}",
-                              "id_cronogramaCalendario":arg.event.id
-                          },
-                    success: function () {
-                    arg.event.remove();
-                    swal("Hecho!", "Fue eliminado con éxito!", "success");
-                    location.reload(); 
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': token
                     },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                    swal("Error al eliminar!", "Inténtalo de nuevo", "error");
+                    success: function(response) {
+                        arg.event.remove();
+                        $('#eventActionModal').modal('hide'); 
+                        swal("Hecho!", "El evento fue eliminado con éxito!", "success");
+                        location.reload();
+                    },
+                    error: function(error) {
+                        swal("Error al eliminar!", "Inténtalo de nuevo", "error");
                     }
-                    });
-                  }
-                }
-                })
-            },/* Fin evento eliminar */
+                });
+            }
+        });
+    });
+
+    $('#editEventCompra').off('click').on('click', function() {
+        
+        $('#editEventCompra').hide();
+        $('#deleteEventCompra').hide();
+        $('#saveEventCompra').show();
+        $('#cancelEventCompra').show();
+
+        
+
+        $.get(ruta +'/cronogramasCalendario/getEquipo/' + id, function(data) {
+            console.log(data.fecha);
+            $('#cronograma_fechaCompra').val(data.fecha);
+            $('#cronograma_fecha_finalCompra').val(data.fecha_final);
+            $('#nombre_equipoGarantiaCompra').val(data.id_equipoGarantia);
+            $('#id_proveedorCompra').val(data.id_proveedor);
+            $('#cronograma_observacionCompra').val(data.observacion);
+            $('#cronograma_realizadoCompra').val(data.realizado);
+
+            if(data.realizado === 0){
+                $('#realizadoCompra').hide();
+            }
+            if(data.realizado === 1){
+                $('#realizadoCompra').show();
+            }
+            $('#descargaCompra').attr('href', '../storage/' + `${data.pdf_cronograma}`);
+            $('#editFormCalendarioCompra').attr('action', ruta+`/cronogramasCalendario/${id}`);
+        });
+        
+        $('#div_fecha_actualCompra').show();
+    });
+
+    $('#cancelEventCompra').off('click').on('click', function() {
+        $('#saveEventCompra').hide();
+        $('#cancelEventCompra').hide();
+        $('#editEventCompra').show();
+        $('#deleteEventCompra').show();
+
+        $('#nombre_equipoGarantiaCompra').val('');
+        $('#cronograma_fechaCompra').val('');
+        $('#cronograma_fecha_finalCompra').val('');
+        $('#cronograma_realizadoCompra').val('');
+        $('#id_proveedorCompra').val('');
+        $('#cronograma_observacionCompra').val('');
+
+
+        $('#div_fecha_actualCompra').hide();
+        
+    });
+
+    $('#cancelCompra').off('click').on('click', function() {
+        $('#saveEventCompra').hide();
+        $('#cancelEventCompra').hide();
+        $('#editEventCompra').show();
+        $('#deleteEventCompra').show();
+
+        $('#nombre_equipoGarantiaCompra').val('');
+        $('#cronograma_fechaCompra').val('');
+        $('#cronograma_fecha_finalCompra').val('');
+        $('#cronograma_realizadoCompra').val('');
+        $('#id_proveedorCompra').val('');
+        $('#cronograma_observacionCompra').val('');
+
+
+        $('#div_fecha_actualCompra').hide();
+        
+    });
+
+    $('#saveEventCompra').off('click').on('click', function() {
+        $('#editFormCalendarioCompra').submit(); 
+    });
+
+}, 
+
+
+
+
+
 
             eventDidMount: function(info) {
                 /* console.log(info.event.extendedProps); */

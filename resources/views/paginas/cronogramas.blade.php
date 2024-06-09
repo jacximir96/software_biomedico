@@ -518,6 +518,17 @@
                         </div>
                     </div>
 
+                    <!-- Inicio de Garantia -->
+                <div class="input-group mb-3" id="cro_valor_garantia">
+                    <label for="email" class="col-md-3 control-label">Garantía:</label>
+
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="garantia" id="cro_garantia"
+                        autofocus
+                        placeholder="Ingrese la garantía (Meses)" style="text-transform: uppercase;" maxlength="2">
+                    </div>
+                </div><!-- Fin de Garantia -->
+
                     <div id="realizado">
                         <div class="input-group mb-3" id="class_detalle">
                             <label for="email" class="col-md-3 control-label">Detalles del Servicio:</label>
@@ -850,6 +861,7 @@
 
 eventClick: function(arg) {
     var id = arg.event.id;
+    console.log(id);
     $('#eventActionModal').modal('show'); 
 
         $('#saveEvent').hide();
@@ -917,6 +929,17 @@ eventClick: function(arg) {
             $('#cro_tipo').val(data.id_mantenimiento);
             $('#cro_detalle').val(data.observacion);
             $('#cro_otm').val(data.otm_cronograma);
+            $('#cro_garantia').val(data.garantia);
+            
+
+            
+
+            if(data.id_mantenimiento === 1 || data.id_mantenimiento ===2){
+                $('#cro_valor_garantia').show();
+            }else{
+                $('#cro_valor_garantia').hide();
+            }
+
 
             if(data.realizado === 0){
                 $('#realizado').hide();

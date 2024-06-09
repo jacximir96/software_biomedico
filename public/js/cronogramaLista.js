@@ -246,6 +246,8 @@ $('#tablaCronogramaLista').on('click', '.editar-btn', function() {
 	   $('#otm_cronograma_editar').val(data.otm_cronograma);
 	   $('#id_tipoEquipamiento').val(data.id_tipoEquipamiento);
 	   $('#id_ambiente').val(data.id_ambiente);
+	   $('#garantia_edit').val(data.garantia);
+	   
 	   $('#fecha_adquisicion_equipo').val(data.fecha_adquisicion_equipo);
 	   $('#monto_adquisicion_equipo').val(data.monto_adquisicion_equipo);
 	   $('#tiempo_vida_util_equipo').val(data.tiempo_vida_util_equipo);
