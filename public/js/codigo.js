@@ -128,6 +128,17 @@ $("select[name=id_mantenimiento]").change(function(){
     }
 });
 
+$('#valor_garantia_div').css("display","none");
+$("select[id=nombres_mantenimiento]").change(function(){
+    var valor_selectMantenimiento = $('select[id=nombres_mantenimiento]').val();
+
+    if(valor_selectMantenimiento == 1 || valor_selectMantenimiento == 2){
+        $('#valor_garantia_div').css("display","");
+    }else{
+        $('#valor_garantia_div').css("display","none");
+    }
+});
+
 $("#nombres_departamento").change(function(){
 	console.log($("#nombres_departamento").val());
 	if($("#nombres_departamento").val() == ''){

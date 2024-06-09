@@ -6,7 +6,6 @@
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
-    /* Estilos para el modal */
     .modalDiv {
         display: none;
         position: fixed;
@@ -128,7 +127,7 @@
                             <th>Prioridad</th>
                             <th>Imagen</th>
                             
-                            {{-- <th>Tarjeta de Control</th> --}}
+                            <th>Tarjeta de Control</th>
                             <th>Acciones</th>
                         </tr>
 
@@ -636,7 +635,6 @@
 </div>
 
 <script>
-    // Script para manejar el modal
     function showImageModal(src) {
         var modal = document.getElementById("myModal");
         var modalImg = document.getElementById("img01");
@@ -644,14 +642,12 @@
         modal.style.display = "block";
         modalImg.src = src;
 
-        // Agregar evento para cerrar el modal al hacer clic en la 'x'
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function() {
             modal.style.display = "none";
         }
 
-        // Agregar evento para cerrar el modal al hacer clic fuera de la imagen
         modal.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";

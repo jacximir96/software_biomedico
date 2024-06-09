@@ -58,7 +58,14 @@ let tablaEquipos = $("#tablaEquipos").DataTable({
 			   return '<img style=width:200px; height:200px; src="' + data + '" alt="Imagen" onclick="showImageModal(\'' + data + '\')">';
 		   }
 	   },
-	   
+	   {
+			data: "id_equipoGarantia",
+			name: 'id_equipoGarantia',
+			render: function(data, type, full, meta) {
+				return '<a href="'+	ruta+'/reportesEquiposGarantia/EquiposGarantiaPdf/'+ data +'" class="btn btn-default btn-sm">'+
+				'<i class="fas fa-download text-black"></i> Descargar Archivo</a>'
+			}
+		},
 	   { 
 		   data: "id_equipo",
 		   name: 'acciones',

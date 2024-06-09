@@ -70,8 +70,11 @@ $('#historial').on('click', '.editar-btn', function() {
 
 		if(data.id_mantenimiento === 1 || data.id_mantenimiento === 2){
 			$('#ods').show();
+			$('#garantiaVer').show();
 			$('#otm').hide();
+			
 		   }else{
+			$('#garantiaVer').hide();
 			$('#ods').hide();
 			$('#otm').show();
 		   }

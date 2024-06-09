@@ -5,6 +5,44 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    .modalDiv {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.9);
+    }
+
+    .modalImg {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -428,7 +466,31 @@
         </div>
     </div>
 </div>
+<div id="asd" class="modal modalDiv">
+    <img class="modal-content modalImg" id="imgasd">
+</div>
 
+<script>
+    function showImageModal(src) {
+        var modal = document.getElementById("asd");
+        var modalImg = document.getElementById("imgasd");
+
+        modal.style.display = "block";
+        modalImg.src = src;
+
+        var span = document.getElementsByClassName("close")[0];
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+</script>
 
 {{-- @if (isset($status))
 

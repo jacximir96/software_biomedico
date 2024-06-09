@@ -38,7 +38,7 @@ let tablaEquiposGarantia = $("#tablaEquiposGarantia").DataTable({
 		{
 			data:'imagen_equipoGarantia',name: 'imagen_equipoGarantia',
 			render: function (data,type,full,meta) {
-				return '<img style="width:200px; height:200px;" src="' + data + '" alt="Imagen">';
+				return '<img style="width:200px; height:200px;" src="' + data + '" alt="Imagen" onclick="showImageModal(\'' + data + '\')">';
 			}
 		},
 		{
