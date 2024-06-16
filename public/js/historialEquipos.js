@@ -65,6 +65,8 @@ $('#tablaHistorialEquipos').on('click', '.editar-btn', function() {
         $('#historialCompra1').DataTable().destroy();
     }
 
+	var boton = document.getElementById("historialServicioImprimir");
+    boton.href = ruta + '/reportesEquipos/EquiposPdf/' + id;
 
 	$.get(ruta +'/equipoDatos/json/' + id, function(data) {
 
