@@ -62,6 +62,9 @@ $("#tablaHistorialCompras").DataTable({
 $('#tablaHistorialCompras').on('click', '.editar-btn', function() {
     var id = $(this).data('id');
 
+	var boton = document.getElementById("historialCompraImprimir");
+    boton.href = ruta + '/reportesEquiposGarantia/EquiposGarantiaPdf/' + id;
+
     // Realiza una petición AJAX para obtener los datos del registro
     $.get(ruta +'/historialgarantia/json/' + id, function(data) {
 

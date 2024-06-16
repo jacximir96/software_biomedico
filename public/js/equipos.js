@@ -59,10 +59,10 @@ let tablaEquipos = $("#tablaEquipos").DataTable({
 		   }
 	   },
 	   {
-			data: "id_equipoGarantia",
-			name: 'id_equipoGarantia',
+			data: 'id_equipo',
+			name: 'id_equipo',
 			render: function(data, type, full, meta) {
-				return '<a href="'+	ruta+'/reportesEquiposGarantia/EquiposGarantiaPdf/'+ data +'" class="btn btn-default btn-sm">'+
+				return '<a href="'+	ruta+'/reportesEquipos/EquiposPdf/'+ data +'" class="btn btn-default btn-sm">'+
 				'<i class="fas fa-download text-black"></i> Descargar Archivo</a>'
 			}
 		},

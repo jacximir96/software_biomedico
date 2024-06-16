@@ -119,7 +119,7 @@
                             </div>
         
                             <div>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <a href="" id="historialCompraImprimir" class="btn btn-primary">Guardar</a>
                             </div>
                         </div>
                     </form>

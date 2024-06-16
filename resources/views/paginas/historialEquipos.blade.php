@@ -135,7 +135,7 @@
                         </div>
     
                         <div>
-                            <button type="submit" class="btn btn-success">Imprimir</button>
+                            <a href="" id="historialServicioImprimir" class="btn btn-success">Imprimir</a>
                         </div>
                     </div>
                 {{-- </form> --}}
