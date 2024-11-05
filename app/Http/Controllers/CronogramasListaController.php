@@ -13,6 +13,7 @@ use App\TipoMantenimientosModel;
 use App\OrdenServiciosModel;
 use App\DepartamentosModel;
 use App\DireccionesEjecutivasModel;
+use App\AmbientesModel;
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
@@ -37,6 +38,7 @@ class CronogramasListaController extends Controller
         $administradores = AdministradoresModel::all();
         $proveedores = ProveedoresModel::all();
         $equipos = EquiposModel::all();
+        $ambientes = AmbientesModel::all();
         $cronogramas = CronogramasModel::all();
         $tipoMantenimientos = TipoMantenimientosModel::all();
         $ordenServicios = OrdenServiciosModel::all();
@@ -62,7 +64,7 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
                                                 "tipoMantenimientos_estado"=>$tipoMantenimientos_estado,"cronogramas_fecha"=>$cronogramas_fecha,
                                                 "ordenServicios"=>$ordenServicios,"departamentos"=>$departamentos,
                                                 "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cronogramas_general"=>$cronogramas_general,
-                                                "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+                                                "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,"ambientes"=>$ambientes));
     }
 
     public function store(Request $request){
@@ -227,7 +229,6 @@ $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogram
     }
 
     public function update($id,Request $request){
-
         $extraer_cronograma_penultimo = DB::select('SELECT * FROM cronograma C WHERE C.id_equipo = ? AND C.realizado = 1 AND (C.id_mantenimiento IN (1,2) OR C.id_mantenimiento IS NULL) ORDER BY C.id_cronograma DESC LIMIT 1',[$request->input("cronograma_equipo")]);
         $extraer_cronograma = $extraer_cronograma_penultimo[0]->acumulado_cronograma;
 

@@ -41,10 +41,7 @@ class EquiposReposicionController extends Controller
         }
 
         return DataTables::of($resultado)->make(true);
-    }
-            
-            // if($equipoReposicion->antiguedad_equipo> =)
-            
+    }   
         }
     public function index(){
         $administradores = AdministradoresModel::all();
@@ -99,10 +96,6 @@ class EquiposReposicionController extends Controller
         $datos = array("fecha_baja"=>$request->input("fecha_baja"),
                         "equipo_baja"=>$request->input("equipo_baja"));
 
-/*              echo "<pre>"; print_r($datos); echo "</pre>";
-            return; */
-
-        //validar los datos
         if(!empty($datos)){
             $validar = \Validator::make($datos,[
                 "fecha_baja"=>'required',

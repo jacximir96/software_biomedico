@@ -159,13 +159,21 @@ $("#nombres_direccionEjecutiva").change(function(){
 	}
 });
 
-if($('#mantenimiento_oculto').val() == 1 || $('#mantenimiento_oculto').val() == 2){
+/* if($('#mantenimiento_oculto').val() == 1 || $('#mantenimiento_oculto').val() == 2){
     $('#orden_servicio_cronograma').css("display","");
     $('#proveedor_cronograma').css("display","");
     $('#garantia_cronograma').css("display","");
     $('#monto_cronograma').css("display","");
     $('#otm_cronograma').css("display","none");
-}
+} */
+
+/* if($('#mantenimiento_oculto1').val() == 1 || $('#mantenimiento_oculto1').val() == 2){
+    $('#orden_servicio_cronograma').css("display","");
+    $('#proveedor_cronograma').css("display","");
+    $('#garantia_cronograma').css("display","");
+    $('#monto_cronograma').css("display","");
+    $('#otm_cronograma').css("display","none");
+} */
 
 /*=============================================
 PREVISUALIZAR IMÁGENES TEMPORALES
@@ -593,7 +601,7 @@ $(document).on("click", ".eliminarRegistro", function(){
   		 confirmButtonColor: '#3085d6',
   		 cancelButtonColor: '#d33',
   		 cancelButtonText: 'Cancelar',
-  		 confirmButtonText: 'Si, eliminar registro!'
+  		 confirmButtonText: 'Si, eliminar!'
   	}).then(function(result){
 
   		if(result.value){
@@ -669,7 +677,7 @@ $(document).on("click", ".eliminarRegistroPermisos", function(){
   		 confirmButtonColor: '#3085d6',
   		 cancelButtonColor: '#d33',
   		 cancelButtonText: 'Cancelar',
-  		 confirmButtonText: 'Si, eliminar registro!'
+  		 confirmButtonText: 'Si, eliminar!'
   	}).then(function(result){
 
   		if(result.value){
@@ -778,12 +786,84 @@ $(document).on("keyup",".inputRutaMonto",function(){
     )
 })
 
+window.onload = function() {
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.open-modal-btn')) {
+            const button = event.target.closest('.open-modal-btn');
+            const target = button.getAttribute('data-modal-target');
+            console.log('Modal target:', target);
+            const modal = document.getElementById(target);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            }
+        }
 
+        if (event.target.closest('[data-modal-close]')) {
+            const button = event.target.closest('[data-modal-close]');
+            const modal = button.closest('.modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            }
+        }
+    });
+};
 
+$(document).ready(function() {
+    const tables = $('table.dataTable').DataTable();
 
+    function applyDarkMode(darkModeEnabled) {
+        const selectors = [
+            '.dataTables_wrapper .dataTables_length', 
+            '.dataTables_wrapper .dataTables_filter', 
+            '.dataTables_wrapper .dataTables_info', 
+            '.dataTables_wrapper .dataTables_processing', 
+            '.dataTables_wrapper .dataTables_paginate',
+            '.paginate_button.disabled',
+            '.paginate_button.disabled:hover',
+            '.paginate_button.disabled:active'
+        ];
 
+        if (darkModeEnabled) {
+            document.documentElement.classList.add('dark');
 
+            document.querySelectorAll('table.dataTable tbody tr').forEach(row => {
+                /* row.style.setProperty('background-color', '#24303F', 'important'); */
+                /* row.style.setProperty('color', 'white', 'important'); */
+            });
 
+            selectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(element => {
+                    /* element.style.setProperty('color', 'white', 'important'); */
+                });
+            });
+        } else {
+            document.documentElement.classList.remove('dark');
 
+            document.querySelectorAll('table.dataTable tbody tr').forEach(row => {
+                /* row.style.setProperty('background-color', 'white', 'important'); */
+                /* row.style.setProperty('color', 'black', 'important'); */
+            });
 
+            selectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(element => {
+                    /* element.style.setProperty('color', 'black', 'important'); */
+                });
+            });
+        }
+    }
 
+    document.getElementById('darkModeToggle').addEventListener('change', function() {
+        const darkModeEnabled = this.checked;
+        applyDarkMode(darkModeEnabled);
+    });
+
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeEnabled = darkModeToggle.checked;
+    applyDarkMode(darkModeEnabled);
+
+    tables.on('draw', function() {
+        applyDarkMode(darkModeEnabled);
+    });
+});

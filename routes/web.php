@@ -52,6 +52,7 @@ Route::get('/obtenerambiente','AmbientesController@getAmbiente')->name('ambiente
 Route::get('/obtenercronogramafecha','CronogramasController@getcronogramaFecha')->name('cronogramas.getfechas');
 Route::get('/obtenercronogramacompra','CronogramasCalendarioController@getConogramaCompra')->name('cronogramas.compras');
 Route::get('/obtenerEquipoBaja','EquiposBajaController@obtenerEquipoBaja')->name('equipos.obtenerEquipoBaja');
+Route::get('/obteneradministrador','AdministradoresController@getAdministrador')->name('administradores.getadministrador');
 
 
 
@@ -155,9 +156,10 @@ Route::get('/equiporeposicion/json/{id}','EquiposReposicionController@showJson')
 Route::get('/historialgarantia/json/{id}','HistorialEquiposCompraController@showJson')->name('historial.json');
 Route::get('/historialequipo/json/{id}','HistorialEquiposController@showJson')->name('historialequipos.json');
 Route::get('/direccionesejecutivas/json/{id}','DireccionesEjecutivasController@showJson')->name('direccionesEjecutivas.json');
+Route::get('/tipomantenimientos/json/{id}','TipoMantenimientosController@showJson')->name('tipoMantenimientos.json');
 Route::get('/cronogramasfecha/json/{id}','CronogramasController@showJson')->name('cronogramas.json');
 Route::get('/cronogramasfechacompras/json/{id}','CronogramasCalendarioController@showJson')->name('cronogramascompras.json');
-
+Route::get('/administradores/json/{id}','AdministradoresController@showJson')->name('administradores.showjson'); 
 Route::get('/mantenimientoServicioHistorial/json/{id}','MantenimientoServicioHistorial@obtenerDatos')->name('mantenimientoServicioHistorial.json');
 Route::get('/equipoDatos/json/{id}','MantenimientoServicioHistorial@obtenerEquipo')->name('equipoDatos.json');
 

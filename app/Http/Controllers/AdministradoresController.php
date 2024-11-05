@@ -3,29 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-/* Modelos de nuestro proyecto */
 use App\AdministradoresModel;
 use App\DepartamentosModel;
 use App\DireccionesEjecutivasModel;
 use App\RolesModel;
 use App\ModelHasRolesModel;
-/* Fin de Modelos de nuestro proyecto */
 
-use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
-
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AdministradoresController extends Controller
 {
-    /* Mostrar todos los registros */
+    public function getAdministrador() {
+        if (request()->ajax()) {
+            $administradores_general = DB::select('SELECT U.id AS id_administrador,U.name AS nombre_administrador,U.email AS correo_administrador,U.foto AS foto_administrador
+                                                ,U.id_rol AS rol_administrador,U.password AS password_administrador,R.id AS id_rol,R.name AS nombreRol_administador FROM users U
+                                                LEFT JOIN roles R ON U.id_rol = R.id ORDER BY U.id DESC');
+
+            return DataTables::of($administradores_general)->make(true);
+        }
+    }
     public function index(){
 
         $administradores = DB::select('select U.id as id_usuario,U.name,U.email,U.foto,U.id_rol,U.password,R.id,R.name rol from users U
         LEFT JOIN roles R ON U.id_rol = R.id');
         $user = Auth::user();
-        $roles = DB::select('select * from roles where estado_rol = 1');
+        $roles = DB::select('SELECT * FROM roles where estado_rol = 1');
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
                                                     FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
                                                     WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
@@ -184,5 +189,10 @@ class AdministradoresController extends Controller
     		return redirect("/administradores")->with("no-borrar", "");
 
     	}
+    }
+
+    public function showJson($id) {
+        $administrador = AdministradoresModel::find($id);
+        return $administrador;
     }
 }

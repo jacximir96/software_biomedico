@@ -11,64 +11,84 @@ use App\DireccionesEjecutivasModel;
 use App\EquiposModel;
 use App\AmbientesModel;
 use App\CronogramasModel;
-use App\EquiposGarantiaModel;
+use App\Exports\EquipoExport;
+use DataTables;
+
 /* Fin de Modelos de nuestro proyecto */
 
 use Illuminate\Support\Facades\DB;/* Agregar conbinaciones de tablas en la base de datos */
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;/* Apuntamos al modelo que existe por defecto para obtener información en PDF */
 use Yajra\DataTables\DataTables as DataTablesDataTables;
 
-
 class EquiposGarantiaController extends Controller
 {
+    
     public function getequipoGarantia() {
         if (request()->ajax()) {
-            $equiposGarantiaGeneral = DB::select("SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
-                                            ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipoGarantia,CURDATE())/12) AS antiguedad_equipoGarantia from equipogarantia E INNER JOIN ambiente A
-                                            ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE ON
-                                            A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva
-                                            ORDER BY E.id_equipoGarantia DESC");
-           return DataTablesDataTables::of($equiposGarantiaGeneral)->make(true);
+            $equiposGeneral = DB::select('SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
+            ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo E INNER JOIN cronograma C ON E.id_equipo = C.id_equipo
+            INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
+            ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
+            tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
+            ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo) AND estado = 1');
+            return DataTablesDataTables::of($equiposGeneral)->make(true);
         }
     }
     public function index(){
-
-    
         $direccionesEjecutivas = DireccionesEjecutivasModel::all();
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
         $equipos = EquiposModel::all();
         $ambientes = AmbientesModel::all();
-        $equiposGarantia = EquiposGarantiaModel::all();
+        $cronogramas = CronogramasModel::all();
+        $tipoEquipamientos = DB::select('SELECT * FROM tipoequipamiento');
+        $equiposGeneral = DB::select('SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
+            ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo E INNER JOIN cronograma C ON E.id_equipo = C.id_equipo
+            INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
+            ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
+            tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
+            ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo)');
+        
+       
         $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
-                                                    FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
-                                                    WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
+        FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
+        WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
         $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
-                                                    AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
+        AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-        return view("paginas.equiposGarantia",array("equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,
-                                                    "direccionesEjecutivas"=>$direccionesEjecutivas,"ambientes"=>$ambientes,
-                                                    "equiposGarantia"=>$equiposGarantia,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,
-                                                    "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
-                                                    ));
-    }
+                return view("paginas.equiposGarantia",array("equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,'equiposGeneral' => $equiposGeneral,'cronogramas' => $cronogramas,
+                                                        "direccionesEjecutivas"=>$direccionesEjecutivas,"ambientes"=>$ambientes,
+                                                        "notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"tipoEquipamientos"=>$tipoEquipamientos,
+                                                        "cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo));
+            // return $equiposGeneral ;
+            }
 
     public function show($id){
-        $equipoGarantia = EquiposGarantiaModel::where("id_equipoGarantia",$id)->get();
+        /* $equipo = EquiposModel::where("id_equipo",$id)->get(); */
+        $equipo = DB::select('select *,ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo where id_equipo = ?',[$id]);
+        $cronogramas = DB::select('select * from cronograma C INNER JOIN proveedor P ON C.id_proveedor = P.id_proveedor
+                                    INNER JOIN ordenservicio O ON C.id_ordenServicio = O.id_ordenServicio WHERE C.id_equipo = ? ORDER BY C.id_cronograma ASC',[$id]);
         $direccionesEjecutivas = DireccionesEjecutivasModel::all();
         $administradores = AdministradoresModel::all();
         $departamentos = DepartamentosModel::all();
         $ambientes = AmbientesModel::all();
-        $equiposGarantia = EquiposGarantiaModel::all();
-        $equipoGarantia_ambiente=DB::select('select * from equipogarantia A INNER JOIN
-                                    ambiente AM ON A.id_ambiente = AM.id_ambiente WHERE A.id_equipoGarantia = ?',[$id]);
+        $tipoEquipamientos = DB::select('SELECT * FROM tipoequipamiento');
 
-        $equiposGarantiaGeneral = DB::select("SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
-                                    ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipoGarantia,CURDATE())/12) AS antiguedad_equipoGarantia from equipogarantia E INNER JOIN ambiente A
-                                    ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE ON
-                                    A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva
-                                    ORDER BY E.id_equipoGarantia DESC");
+        $equiposGeneral =DB::select('SELECT *,DE.iniciales_direccionEjecutiva as iniciales_direccionAmbiente,DEE.iniciales_direccionEjecutiva as iniciales_direccionDepartamento,
+                                     ROUND(TIMESTAMPDIFF(MONTH,fecha_adquisicion_equipo,CURDATE())/12) AS antiguedad_equipo from equipo E INNER JOIN cronograma C ON E.id_equipo = C.id_equipo
+                                     INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
+                                     ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
+                                     tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
+                                     ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo)');
+
+        $equipo_ambiente=DB::select('select * from equipo A INNER JOIN
+                                    ambiente AM ON A.id_ambiente = AM.id_ambiente WHERE A.id_equipo = ?',[$id]);
+
+        $equipo_tipoEquipamiento=DB::select('SELECT * FROM equipo E INNER JOIN tipoequipamiento TE ON
+                                            E.id_tipoEquipamiento  = TE.id_tipoEquipamiento WHERE E.id_equipo = ?',[$id]);
 
 $notificacionesCronogramaNuevo = DB::select("SELECT C.id_equipoGarantia, C.mes_cronogramaGeneralNuevo, C.año_cronogramaGeneralNuevo, E.nombre_equipoGarantia, E.cp_equipoGarantia
 FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
@@ -77,25 +97,27 @@ WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()
 $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
 AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-        if(count($equipoGarantia) != 0){
-            return view("paginas.equiposGarantia",array("status"=>200,"equipoGarantia"=>$equipoGarantia,"equipoGarantia_ambiente"=>$equipoGarantia_ambiente,'equiposGarantia' => $equiposGarantia,
+        if(count($equipo) != 0){
+            return view("paginas.equiposGarantia",array("status"=>200,"equipo"=>$equipo,"equipo_ambiente"=>$equipo_ambiente,
         "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
         "ambientes"=>$ambientes,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
-        "equiposGarantiaGeneral"=>$equiposGarantiaGeneral));
+        "cronogramas"=>$cronogramas,"tipoEquipamientos"=>$tipoEquipamientos,"equipo_tipoEquipamiento"=>$equipo_tipoEquipamiento,"equiposGeneral"=>$equiposGeneral));
         }else{
-            return view("paginas.equiposGarantia",array("status"=>404,"equipoGarantia"=>$equipoGarantia,"equipoGarantia_ambiente"=>$equipoGarantia_ambiente, 'equiposGarantia' => $equiposGarantia,
+            return view("paginas.equiposGarantia",array("status"=>404,"direccionesEjecutivas"=>$direccionesEjecutivas,
             "direccionesEjecutivas"=>$direccionesEjecutivas,"administradores"=>$administradores,"departamentos"=>$departamentos,
             "ambientes"=>$ambientes,"notificacionesCronogramaNuevo"=>$notificacionesCronogramaNuevo,"cantidadNotificacionesCronogramaNuevo"=>$cantidadNotificacionesCronogramaNuevo,
-            "equiposGarantiaGeneral"=>$equiposGarantiaGeneral));
+            "cronogramas"=>$cronogramas,"tipoEquipamientos"=>$tipoEquipamientos,"equipo_tipoEquipamiento"=>$equipo_tipoEquipamiento,"equiposGeneral"=>$equiposGeneral));
         }
     }
 
-    /* Inicio Eliminar un registro */
+                /* Inicio Eliminar un registro */
     public function destroy($id, Request $request){
-        $validar = EquiposGarantiaModel::where("id_equipoGarantia",$id)->get();
+        $validar = EquiposModel::where("id_equipo",$id)->get();
+        /*echo "<pre>"; print_r($validar); echo "</pre>";
+        return; */
 
         if(!empty($validar)){
-            $equipoGarantia = EquiposGarantiaModel::where("id_equipoGarantia",$validar[0]["id_equipoGarantia"])->delete();
+            $equipo = EquiposModel::where("id_equipo",$validar[0]["id_equipo"])->delete();
             //Responder al AJAX de JS
             return "ok";
         }else{
@@ -109,14 +131,17 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                         "modelo_equipo"=>$request->input("modelo_equipo"),
                         "serie_equipo"=>$request->input("serie_equipo"),
                         "cp_equipo"=>$request->input("cp_equipo"),
+                        "id_tipoEquipamiento"=>$request->input("id_tipoEquipamiento"),
                         "id_ambiente"=>$request->input("id_ambiente"),
                         "fecha_adquisicion_equipo"=>$request->input("fecha_adquisicion_equipo"),
                         "monto_adquisicion_equipo"=>$request->input("monto_adquisicion_equipo"),
-                        "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"));
+                        "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"),
+                        "prioridad_equipo"=>$request->input("prioridad_equipo"),
+                        "estado"=>$request->input("estado"));
 
         $imagenEquipo = array("imagen_equipo"=>$request->file("foto"));
 
-        $cp_validacion = DB::select('select * from equipogarantia where cp_equipoGarantia = ?', [$request->input("cp_equipo")]);
+        $cp_validacion = DB::select('select * from equipo where cp_equipo = ?', [$request->input("cp_equipo")]);
 
         if(empty($cp_validacion) == ""){
             return redirect("/equiposGarantia")->with("cp-existe","");
@@ -125,15 +150,17 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                 /* Validar datos */
                 if(!empty($datos)){
                     $validar = \Validator::make($datos,[
-                        "nombre_equipo"=>'required|regex:/^[_\\-\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                        "nombre_equipo"=>'required|regex:/^[-\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
                         "marca_equipo"=>'required|regex:/^[-\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
-                        "modelo_equipo"=>'required|regex:/^[-\\/\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
-                        "serie_equipo"=>'required|regex:/^[-\\/\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                        "modelo_equipo"=>'required|regex:/^[=\\-\\/\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                        "serie_equipo"=>'required|regex:/^[=\\-\\/\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
                         "cp_equipo"=>'required|regex:/^[0-9]+$/i',
+                        "id_tipoEquipamiento"=>'required',
                         "id_ambiente"=>'required',
                         "fecha_adquisicion_equipo"=>'required',
                         "monto_adquisicion_equipo"=>'required|regex:/^[.\\0-9]+$/i',
-                        "tiempo_vida_util_equipo"=>'required|regex:/^[0-9]+$/i'
+                        "tiempo_vida_util_equipo"=>'required|regex:/^[0-9]+$/i',
+                        "prioridad_equipo"=>'required|regex:/^[0-9]+$/i'
                     ]);
 
                     /* Guardar Dirección Ejecutiva */
@@ -149,18 +176,44 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                             move_uploaded_file($imagenEquipo["imagen_equipo"], $ruta);
                         }
 
-                        $equipoGarantia = new EquiposGarantiaModel();
-                        $equipoGarantia->nombre_equipoGarantia = $datos["nombre_equipo"];
-                        $equipoGarantia->marca_equipoGarantia = $datos["marca_equipo"];
-                        $equipoGarantia->modelo_equipoGarantia = $datos["modelo_equipo"];
-                        $equipoGarantia->serie_equipoGarantia = $datos["serie_equipo"];
-                        $equipoGarantia->cp_equipoGarantia = $datos["cp_equipo"];
-                        $equipoGarantia->id_ambiente = $datos["id_ambiente"];
-                        $equipoGarantia->fecha_adquisicion_equipoGarantia = $datos["fecha_adquisicion_equipo"];
-                        $equipoGarantia->monto_adquisicion_equipoGarantia = $datos["monto_adquisicion_equipo"];
-                        $equipoGarantia->tiempo_vida_util_equipoGarantia = $datos["tiempo_vida_util_equipo"];
-                        $equipoGarantia->imagen_equipoGarantia = $ruta;
-                        $equipoGarantia->save();
+                        $equipo = new EquiposModel();
+                        $equipo->nombre_equipo = $datos["nombre_equipo"];
+                        $equipo->marca_equipo = $datos["marca_equipo"];
+                        $equipo->modelo_equipo = $datos["modelo_equipo"];
+                        $equipo->serie_equipo = $datos["serie_equipo"];
+                        $equipo->cp_equipo = $datos["cp_equipo"];
+                        $equipo->id_tipoEquipamiento = $datos["id_tipoEquipamiento"];
+                        $equipo->id_ambiente = $datos["id_ambiente"];
+                        $equipo->fecha_adquisicion_equipo = $datos["fecha_adquisicion_equipo"];
+                        $equipo->monto_adquisicion_equipo = $datos["monto_adquisicion_equipo"];
+                        $equipo->tiempo_vida_util_equipo = $datos["tiempo_vida_util_equipo"];
+                        $equipo->prioridad_equipo = $datos["prioridad_equipo"];
+                        $equipo->estado = $datos["estado"];
+                        $equipo->criterio_1 = 0;
+                        $equipo->criterio_3 = 0;
+                        $equipo->criterio_4 = 0;
+                        $equipo->criterio_6 = 0;
+                        $equipo->imagen_equipo = $ruta;
+
+                        $equipo->save();
+
+                        $extraer_equipos = DB::select('SELECT * FROM equipo E ORDER BY E.id_equipo DESC LIMIT 1');
+
+                        $cronograma = new CronogramasModel();
+                        $cronograma->id_equipo = $extraer_equipos[0]->id_equipo;
+                        $cronograma->fecha;
+                        $cronograma->fecha_final;
+                        $cronograma->id_mantenimiento;
+                        $cronograma->id_proveedor;
+                        $cronograma->garantia = 0;
+                        $cronograma->monto_cronograma = 0;
+                        $cronograma->acumulado_cronograma = 0;
+                        $cronograma->realizado = 1;
+                        $cronograma->observacion='';
+                        $cronograma->id_ordenServicio;
+                        $cronograma->id_departamento;
+                        $cronograma->pdf_cronograma;
+                        $cronograma->save();
 
                         return redirect('/equiposGarantia')->with("ok-crear","");
 
@@ -168,47 +221,53 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
                 }else{
                     return redirect('/equiposGarantia')->with("error","");
                 }
-
         }
     }
 
     public function update($id,Request $request){
-        $datos = array("nombre_equipoGarantia"=>$request->input("nombre_equipo"),
-                        "marca_equipoGarantia"=>$request->input("marca_equipo"),
-                        "modelo_equipoGarantia"=>$request->input("modelo_equipo"),
-                        "serie_equipoGarantia"=>$request->input("serie_equipo"),
-                        "cp_equipoGarantia"=>$request->input("cp_equipo"),
-                        "id_ambiente"=>$request->input("id_ambiente"),
-                        "fecha_adquisicion_equipoGarantia"=>$request->input("fecha_adquisicion_equipo"),
-                        "monto_adquisicion_equipoGarantia"=>$request->input("monto_adquisicion_equipo"),
-                        "tiempo_vida_util_equipoGarantia"=>$request->input("tiempo_vida_util_equipo"));
+        $datos = array("nombre_equipo"=>$request->input("nombre_equipo"),
+                        "marca_equipo"=>$request->input("marca_equipo"),
+                        "modelo_equipo"=>$request->input("modelo_equipo"),
+                        "serie_equipo"=>$request->input("serie_equipo"),
+                        "cp_equipo"=>$request->input("cp_equipo"),
+                        "id_tipoEquipamiento"=>$request->input("id_tipoEquipamiento"),
+                        "id_ambiente"=>$request->input("id_ambiente_editar"),
+                        "fecha_adquisicion_equipo"=>$request->input("fecha_adquisicion_equipo"),
+                        "monto_adquisicion_equipo"=>$request->input("monto_adquisicion_equipo"),
+                        "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"),
+                        "estado"=>$request->input("estado_editar"),
+                        "prioridad_equipo"=>$request->input("prioridad_equipo"),
+                        "criterio1_equipo"=>$request->input("criterio1_equipo"),
+                        "criterio3_equipo"=>$request->input("criterio3_equipo"),
+                        "criterio4_equipo"=>$request->input("criterio4_equipo"),
+                        "criterio6_equipo"=>$request->input("criterio6_equipo"),
+                        "criterio7_equipo"=>$request->input("criterio7_equipo"));
 
         $imagen_actual = array("imagen_actual"=>$request->input("imagen_actual"));
-        $imagenEquipo = array("imagen_equipoGarantia"=>$request->file("foto"));
+        $imagenEquipo = array("imagen_equipo"=>$request->file("foto"));
 
-/*                         echo "<pre>"; print_r($imagen_actual); echo "</pre>";
-                        echo "<pre>"; print_r($imagenEquipo); echo "</pre>";
-        return; */
-
-        //validar los datos
         if(!empty($datos)){
             $validar = \Validator::make($datos,[
-                "nombre_equipoGarantia"=>'required|regex:/^[_\\-\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
-                "marca_equipoGarantia"=>'required|regex:/^[-\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
-                "modelo_equipoGarantia"=>'required|regex:/^[-\\/\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
-                "serie_equipoGarantia"=>'required|regex:/^[-\\/\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
-                "cp_equipoGarantia"=>'required|regex:/^[0-9]+$/i',
+                "nombre_equipo"=>'required|regex:/^[-\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                "marca_equipo"=>'required|regex:/^[-\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                "modelo_equipo"=>'required|regex:/^[=\\-\\/\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                "serie_equipo"=>'required|regex:/^[=\\-\\/\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',
+                "cp_equipo"=>'required|regex:/^[0-9]+$/i',
+                "id_tipoEquipamiento"=>'required',
                 "id_ambiente"=>'required',
-                "fecha_adquisicion_equipoGarantia"=>'required',
-                "monto_adquisicion_equipoGarantia"=>'required|regex:/^[.\\0-9]+$/i',
-                "tiempo_vida_util_equipoGarantia"=>'required|regex:/^[0-9]+$/i'
+                "fecha_adquisicion_equipo"=>'required',
+                "monto_adquisicion_equipo"=>'required|regex:/^[.\\0-9]+$/i',
+                "tiempo_vida_util_equipo"=>'required|regex:/^[0-9]+$/i',
+                "prioridad_equipo"=>'required|regex:/^[0-9]+$/i'
             ]);
 
             if($validar->fails()){
                 return redirect("/equiposGarantia")->with("no-validacion","");
             }else{
 
-                if($imagenEquipo["imagen_equipoGarantia"] != ""){
+                //dd($imagenEquipo["imagen_equipo"]);
+
+                if($imagenEquipo["imagen_equipo"] != ""){
 
                     if(!empty($imagen_actual["imagen_actual"])){
 
@@ -222,26 +281,34 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
                     $aleatorio = mt_rand(100,999);
 
-                    $ruta = "img/equiposGarantia/".$aleatorio.".".$imagenEquipo["imagen_equipoGarantia"]->guessExtension();
+                    $ruta = "img/equiposGarantia/".$aleatorio.".".$imagenEquipo["imagen_equipo"]->guessExtension();
 
-                    move_uploaded_file($imagenEquipo["imagen_equipoGarantia"], $ruta);
+                    move_uploaded_file($imagenEquipo["imagen_equipo"], $ruta);
 
                 }else{
                     $ruta = $imagen_actual["imagen_actual"];
                 }
 
-                $datos = array("nombre_equipoGarantia"=>$request->input("nombre_equipo"),
-                                "marca_equipoGarantia"=>$request->input("marca_equipo"),
-                                "modelo_equipoGarantia"=>$request->input("modelo_equipo"),
-                                "serie_equipoGarantia"=>$request->input("serie_equipo"),
-                                "cp_equipoGarantia"=>$request->input("cp_equipo"),
-                                "id_ambiente"=>$request->input("id_ambiente"),
-                                "fecha_adquisicion_equipoGarantia"=>$request->input("fecha_adquisicion_equipo"),
-                                "monto_adquisicion_equipoGarantia"=>$request->input("monto_adquisicion_equipo"),
-                                "tiempo_vida_util_equipoGarantia"=>$request->input("tiempo_vida_util_equipo"),
-                                "imagen_equipoGarantia"=>$ruta);
+                $datos = array("nombre_equipo"=>$request->input("nombre_equipo"),
+                                "marca_equipo"=>$request->input("marca_equipo"),
+                                "modelo_equipo"=>$request->input("modelo_equipo"),
+                                "serie_equipo"=>$request->input("serie_equipo"),
+                                "cp_equipo"=>$request->input("cp_equipo"),
+                                "id_tipoEquipamiento"=>$request->input("id_tipoEquipamiento"),
+                                "id_ambiente"=>$request->input("id_ambiente_editar"),
+                                "fecha_adquisicion_equipo"=>$request->input("fecha_adquisicion_equipo"),
+                                "monto_adquisicion_equipo"=>$request->input("monto_adquisicion_equipo"),
+                                "tiempo_vida_util_equipo"=>$request->input("tiempo_vida_util_equipo"),
+                                "prioridad_equipo"=>$request->input("prioridad_equipo"),
+                                "estado"=>$request->input("estado_editar"),
+                                "criterio_1"=>$request->input("criterio1_equipo"),
+                                "criterio_3"=>$request->input("criterio3_equipo"),
+                                "criterio_4"=>$request->input("criterio4_equipo"),
+                                "criterio_6"=>$request->input("criterio6_equipo"),
+                                "criterio_7"=>$request->input("criterio7_equipo"),
+                                "imagen_equipo"=>$ruta);
 
-                $equipoGarantia = EquiposGarantiaModel::where('id_equipoGarantia',$id)->update($datos);
+                $equipo = EquiposModel::where('id_equipo',$id)->update($datos);
                 return redirect("/equiposGarantia")->with("ok-editar","");
             }
 
@@ -252,31 +319,38 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
     public function createPDF($id,Request $request) {
 
-        $equiposGarantia = DB::select('select EG.id_equipoGarantia, EG.id_ambiente, EG.cp_equipoGarantia, EG.nombre_equipoGarantia,
-                                        EG.marca_equipoGarantia, EG.modelo_equipoGarantia, EG.serie_equipoGarantia, A.nombre_ambiente,
-                                        EG.fecha_adquisicion_equipoGarantia, D.nombre_departamento, D.iniciales_departamento
-                                        from equipogarantia EG INNER JOIN ambiente A ON EG.id_ambiente = A.id_ambiente LEFT JOIN
-                                        departamento D ON A.id_departamento = D.id_departamento
-                                        where EG.id_equipoGarantia = ?',[$id]);
+        $equipos = DB::select('SELECT E.id_equipo, E.id_ambiente, E.cp_equipo, E.nombre_equipo,
+                               E.marca_equipo, E.modelo_equipo, E.serie_equipo, A.nombre_ambiente,
+                               E.fecha_adquisicion_equipo, D.nombre_departamento, D.iniciales_departamento
+                               FROM equipo E INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN
+                               departamento D ON A.id_departamento = D.id_departamento
+                               WHERE E.id_equipo = ?',[$id]);
 
-        $cronogramaCalendarioEquiposGarantia = DB::select('select CC.fecha,CC.observacion,CC.id_proveedor,P.razonSocial_proveedor from cronogramacalendario CC
-                                                            INNER JOIN proveedor P ON CC.id_proveedor = P.id_proveedor where
-                                                            CC.id_equipoGarantia = ? and CC.realizado = 1 ORDER BY CC.fecha ASC',[$id]);
+        $cronogramaCalendarioEquipos = DB::select("SELECT C.id_mantenimiento,M.nombre_mantenimiento,C.fecha,C.observacion,C.id_proveedor,
+                                                   CASE WHEN P.razonSocial_proveedor IS NULL THEN 'ÁREA DE INGENIERÍA ELECTRÓNICA DE LA OFICINA DE SERVICIOS GENERALES INR (ESGTMEB)'
+                                                   ELSE P.razonSocial_proveedor END AS razonSocial_proveedor
+                                                   FROM cronograma C LEFT JOIN proveedor P ON C.id_proveedor = P.id_proveedor INNER JOIN mantenimiento M ON
+                                                   M.id_mantenimiento = C.id_mantenimiento WHERE
+                                                   C.id_equipo = ? AND C.realizado = 1 ORDER BY C.fecha ASC",[$id]);
 
 /*         echo "<pre>"; print_r($equiposGarantia); echo "</pre>";
         return; */
 
         // compartir datos para ver
-        view()->share('cronogramaCalendarioEquiposGarantia',$cronogramaCalendarioEquiposGarantia);
-        view()->share('equiposGarantia',$equiposGarantia);
+        view()->share('cronogramaCalendarioEquipos',$cronogramaCalendarioEquipos);
+        view()->share('equiposGarantia',$equipos);
 
-        $pdf = PDF::loadView('paginas.reportesEquiposGarantia',$equiposGarantia);
+        $pdf = PDF::loadView('paginas.reportesEquipos',$equipos);
 
         // descargar archivo PDF con método de descarga
         return $pdf->setPaper('a4','portrait')->stream('equipos.pdf');
       }
-      public function showJson($id) {
-        $equipogarantia = EquiposGarantiaModel::with('ambiente')->find($id);
-        return $equipogarantia;
+      public function ExcelExport() {
+        return Excel::download(new EquipoExport, 'EQUIPOS_MANTENIMIENTO.xlsx');
       }
+    public function showJson($id) {
+        $equipo = EquiposModel::with('cronogramas')->find($id);
+        
+        return $equipo;
+    }
 }

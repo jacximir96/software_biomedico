@@ -621,7 +621,6 @@
    });
 </script>
 
-
 @endsection
 
 @endif

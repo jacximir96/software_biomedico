@@ -32,7 +32,7 @@ class EquiposController extends Controller
             INNER JOIN ambiente A ON E.id_ambiente = A.id_ambiente LEFT JOIN departamento D ON A.id_departamento = D.id_departamento LEFT JOIN direccionejecutiva DE
             ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva INNER JOIN
             tipoequipamiento TE ON E.id_tipoEquipamiento = TE.id_tipoEquipamiento WHERE C.updated_at in (SELECT MAX(C.updated_at) FROM equipo E INNER JOIN cronograma C
-            ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo)');
+            ON E.id_equipo = C.id_equipo GROUP BY E.id_equipo) AND estado = 0');
             return DataTablesDataTables::of($equiposGeneral)->make(true);
         }
     }
@@ -56,7 +56,7 @@ class EquiposController extends Controller
         FROM cronogramageneralnuevo C INNER JOIN equipogarantia E ON C.id_equipoGarantia = E.id_equipoGarantia
         WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW()) AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
-$cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
+        $cantidadNotificacionesCronogramaNuevo = DB::select("SELECT COUNT(C.id_cronogramaGeneralNuevo) as cantidad FROM cronogramageneralnuevo C WHERE /*C.mes_cronogramaGeneralNuevo BETWEEN MONTH('2012-01-01') AND MONTH(NOW())
         AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
 
                 return view("paginas.equipos",array("equipos"=>$equipos,"departamentos"=>$departamentos,"administradores"=>$administradores,'equiposGeneral' => $equiposGeneral,'cronogramas' => $cronogramas,
@@ -246,10 +246,6 @@ AND C.año_cronogramaGeneralNuevo = YEAR(NOW()) AND*/ C.realizado IS NULL");
         $imagen_actual = array("imagen_actual"=>$request->input("imagen_actual"));
         $imagenEquipo = array("imagen_equipo"=>$request->file("foto"));
 
-/*                 echo "<pre>"; print_r($datos); echo "</pre>";
-                return; */
-
-        //validar los datos
         if(!empty($datos)){
             $validar = \Validator::make($datos,[
                 "nombre_equipo"=>'required|regex:/^[-\\,\\.\\0-9a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/i',

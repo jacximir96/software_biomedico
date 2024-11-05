@@ -29,6 +29,7 @@ class AmbientesController extends Controller
                                     LEFT JOIN direccionejecutiva DE ON A.id_direccionEjecutiva = DE.id_direccionEjecutiva
                                     LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva
                                     INNER JOIN estado E ON A.estado_ambiente = E.id_estado ORDER BY A.id_ambiente DESC');
+
             return DataTables::of($ambientes_general)->make(true);
         }
     }
@@ -46,8 +47,6 @@ class AmbientesController extends Controller
                                     LEFT JOIN direccionejecutiva DEE ON D.id_direccionEjecutiva = DEE.id_direccionEjecutiva
                                     INNER JOIN estado E ON A.estado_ambiente = E.id_estado ORDER BY A.id_ambiente DESC');
 
-                            /* echo "<pre>"; print_r($ambientes_general); echo "</pre>";
-                        return; */
     $direccionesEjecutivas = DireccionesEjecutivasModel::all();
     $administradores = AdministradoresModel::all();
     $departamentos = DepartamentosModel::all();
